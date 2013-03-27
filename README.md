@@ -1,6 +1,6 @@
-Archiver
-========
-A simple facade for [org.apache.commons.compress]
+jarchivelib
+===========
+A simple archiving library for java, facading [org.apache.commons.compress]
 
   [org.apache.commons.compress]: http://commons.apache.org/proper/commons-compress/
 

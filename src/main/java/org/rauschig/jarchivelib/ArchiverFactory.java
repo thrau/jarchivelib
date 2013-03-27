@@ -1,4 +1,4 @@
-package org.rauschig.archiver;
+package org.rauschig.jarchivelib;
 
 /**
  * Factory for creating {@link Archiver} instances by a given archiver type name. Use the constants in this class to

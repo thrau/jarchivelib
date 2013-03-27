@@ -1,4 +1,4 @@
-package org.rauschig.archiver;
+package org.rauschig.jarchivelib;
 
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 

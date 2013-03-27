@@ -1,4 +1,4 @@
-package org.rauschig.archiver;
+package org.rauschig.jarchivelib;
 
 import java.io.BufferedInputStream;
 import java.io.File;

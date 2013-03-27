@@ -1,4 +1,4 @@
-package org.rauschig.archiver;
+package org.rauschig.jarchivelib;
 
 /**
  * Factory for creating {@link Compressor} instances by a given compression algorithm. Use the constants in this class

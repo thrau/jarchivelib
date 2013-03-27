@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.rauschig</groupId>
-  <artifactId>archiver</artifactId>
+  <artifactId>jarchivelib</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>org.rauschig.archiver</name>
+  <name>org.rauschig.jarchivelib</name>
 
   <packaging>bundle</packaging>
 

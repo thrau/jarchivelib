@@ -4,17 +4,20 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.rauschig</groupId>
-  <artifactId>org.rauschig.archiver</artifactId>
+  <artifactId>archiver</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <name>org.rauschig.archiver</name>
 
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
 
   <properties>
     <commons.compress.version>1.5</commons.compress.version>
     <commons.io.version>1.3.2</commons.io.version>
     <junit.version>4.11</junit.version>
+    
+    <bundle.symbolicName>${project.groupId}.${project.artifactId}</bundle.symbolicName>
+    <bundle.namespace>${project.groupId}.${project.artifactId}</bundle.namespace>
   </properties>
 
   <build>
@@ -24,10 +27,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.0</version>
-          <configuration>
-            <source>1.7</source>
-            <target>1.7</target>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -39,10 +38,48 @@
           <artifactId>maven-jar-plugin</artifactId>
           <version>2.4</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>2.3.7</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
     <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+            <Bundle-Version>${project.version}</Bundle-Version>
+            <Embed-Dependency>*;scope=compile|runtime;type=!pom;inline=true</Embed-Dependency>
+            <Import-Package>*;resolution:=optional</Import-Package>
+            <Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
+            <Private-Package>!*</Private-Package>
+            <_include>-osgi.bnd</_include>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -50,6 +87,28 @@
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -61,12 +120,14 @@
       <version>${commons.compress.version}</version>
     </dependency>
 
+    <!-- test dependencies -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-io</artifactId>
       <version>${commons.io.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

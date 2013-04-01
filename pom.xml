@@ -23,7 +23,7 @@
   <artifactId>jarchivelib</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>org.rauschig.jarchivelib</name>
+  <name>java archiving library</name>
 
   <inceptionYear>2013</inceptionYear>
 
@@ -34,6 +34,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
+  <scm>
+    <connection>scm:git:git://git@bitbucket.org:thrau/jarchivelib.git</connection>
+    <developerConnection>scm:git:git@bitbucket.org:thrau/jarchivelib.git</developerConnection>
+    <url>https://bitbucket.org/thrau/jarchivelib</url>
+  </scm>
 
   <properties>
     <commons.compress.version>1.5</commons.compress.version>
@@ -73,6 +79,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>2.9</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.2.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
@@ -163,6 +174,15 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <mavenExecutorId>forked-path</mavenExecutorId>
+          <useReleaseProfile>false</useReleaseProfile>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -22,7 +22,7 @@ import java.io.File;
 import org.junit.After;
 import org.junit.Test;
 
-public class GenericCompressorTest extends AbstractArchiverTest {
+public class CommonsCompressorTest extends AbstractArchiverTest {
 
     private Compressor compressor;
 

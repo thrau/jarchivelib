@@ -35,14 +35,14 @@ public final class CompressorFactory {
             throw new IllegalArgumentException("Unkonwn compression type " + compression);
         }
 
-        return new GenericCompressor(compression);
+        return new CommonsCompressor(compression);
     }
 
     /**
      * Creates a compressor from the given CompressionType
      */
     public static Compressor createCompressor(CompressionType compression) {
-        return new GenericCompressor(compression.getName());
+        return new CommonsCompressor(compression.getName());
     }
 
 }

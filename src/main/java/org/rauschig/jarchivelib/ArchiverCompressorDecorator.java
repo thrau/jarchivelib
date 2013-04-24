@@ -25,8 +25,8 @@ import java.io.IOException;
  */
 class ArchiverCompressorDecorator implements Archiver {
 
-    private GenericArchiver archiver;
-    private GenericCompressor compressor;
+    private CommonsArchiver archiver;
+    private CommonsCompressor compressor;
 
     /**
      * Decorates the given Archiver with the given Compressor.
@@ -34,7 +34,7 @@ class ArchiverCompressorDecorator implements Archiver {
      * @param archiver the archiver to decorate
      * @param compressor the compressor used for compression
      */
-    ArchiverCompressorDecorator(GenericArchiver archiver, GenericCompressor compressor) {
+    ArchiverCompressorDecorator(CommonsArchiver archiver, CommonsCompressor compressor) {
         this.archiver = archiver;
         this.compressor = compressor;
     }

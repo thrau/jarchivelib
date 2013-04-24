@@ -32,14 +32,14 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
  * archiver name passed when creating the {@code GenericArchiver}. Thus, it can be used for all archive formats the
  * {@code org.apache.commons.compress} library supports.
  */
-class GenericArchiver implements Archiver {
+class CommonsArchiver implements Archiver {
 
     private ArchiveStreamFactory streamFactory = new ArchiveStreamFactory();
 
     private final String archiverName;
     private final String fileExtension;
 
-    GenericArchiver(String archiverName) {
+    CommonsArchiver(String archiverName) {
         this.archiverName = archiverName.toLowerCase();
         this.fileExtension = "." + archiverName.toLowerCase();
     }

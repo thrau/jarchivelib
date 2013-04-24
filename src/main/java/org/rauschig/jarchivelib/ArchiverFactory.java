@@ -42,8 +42,8 @@ public final class ArchiverFactory {
             throw new IllegalArgumentException("Unknown compression type " + compression);
         }
 
-        GenericArchiver archiver = new GenericArchiver(archiveFormat);
-        GenericCompressor compressor = new GenericCompressor(compression);
+        CommonsArchiver archiver = new CommonsArchiver(archiveFormat);
+        CommonsCompressor compressor = new CommonsCompressor(compression);
 
         return new ArchiverCompressorDecorator(archiver, compressor);
     }
@@ -73,7 +73,7 @@ public final class ArchiverFactory {
             throw new IllegalArgumentException("Unknown archive format " + archiveFormat);
         }
 
-        return new GenericArchiver(archiveFormat);
+        return new CommonsArchiver(archiveFormat);
     }
 
     /**
@@ -84,7 +84,7 @@ public final class ArchiverFactory {
      * @return a new Archiver instance
      */
     public static Archiver createArchiver(ArchiveFormat archiveFormat) {
-        return new GenericArchiver(archiveFormat.getName());
+        return new CommonsArchiver(archiveFormat.getName());
     }
 
 }

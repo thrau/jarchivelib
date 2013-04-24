@@ -32,14 +32,14 @@ import org.apache.commons.compress.utils.IOUtils;
  * compressor name passed when creating the GenericCompressor. Thus, it can be used for all compression algorithms the
  * {@code org.apache.commons.compress} library supports.
  */
-class GenericCompressor implements Compressor {
+class CommonsCompressor implements Compressor {
 
     private CompressorStreamFactory streamFactory = new CompressorStreamFactory();
 
     private final String compressorName;
     private final String fileExtension;
 
-    GenericCompressor(String compressorName) {
+    CommonsCompressor(String compressorName) {
         this.compressorName = compressorName.toLowerCase();
         this.fileExtension = "." + compressorName.toLowerCase();
     }

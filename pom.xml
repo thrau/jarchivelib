@@ -22,9 +22,18 @@
   <artifactId>jarchivelib</artifactId>
   <version>0.2.1-SNAPSHOT</version>
 
+  <packaging>bundle</packaging>
+
   <name>java archiving library</name>
 
+  <description>
+    A simple library that facades org.apache.commons.compress, to provide an easy-to-use API for archiving and
+    compressing into and out of File objects.
+  </description>
+
   <inceptionYear>2013</inceptionYear>
+
+  <url>http://rauschig.org/jarchivelib</url>
 
   <licenses>
     <license>
@@ -35,10 +44,18 @@
   </licenses>
 
   <scm>
+    <url>https://bitbucket.org/thrau/jarchivelib</url>
     <connection>scm:git:git://git@bitbucket.org:thrau/jarchivelib.git</connection>
     <developerConnection>scm:git:git@bitbucket.org:thrau/jarchivelib.git</developerConnection>
-    <url>https://bitbucket.org/thrau/jarchivelib</url>
   </scm>
+
+  <developers>
+    <developer>
+      <id>thrau</id>
+      <name>Thomas Rausch</name>
+      <email>thomas@rauschig.org</email>
+    </developer>
+  </developers>
 
   <properties>
     <commons.compress.version>1.5</commons.compress.version>
@@ -48,8 +65,6 @@
     <bundle.symbolicName>${project.groupId}.${project.artifactId}</bundle.symbolicName>
     <bundle.namespace>${project.groupId}.${project.artifactId}</bundle.namespace>
   </properties>
-
-  <packaging>bundle</packaging>
 
   <build>
     <pluginManagement>
@@ -93,6 +108,11 @@
           <groupId>com.mycila.maven-license-plugin</groupId>
           <artifactId>maven-license-plugin</artifactId>
           <version>1.9.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.4</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -182,6 +202,19 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

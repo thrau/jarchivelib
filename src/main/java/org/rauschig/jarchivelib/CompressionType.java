@@ -45,14 +45,19 @@ public enum CompressionType {
     }
 
     /**
-     * Returns the name by which the compression algorithm is identified by.
+     * Returns the name by which the compression algorithm is identified.
+     * 
+     * @return the compression algorithm name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Returns true if the given compression type is known to the factory, false otherwise.
+     * Checks if the given compression type name is valid and known format.
+     * 
+     * @param compression the compression algorithm name
+     * @return true true if the given compression type is known to the factory, false otherwise
      */
     public static boolean isValidCompressionType(String compression) {
         for (CompressionType type : values()) {

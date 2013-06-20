@@ -26,11 +26,13 @@ public final class CompressorFactory {
     }
 
     /**
-     * Creates a compressor from the given compression type
+     * Creates a compressor from the given compression type.
      * 
+     * @param compression the name of the compression algorithm e.g. "gz" or "bzip2".
+     * @return a new {@link Compressor} instance for the given compression algorithm
      * @throws IllegalArgumentException if the compression type is unknown
      */
-    public static Compressor createCompressor(String compression) {
+    public static Compressor createCompressor(String compression) throws IllegalArgumentException {
         if (!CompressionType.isValidCompressionType(compression)) {
             throw new IllegalArgumentException("Unkonwn compression type " + compression);
         }
@@ -39,7 +41,10 @@ public final class CompressorFactory {
     }
 
     /**
-     * Creates a compressor from the given CompressionType
+     * Creates a compressor from the given CompressionType.
+     * 
+     * @param compression the type of the compression algorithm
+     * @return a new {@link Compressor} instance that uses the specified compression algorithm.
      */
     public static Compressor createCompressor(CompressionType compression) {
         return new CommonsCompressor(compression.getName());

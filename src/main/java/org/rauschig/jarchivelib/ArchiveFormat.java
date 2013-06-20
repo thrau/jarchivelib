@@ -58,13 +58,18 @@ public enum ArchiveFormat {
 
     /**
      * Returns the name by which the archive format is identified by.
+     * 
+     * @return the archiver format name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Returns true if the given archive format is known to the factory, false otherwise
+     * Checks if the given archive format name is valid and known format.
+     * 
+     * @param archiveFormat the archive format name
+     * @return true if the given archive format is known to the factory, false otherwise
      */
     public static boolean isValidArchiveFormat(String archiveFormat) {
         for (ArchiveFormat format : values()) {

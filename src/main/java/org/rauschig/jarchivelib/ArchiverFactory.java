@@ -34,7 +34,7 @@ public final class ArchiverFactory {
      * @return a new Archiver instance that also handles compression
      * @throws IllegalArgumentException if the archive format or the compression type is unknown
      */
-    public static Archiver createArchiver(String archiveFormat, String compression) {
+    public static Archiver createArchiver(String archiveFormat, String compression) throws IllegalArgumentException {
         if (!ArchiveFormat.isValidArchiveFormat(archiveFormat)) {
             throw new IllegalArgumentException("Unknown archive format " + archiveFormat);
         }
@@ -61,14 +61,14 @@ public final class ArchiverFactory {
     }
 
     /**
-     * Creates an Archiver for the given archive format
+     * Creates an Archiver for the given archive format.
      * 
      * @param archiveFormat the archive format e.g. "tar" or "zip"
      * 
      * @return a new Archiver instance
      * @throws IllegalArgumentException if the archive format is unknown
      */
-    public static Archiver createArchiver(String archiveFormat) {
+    public static Archiver createArchiver(String archiveFormat) throws IllegalArgumentException {
         if (!ArchiveFormat.isValidArchiveFormat(archiveFormat)) {
             throw new IllegalArgumentException("Unknown archive format " + archiveFormat);
         }
@@ -77,7 +77,7 @@ public final class ArchiverFactory {
     }
 
     /**
-     * Creates an Archiver for the given archive format
+     * Creates an Archiver for the given archive format.
      * 
      * @param archiveFormat the archive format
      * 

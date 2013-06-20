@@ -47,6 +47,7 @@ class CommonsArchiver implements Archiver {
     /**
      * Returns the name of the archiver.
      * 
+     * @return the archiver name
      * @see ArchiverFactory
      */
     public String getArchiverName() {
@@ -54,7 +55,9 @@ class CommonsArchiver implements Archiver {
     }
 
     /**
-     * Returns the file extension, which is equal to "." + {@link #getArchiverName()}
+     * Returns the file extension, which is equal to "." + {@link #getArchiverName()}.
+     * 
+     * @return the filename extension
      */
     public String getFileExtension() {
         return fileExtension;
@@ -107,7 +110,7 @@ class CommonsArchiver implements Archiver {
      * 
      * @param archive the archive file to create the {@link ArchiveOutputStream} for
      * @return a new {@link ArchiveOutputStream}
-     * @throws IOException
+     * @throws IOException propagated IOExceptions when creating the FileOutputStream.
      * @throws ArchiveException if the archiver name is not known
      */
     protected ArchiveOutputStream createArchiveOutputStream(File archive) throws IOException, ArchiveException {
@@ -117,9 +120,9 @@ class CommonsArchiver implements Archiver {
     /**
      * Uses the {@link #streamFactory} to create a new {@link ArchiveInputStream} for the given archive file.
      * 
-     * @param archive
-     * @return
-     * @throws IOException
+     * @param archive the archive file
+     * @return a new {@link ArchiveInputStream} for the given archive file
+     * @throws IOException propagated IOException when creating the FileInputStream.
      * @throws ArchiveException if the archiver name is not known
      */
     protected ArchiveInputStream createArchiveInputStream(File archive) throws IOException, ArchiveException {
@@ -128,17 +131,17 @@ class CommonsArchiver implements Archiver {
 
     /**
      * Creates a new File in the given destination. The resulting name will always be "archive"."fileExtension". If the
-     * archive name parameter already ends with the given file name extension, it is not additinally appended.
+     * archive name parameter already ends with the given file name extension, it is not additionally appended.
      * 
      * @param archive the name of the archive
-     * @param fileExtension the file extension (e.g. ".tar")
+     * @param extension the file extension (e.g. ".tar")
      * @param destination the parent path
      * @return the newly created file
-     * @throws IOException
+     * @throws IOException if an I/O error occurred while creating the file
      */
-    protected File createNewArchiveFile(String archive, String fileExtension, File destination) throws IOException {
-        if (!archive.endsWith(fileExtension)) {
-            archive += fileExtension;
+    protected File createNewArchiveFile(String archive, String extension, File destination) throws IOException {
+        if (!archive.endsWith(extension)) {
+            archive += extension;
         }
 
         File file = new File(destination, archive);
@@ -154,7 +157,7 @@ class CommonsArchiver implements Archiver {
      * 
      * @param sources the files to write in to the archive
      * @param archive the archive to write into
-     * @throws IOException
+     * @throws IOException when an I/O error occurs
      */
     protected void writeToArchive(File[] sources, ArchiveOutputStream archive) throws IOException {
         for (File source : sources) {
@@ -173,7 +176,7 @@ class CommonsArchiver implements Archiver {
      * @param parent the parent file node for computing a relative path (see {@link #relativePath(File, File)})
      * @param sources the files to write in to the archive
      * @param archive the archive to write into
-     * @throws IOException
+     * @throws IOException when an I/O error occurs
      */
     protected void writeToArchive(File parent, File[] sources, ArchiveOutputStream archive) throws IOException {
         for (File source : sources) {
@@ -194,7 +197,7 @@ class CommonsArchiver implements Archiver {
      * @param file the file to add to the archive
      * @param entryName the name of the archive entry
      * @param archive the archive to write to
-     * @throws IOException
+     * @throws IOException when an I/O error occurs during FileInputStream creation or during copying
      */
     protected void createArchiveEntry(File file, String entryName, ArchiveOutputStream archive) throws IOException {
         ArchiveEntry entry = archive.createArchiveEntry(file, entryName);

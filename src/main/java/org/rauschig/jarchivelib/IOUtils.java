@@ -21,7 +21,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Utility class for I/O operations.
+ */
 public final class IOUtils {
+
+    /**
+     * Default buffer size used for {@code copy} operations.
+     */
+    private static final int DEFAULT_BUFFER_SIZE = 8024;
+
     private IOUtils() {
 
     }
@@ -44,18 +53,20 @@ public final class IOUtils {
      * 
      * @param input the InputStream to copy
      * @param output the target Stream
+     * @return the amount of bytes written
      * @throws IOException if an error occurs
      */
     public static long copy(final InputStream input, final OutputStream output) throws IOException {
-        return copy(input, output, 8024);
+        return copy(input, output, DEFAULT_BUFFER_SIZE);
     }
 
     /**
-     * Copies the content of a InputStream into an OutputStream
+     * Copies the entire content of the given InputStream into the given OutputStream.
      * 
      * @param input the InputStream to copy
      * @param output the target Stream
      * @param buffersize the buffer size to use
+     * @return the amount of bytes written
      * @throws IOException if an error occurs
      */
     public static long copy(final InputStream input, final OutputStream output, int buffersize) throws IOException {
@@ -79,7 +90,7 @@ public final class IOUtils {
      * @param root the parent node
      * @param node the file node to compute the relative path for
      * @return the path of {@code node} relative to {@code root}
-     * @throws IOException
+     * @throws IOException when an I/O error occurs during resolving the canonical path of the files
      */
     public static String relativePath(File root, File node) throws IOException {
         String rootPath = root.getCanonicalPath();
@@ -94,11 +105,11 @@ public final class IOUtils {
      * <p>
      * Will throw an exception if the given {@link File} is actually an existing file, or the directory is not writable
      * 
-     * @param destination
-     * @throws IOException
+     * @param destination the directory which to ensure its existence for
+     * @throws IOException if an I/O error occurs e.g. when attempting to create the destination directory
      * @throws IllegalArgumentException if the destination is an existing file, or the directory is not writable
      */
-    public static void requireDirectory(File destination) throws IOException {
+    public static void requireDirectory(File destination) throws IOException, IllegalArgumentException {
         if (destination.isFile()) {
             throw new IllegalArgumentException("Given destination exists and is a file");
         } else if (!destination.exists()) {

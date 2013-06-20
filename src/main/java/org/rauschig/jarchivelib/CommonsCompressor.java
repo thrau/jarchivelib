@@ -47,6 +47,7 @@ class CommonsCompressor implements Compressor {
     /**
      * Returns the name of the compressor.
      * 
+     * @return the compressor name.
      * @see CompressorFactory
      */
     public String getCompressorName() {
@@ -54,7 +55,9 @@ class CommonsCompressor implements Compressor {
     }
 
     /**
-     * Returns the file extension, which is equal to "." + {@link #getCompressorName()}
+     * Returns the file extension, which is equal to "." + {@link #getCompressorName()}.
+     * 
+     * @return the filename extension
      */
     public String getFileExtension() {
         return fileExtension;
@@ -86,7 +89,7 @@ class CommonsCompressor implements Compressor {
      * 
      * @param destination the file to create the {@link CompressorOutputStream} for
      * @return a new {@link CompressorOutputStream}
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      * @throws CompressorException if the compressor name is not known
      */
     protected CompressorOutputStream createCompressorOutputStream(File destination) throws IOException,
@@ -97,9 +100,9 @@ class CommonsCompressor implements Compressor {
     /**
      * Uses the {@link #streamFactory} to create a new {@link CompressorInputStream} for the given source {@link File}.
      * 
-     * @param spirce the file to create the {@link CompressorInputStream} for
+     * @param source the file to create the {@link CompressorInputStream} for
      * @return a new {@link CompressorInputStream}
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      * @throws CompressorException if the compressor name is not known
      */
     protected CompressorInputStream createCompressorInputStream(File source) throws IOException, CompressorException {

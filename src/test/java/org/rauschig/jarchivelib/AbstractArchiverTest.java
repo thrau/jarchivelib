@@ -48,28 +48,29 @@ public abstract class AbstractArchiverTest {
     public static final File ARCHIVE_DIR = new File(RESOURCES_DIR, "archive");
 
     public static final File NON_READABLE_FILE = new File(RESOURCES_DIR, "non_readable_file.txt");
-    static {
-        NON_READABLE_FILE.setReadable(false);
-    }
 
     @Before
-    public synchronized void createDirs() {
+    public synchronized void createResources() {
         if (!ARCHIVE_EXTRACT_DIR.exists()) {
             ARCHIVE_EXTRACT_DIR.mkdirs();
         }
         if (!ARCHIVE_CREATE_DIR.exists()) {
             ARCHIVE_CREATE_DIR.mkdirs();
         }
+
+        NON_READABLE_FILE.setReadable(false);
     }
 
     @After
-    public synchronized void deleteDirs() throws IOException {
+    public synchronized void dropResources() throws IOException {
         if (ARCHIVE_EXTRACT_DIR.exists()) {
             FileUtils.deleteDirectory(ARCHIVE_EXTRACT_DIR);
         }
         if (ARCHIVE_CREATE_DIR.exists()) {
             FileUtils.deleteDirectory(ARCHIVE_CREATE_DIR);
         }
+
+        NON_READABLE_FILE.setReadable(true);
     }
 
     protected static void assertExtractionWasSuccessful() throws Exception {

@@ -47,6 +47,11 @@ public abstract class AbstractArchiverTest {
      */
     public static final File ARCHIVE_DIR = new File(RESOURCES_DIR, "archive");
 
+    public static final File NON_READABLE_FILE = new File(RESOURCES_DIR, "non_readable_file.txt");
+    static {
+        NON_READABLE_FILE.setReadable(false);
+    }
+
     @Before
     public synchronized void createDirs() {
         if (!ARCHIVE_EXTRACT_DIR.exists()) {
@@ -88,7 +93,7 @@ public abstract class AbstractArchiverTest {
         for (int i = 0; i < expecteds.length; i++) {
             File expected = new File(expecteds[i]);
             File actual = new File(actuals[i]);
-            
+
             Assert.assertEquals(expected.getName(), actual.getName());
 
             if (expected.isFile()) {

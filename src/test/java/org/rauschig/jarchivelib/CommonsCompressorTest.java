@@ -18,6 +18,7 @@ package org.rauschig.jarchivelib;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.junit.After;
 import org.junit.Test;
@@ -91,5 +92,61 @@ public class CommonsCompressorTest extends AbstractArchiverTest {
 
         compressor.decompress(destinationBzip2, destination);
         assertFileContentEquals(source, destination);
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void compress_gzip_nonExistingFile_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.compress(new File("some/file/that/does/not/exist/../hopefully"), destinationGz);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void compress_gzip_nonReadableFile_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.compress(NON_READABLE_FILE, destinationGz);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void compress_gzip_withDirectoryAsSource_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.compress(ARCHIVE_DIR, destinationGz);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void compress_gzip_withDirectoryAsDestination_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.compress(source, ARCHIVE_DIR);
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void decompress_gzip_nonExistingFile_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.decompress(new File("some/file/that/does/not/exist/../hopefully"), destination);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decompress_gzip_nonReadableFile_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.decompress(NON_READABLE_FILE, destination);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decompress_gzip_withDirectoryAsSource_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.decompress(ARCHIVE_DIR, destination);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decompress_gzip_withDirectoryAsDestination_shouldFail() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        compressor.decompress(sourceGz, ARCHIVE_DIR);
     }
 }

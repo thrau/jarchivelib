@@ -18,6 +18,7 @@ package org.rauschig.jarchivelib;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -64,7 +65,18 @@ class CommonsCompressor implements Compressor {
     }
 
     @Override
-    public void compress(File source, File destination) throws IOException {
+    public void compress(File source, File destination) throws IllegalArgumentException, IOException {
+        if (source.isDirectory()) {
+            throw new IllegalArgumentException("Can not compress " + source + ". Source is a directory.");
+        } else if (!source.exists()) {
+            throw new FileNotFoundException(source.getPath());
+        } else if (!source.canRead()) {
+            throw new IllegalArgumentException("Can not compress " + source + ". Can not read from source.");
+        } else if (destination.isDirectory()) {
+            throw new IllegalArgumentException("Can not compress into " + destination
+                + ". Destination is a directory.");
+        }
+
         try (CompressorOutputStream compressed = createCompressorOutputStream(destination);
                 BufferedInputStream input = new BufferedInputStream(new FileInputStream(source))) {
             IOUtils.copy(input, compressed);
@@ -75,6 +87,17 @@ class CommonsCompressor implements Compressor {
 
     @Override
     public void decompress(File source, File destination) throws IOException {
+        if (source.isDirectory()) {
+            throw new IllegalArgumentException("Can not decompress " + source + ". Source is a directory.");
+        } else if (!source.exists()) {
+            throw new FileNotFoundException(source.getName());
+        } else if (!source.canRead()) {
+            throw new IllegalArgumentException("Can not decompress " + source + ". Can not read from source.");
+        } else if (destination.isDirectory()) {
+            throw new IllegalArgumentException("Can not decompress into " + destination
+                + ". Destination is a directory.");
+        }
+
         try (CompressorInputStream compressed = createCompressorInputStream(source);
                 FileOutputStream output = new FileOutputStream(destination)) {
             IOUtils.copy(compressed, output);
@@ -93,7 +116,7 @@ class CommonsCompressor implements Compressor {
      * @throws CompressorException if the compressor name is not known
      */
     protected CompressorOutputStream createCompressorOutputStream(File destination) throws IOException,
-            CompressorException {
+        CompressorException {
         return streamFactory.createCompressorOutputStream(compressorName, new FileOutputStream(destination));
     }
 

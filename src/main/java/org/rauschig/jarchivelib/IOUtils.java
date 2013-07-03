@@ -111,7 +111,7 @@ public final class IOUtils {
      */
     public static void requireDirectory(File destination) throws IOException, IllegalArgumentException {
         if (destination.isFile()) {
-            throw new IllegalArgumentException("Given destination exists and is a file");
+            throw new IllegalArgumentException(destination + " exists and is a file, directory or path expected.");
         } else if (!destination.exists()) {
             destination.mkdirs();
         }

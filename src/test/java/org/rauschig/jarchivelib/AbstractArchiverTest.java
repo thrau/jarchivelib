@@ -15,10 +15,10 @@
  */
 package org.rauschig.jarchivelib;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -77,6 +77,36 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
 
         archiver.extract(archive, ARCHIVE_EXTRACT_DIR);
         assertExtractionWasSuccessful();
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void create_withNonExistingSource_fails() throws Exception {
+        archiver.create("archive", ARCHIVE_CREATE_DIR, new File("file/that/does/not/exist/../hopefully"));
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void create_withNonReadableSource_fails() throws Exception {
+        archiver.create("archive", ARCHIVE_CREATE_DIR, NON_READABLE_FILE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void create_withFileAsDestination_fails() throws Exception {
+        archiver.create("archive", NON_READABLE_FILE, ARCHIVE_DIR);
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void extract_withNonExistingSource_fails() throws Exception {
+        archiver.extract(new File("file/that/does/not/exist/../hopefully"), ARCHIVE_EXTRACT_DIR);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void extract_withNonReadableSource_fails() throws Exception {
+        archiver.extract(NON_READABLE_FILE, ARCHIVE_EXTRACT_DIR);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void extract_withFileAsDestination_fails() throws Exception {
+        archiver.extract(archive, NON_READABLE_FILE);
     }
 
     protected static void assertExtractionWasSuccessful() throws Exception {

@@ -18,6 +18,7 @@ package org.rauschig.jarchivelib;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -83,6 +84,14 @@ class CommonsArchiver implements Archiver {
 
     @Override
     public void extract(File archive, File destination) throws IOException {
+        if (archive.isDirectory()) {
+            throw new IllegalArgumentException("Can not extract " + archive + ". Source is a directory.");
+        } else if (!archive.exists()) {
+            throw new FileNotFoundException(archive.getPath());
+        } else if (!archive.canRead()) {
+            throw new IllegalArgumentException("Can not extract " + archive + ". Can not read from source.");
+        }
+
         IOUtils.requireDirectory(destination);
 
         try (ArchiveInputStream input = createArchiveInputStream(archive)) {
@@ -161,6 +170,12 @@ class CommonsArchiver implements Archiver {
      */
     protected void writeToArchive(File[] sources, ArchiveOutputStream archive) throws IOException {
         for (File source : sources) {
+            if (!source.exists()) {
+                throw new FileNotFoundException(source.getPath());
+            } else if (!source.canRead()) {
+                throw new FileNotFoundException(source.getPath() + " (Permission denied)");
+            }
+
             if (source.isFile()) {
                 writeToArchive(source.getParentFile(), new File[] { source }, archive);
             } else {

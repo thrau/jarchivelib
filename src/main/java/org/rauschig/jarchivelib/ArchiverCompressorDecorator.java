@@ -18,7 +18,6 @@ package org.rauschig.jarchivelib;
 import java.io.File;
 import java.io.IOException;
 
-
 /**
  * Decorates an {@link Archiver} with a {@link Compressor}, s.t. it is able to compress the archives it generates and
  * decompress the archives it extracts.
@@ -41,6 +40,8 @@ class ArchiverCompressorDecorator implements Archiver {
 
     @Override
     public File create(String archive, File destination, File... sources) throws IOException {
+        IOUtils.requireDirectory(destination);
+
         File temp = File.createTempFile(destination.getName(), archiver.getFileExtension(), destination);
         File destinationArchive = null;
 

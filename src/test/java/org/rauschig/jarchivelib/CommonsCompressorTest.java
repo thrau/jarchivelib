@@ -23,7 +23,7 @@ import java.io.FileNotFoundException;
 import org.junit.After;
 import org.junit.Test;
 
-public class CommonsCompressorTest extends AbstractArchiverTest {
+public class CommonsCompressorTest extends AbstractResourceTest {
 
     private Compressor compressor;
 

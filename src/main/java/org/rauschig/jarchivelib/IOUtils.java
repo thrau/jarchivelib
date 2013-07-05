@@ -71,7 +71,7 @@ public final class IOUtils {
      */
     public static long copy(final InputStream input, final OutputStream output, int buffersize) throws IOException {
         final byte[] buffer = new byte[buffersize];
-        int n = 0;
+        int n;
         long count = 0;
         while (-1 != (n = input.read(buffer))) {
             output.write(buffer, 0, n);

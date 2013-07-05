@@ -26,7 +26,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
-public class AbstractResourceTest {
+public abstract class AbstractResourceTest {
 
     public static final File RESOURCES_DIR = new File("src/test/resources");
 
@@ -113,7 +113,7 @@ public class AbstractResourceTest {
     }
 
     public static List<String> flatList(File root) throws IOException {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         File[] nodes = root.listFiles();
 
@@ -139,7 +139,7 @@ public class AbstractResourceTest {
     }
 
     public static List<String> flatRelativeList(File root, File current) throws IOException {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
         String prefix = root.getCanonicalPath();
         File[] nodes = current.getCanonicalFile().listFiles();

@@ -188,7 +188,7 @@ class CommonsArchiver implements Archiver {
      * Recursively writes all given source {@link File}s into the given {@link ArchiveOutputStream}. The paths of the
      * sources in the archive will be relative to the given parent {@code File}.
      * 
-     * @param parent the parent file node for computing a relative path (see {@link #relativePath(File, File)})
+     * @param parent the parent file node for computing a relative path (see {@link IOUtils#relativePath(File, File)})
      * @param sources the files to write in to the archive
      * @param archive the archive to write into
      * @throws IOException when an I/O error occurs

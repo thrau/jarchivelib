@@ -17,9 +17,11 @@ package org.rauschig.jarchivelib;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
 
-public class FactoryTest {
+public class FactoryTest extends AbstractResourceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void createArchiver_withUnknownArchiveType_fails() throws Exception {
@@ -52,6 +54,32 @@ public class FactoryTest {
         assertEquals(ArchiverCompressorDecorator.class, archiver.getClass());
     }
 
+    @Test
+    public void createArchiver_fromCompressedArchiveFile_returnsCorrectArchiver() throws Exception {
+        Archiver archiver = ArchiverFactory.createArchiver(new File(RESOURCES_DIR, "archive.tar.gz"));
+
+        assertNotNull(archiver);
+        assertEquals(ArchiverCompressorDecorator.class, archiver.getClass());
+    }
+
+    @Test
+    public void createArchiver_fromArchiveFile_returnsCorrectArchiver() throws Exception {
+        Archiver archiver = ArchiverFactory.createArchiver(new File(RESOURCES_DIR, "archive.tar"));
+
+        assertNotNull(archiver);
+        assertEquals(CommonsArchiver.class, archiver.getClass());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createArchiver_fromUnknownFileExtension_fails() throws Exception {
+        ArchiverFactory.createArchiver(NON_READABLE_FILE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createArchiver_fromUnknownArchiveType_fails() throws Exception {
+        ArchiverFactory.createArchiver(new File(RESOURCES_DIR, "compress.txt.gz"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void createCompressor_withUnknownCompressionType_fails() throws Exception {
         CompressorFactory.createCompressor("foo");
@@ -64,4 +92,23 @@ public class FactoryTest {
         assertNotNull(compressor);
         assertEquals(CommonsCompressor.class, compressor.getClass());
     }
+
+    @Test
+    public void createCompressor_fromFile_returnsCorrectCompressor() throws Exception {
+        Compressor compressor = CompressorFactory.createCompressor(new File(RESOURCES_DIR, "compress.txt.gz"));
+
+        assertNotNull(compressor);
+        assertEquals(CommonsCompressor.class, compressor.getClass());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createCompressor_fromUnknownFileExtension_fails() throws Exception {
+        CompressorFactory.createCompressor(NON_READABLE_FILE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createCompressor_fromUnknownCompressionType_fails() throws Exception {
+        CompressorFactory.createCompressor(new File(RESOURCES_DIR, "archive.tar"));
+    }
+
 }

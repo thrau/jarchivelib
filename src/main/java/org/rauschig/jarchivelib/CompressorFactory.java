@@ -15,6 +15,8 @@
  */
 package org.rauschig.jarchivelib;
 
+import java.io.File;
+
 /**
  * Factory for creating {@link Compressor} instances by a given compression algorithm. Use the constants in this class
  * to pass to the factory method.
@@ -23,6 +25,27 @@ public final class CompressorFactory {
 
     private CompressorFactory() {
 
+    }
+
+    /**
+     * Probes the given {@link File} for its file type and creates a {@link Compressor} based on this file type.
+     * 
+     * @param file the file to check.
+     * @return a new Compressor instance
+     * @throws IllegalArgumentException if the given file is not a known compressed file type
+     */
+    public static Compressor createCompressor(File file) throws IllegalArgumentException {
+        FileType extension = FileTypeMap.get(file);
+
+        if (extension == null) {
+            throw new IllegalArgumentException("Unknown file extension " + file.getName());
+        }
+
+        if (extension.isCompressed()) {
+            return createCompressor(extension.getCompression());
+        } else {
+            throw new IllegalArgumentException("Unknown compressed file extension " + file.getName());
+        }
     }
 
     /**

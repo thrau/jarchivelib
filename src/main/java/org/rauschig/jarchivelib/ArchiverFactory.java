@@ -15,6 +15,8 @@
  */
 package org.rauschig.jarchivelib;
 
+import java.io.File;
+
 /**
  * Factory for creating {@link Archiver} instances by a given archiver type name. Use the constants in this class to
  * pass to the factory method.
@@ -23,6 +25,31 @@ public final class ArchiverFactory {
 
     private ArchiverFactory() {
 
+    }
+
+    /**
+     * Probes the given {@link File} for its file type and creates an {@link Archiver} based on this file type. If the
+     * File has a composite file extension such as ".tar.gz", the created {@link Archiver} will also handle ".gz"
+     * compression.
+     * 
+     * @param archive the archive file to check.
+     * @return a new Archiver instance (that may also handles compression)
+     * @throws IllegalArgumentException if the given file is not a known archive
+     */
+    public static Archiver createArchiver(File archive) throws IllegalArgumentException {
+        FileType extension = FileTypeMap.get(archive);
+
+        if (extension == null) {
+            throw new IllegalArgumentException("Unknown file extension " + archive.getName());
+        }
+
+        if (extension.isArchive() && extension.isCompressed()) {
+            return createArchiver(extension.getArchiveFormat(), extension.getCompression());
+        } else if (extension.isArchive()) {
+            return createArchiver(extension.getArchiveFormat());
+        } else {
+            throw new IllegalArgumentException("Unknown archive file extension " + archive.getName());
+        }
     }
 
     /**

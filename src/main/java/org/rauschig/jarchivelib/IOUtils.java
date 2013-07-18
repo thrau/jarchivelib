@@ -20,6 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Utility class for I/O operations.
@@ -118,6 +120,18 @@ public final class IOUtils {
         if (!destination.canWrite()) {
             throw new IllegalArgumentException("Can not write to destination " + destination);
         }
+    }
+
+    /**
+     * Uses {@code java.nio}'s {@link Paths} and {@link Files#probeContentType(java.nio.file.Path)} to return the files
+     * content type.
+     * 
+     * @param file the file to inspect
+     * @return a string with the content type
+     * @throws IOException if an error occurs while resolving the path or probing the file
+     */
+    public static String getContentType(File file) throws IOException {
+        return Files.probeContentType(Paths.get(file.getPath()));
     }
 
 }

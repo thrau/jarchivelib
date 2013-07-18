@@ -48,7 +48,7 @@ public enum ArchiveFormat {
     ZIP(ArchiveStreamFactory.ZIP);
 
     /**
-     * The name by which the compression algorithm is identified by
+     * The name by which the compression algorithm is identified.
      */
     private final String name;
 
@@ -57,7 +57,7 @@ public enum ArchiveFormat {
     }
 
     /**
-     * Returns the name by which the archive format is identified by.
+     * Returns the name by which the archive format is identified.
      * 
      * @return the archiver format name
      */

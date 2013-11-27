@@ -131,7 +131,7 @@ public final class IOUtils {
      * @throws IOException if an error occurs while resolving the path or probing the file
      */
     public static String getContentType(File file) throws IOException {
-        return Files.probeContentType(Paths.get(file.getPath()));
+        return Files.probeContentType(file.toPath());
     }
 
 }

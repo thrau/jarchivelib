@@ -41,3 +41,12 @@ To create a new tar archive with gzip compression `archive.tar.gz` in `/home/jac
     File archive = archiver.create(archiveName, destination, source);
 
 notice that you can omit the filename extension in the archive name, as it will be appended by the archiver automatically if it is missing.
+
+Compatibility
+-------------
+
+Currently only tested for *nix file systems.
+
+### OSGi
+
+jarchivelib compiles to a bundle and is OSGi compatible

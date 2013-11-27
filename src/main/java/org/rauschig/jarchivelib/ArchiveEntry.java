@@ -31,35 +31,35 @@ public interface ArchiveEntry {
     /**
      * Special value indicating that the size is unknown
      */
-    public static final long UNKNOWN_SIZE = -1;
+    static final long UNKNOWN_SIZE = -1;
 
     /**
      * The name of the entry in the archive. May refer to a file or directory or other item.
      * 
      * @return the name of the item
      */
-    public abstract String getName();
+    String getName();
 
     /**
      * The (uncompressed) size of the entry. May be -1 (UNKNOWN_SIZE) if the size is unknown
      * 
      * @return the size of the entry once uncompressed, or -1 if unknown.
      */
-    public abstract long getSize();
+    long getSize();
 
     /**
      * Returns the last modified date of the entry.
      * 
      * @return the date the entry was last modified.
      */
-    public abstract Date getLastModifiedDate();
+    Date getLastModifiedDate();
 
     /**
      * Checks whether the given entry is a directory.
      * 
      * @return true if the entry refers to a directory
      */
-    public abstract boolean isDirectory();
+    boolean isDirectory();
 
     /**
      * Extracts the entry to the given destination directory.
@@ -73,7 +73,6 @@ public interface ArchiveEntry {
      * @throws IllegalArgumentException if the destination is not a directory, or a directory can not be created at the
      *         given location
      */
-    public abstract File extract(File destination) throws IOException, IllegalStateException,
-        IllegalArgumentException;
+    File extract(File destination) throws IOException, IllegalStateException, IllegalArgumentException;
 
 }

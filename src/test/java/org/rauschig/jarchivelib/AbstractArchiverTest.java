@@ -19,6 +19,9 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -107,6 +110,82 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
     @Test(expected = IllegalArgumentException.class)
     public void extract_withFileAsDestination_fails() throws Exception {
         archiver.extract(archive, NON_READABLE_FILE);
+    }
+
+    @Test
+    public void stream_returnsCorrectEntries() throws IOException {
+        try (ArchiveStream stream = archiver.stream(archive)) {
+
+            ArchiveEntry entry;
+            List<String> entries = new ArrayList<>();
+
+            while ((entry = stream.getNextEntry()) != null) {
+                entries.add(entry.getName());
+            }
+
+            assertEquals(5, entries.size());
+            assertTrue(entries.contains("file.txt"));
+            assertTrue(entries.contains("folder/"));
+            assertTrue(entries.contains("folder/folder_file.txt"));
+            assertTrue(entries.contains("folder/subfolder/subfolder_file.txt"));
+            assertTrue(entries.contains("folder/subfolder/"));
+
+        } catch (UnsupportedOperationException e) {
+            // TODO: remove catch block once archiver compressor decorator supports stream
+            return;
+        }
+    }
+
+    @Test
+    public void stream_extractEveryEntryWorks() throws Exception {
+
+        try (ArchiveStream stream = archiver.stream(archive)) {
+            ArchiveEntry entry;
+            while ((entry = stream.getNextEntry()) != null) {
+                entry.extract(ARCHIVE_EXTRACT_DIR);
+            }
+        } catch (UnsupportedOperationException e) {
+            // TODO: remove catch block once archiver compressor decorator supports stream
+            return;
+        }
+
+        assertExtractionWasSuccessful();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void stream_extractPassedEntry_throwsException() throws Exception {
+        try (ArchiveStream stream = archiver.stream(archive)) {
+            ArchiveEntry entry = null;
+
+            try {
+                entry = stream.getNextEntry();
+                stream.getNextEntry();
+            } catch (IllegalStateException e) {
+                fail("Illegal state exception caugth to early");
+            }
+
+            entry.extract(ARCHIVE_EXTRACT_DIR);
+        } catch (UnsupportedOperationException e) {
+            // TODO: remove catch block once archiver compressor decorator supports stream
+            throw new IllegalStateException();
+        }
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void stream_extractOnClosedStream_throwsException() throws Exception {
+        ArchiveEntry entry = null;
+        try (ArchiveStream stream = archiver.stream(archive)) {
+            try {
+                entry = stream.getNextEntry();
+            } catch (IllegalStateException e) {
+                fail("Illegal state exception caugth to early");
+            }
+        } catch (UnsupportedOperationException e) {
+            // TODO: remove catch block once archiver compressor decorator supports stream
+            throw new IllegalStateException();
+        }
+
+        entry.extract(ARCHIVE_EXTRACT_DIR);
     }
 
     protected static void assertExtractionWasSuccessful() throws Exception {

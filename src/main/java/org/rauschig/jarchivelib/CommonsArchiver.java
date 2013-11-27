@@ -113,6 +113,15 @@ class CommonsArchiver implements Archiver {
         }
     }
 
+    @Override
+    public ArchiveStream stream(File archive) throws IOException {
+        try {
+            return new CommonsArchiveStream(createArchiveInputStream(archive));
+        } catch (ArchiveException e) {
+            throw new IOException(e);
+        }
+    }
+
     /**
      * Uses the {@link #streamFactory} and the {@link #archiverName} to create a new {@link ArchiveOutputStream} for the
      * given archive {@link File}.

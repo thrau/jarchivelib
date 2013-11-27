@@ -71,6 +71,12 @@ class ArchiverCompressorDecorator implements Archiver {
         }
     }
 
+    @Override
+    public ArchiveStream stream(File archive) throws IOException {
+        // TODO
+        throw new UnsupportedOperationException("Can't yet stream compressed archives");
+    }
+
     /**
      * Returns a file name from the given archive name. The file extension suffix will be appended according to what is
      * already present.

@@ -50,4 +50,14 @@ public interface Archiver {
      * @throws IOException propagated I/O errors by {@code java.io}
      */
     void extract(File archive, File destination) throws IOException;
+
+    /**
+     * Reads the given archive file as an {@link ArchiveStream} which is used to access individual {@link CommonsArchiveEntry}
+     * objects within the archive without extracting the archive onto the file system.
+     * 
+     * @param archive the archive file to stream
+     * @return a new archive stream for the given archive
+     * @throws IOException propagated I/O errors by {@code java.io}
+     */
+    ArchiveStream stream(File archive) throws IOException;
 }

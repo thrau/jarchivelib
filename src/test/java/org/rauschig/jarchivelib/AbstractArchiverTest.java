@@ -130,9 +130,6 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             assertTrue(entries.contains("folder/subfolder/subfolder_file.txt"));
             assertTrue(entries.contains("folder/subfolder/"));
 
-        } catch (UnsupportedOperationException e) {
-            // TODO: remove catch block once archiver compressor decorator supports stream
-            return;
         }
     }
 
@@ -144,9 +141,6 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             while ((entry = stream.getNextEntry()) != null) {
                 entry.extract(ARCHIVE_EXTRACT_DIR);
             }
-        } catch (UnsupportedOperationException e) {
-            // TODO: remove catch block once archiver compressor decorator supports stream
-            return;
         }
 
         assertExtractionWasSuccessful();
@@ -165,9 +159,6 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             }
 
             entry.extract(ARCHIVE_EXTRACT_DIR);
-        } catch (UnsupportedOperationException e) {
-            // TODO: remove catch block once archiver compressor decorator supports stream
-            throw new IllegalStateException();
         }
     }
 
@@ -180,9 +171,6 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             } catch (IllegalStateException e) {
                 fail("Illegal state exception caugth to early");
             }
-        } catch (UnsupportedOperationException e) {
-            // TODO: remove catch block once archiver compressor decorator supports stream
-            throw new IllegalStateException();
         }
 
         entry.extract(ARCHIVE_EXTRACT_DIR);

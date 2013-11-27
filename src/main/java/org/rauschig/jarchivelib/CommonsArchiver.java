@@ -15,11 +15,12 @@
  */
 package org.rauschig.jarchivelib;
 
-import java.io.BufferedInputStream;
+import static org.rauschig.jarchivelib.CommonsStreamFactory.createArchiveInputStream;
+import static org.rauschig.jarchivelib.CommonsStreamFactory.createArchiveOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -34,8 +35,6 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
  * {@code org.apache.commons.compress} library supports.
  */
 class CommonsArchiver implements Archiver {
-
-    private ArchiveStreamFactory streamFactory = new ArchiveStreamFactory();
 
     private final String archiverName;
     private final String fileExtension;
@@ -70,7 +69,7 @@ class CommonsArchiver implements Archiver {
 
         File archiveFile = createNewArchiveFile(archive, fileExtension, destination);
 
-        try (ArchiveOutputStream outputStream = createArchiveOutputStream(archiveFile)) {
+        try (ArchiveOutputStream outputStream = createArchiveOutputStream(this, archiveFile)) {
 
             writeToArchive(sources, outputStream);
 
@@ -120,31 +119,6 @@ class CommonsArchiver implements Archiver {
         } catch (ArchiveException e) {
             throw new IOException(e);
         }
-    }
-
-    /**
-     * Uses the {@link #streamFactory} and the {@link #archiverName} to create a new {@link ArchiveOutputStream} for the
-     * given archive {@link File}.
-     * 
-     * @param archive the archive file to create the {@link ArchiveOutputStream} for
-     * @return a new {@link ArchiveOutputStream}
-     * @throws IOException propagated IOExceptions when creating the FileOutputStream.
-     * @throws ArchiveException if the archiver name is not known
-     */
-    protected ArchiveOutputStream createArchiveOutputStream(File archive) throws IOException, ArchiveException {
-        return streamFactory.createArchiveOutputStream(archiverName, new FileOutputStream(archive));
-    }
-
-    /**
-     * Uses the {@link #streamFactory} to create a new {@link ArchiveInputStream} for the given archive file.
-     * 
-     * @param archive the archive file
-     * @return a new {@link ArchiveInputStream} for the given archive file
-     * @throws IOException propagated IOException when creating the FileInputStream.
-     * @throws ArchiveException if the archiver name is not known
-     */
-    protected ArchiveInputStream createArchiveInputStream(File archive) throws IOException, ArchiveException {
-        return streamFactory.createArchiveInputStream(new BufferedInputStream(new FileInputStream(archive)));
     }
 
     /**

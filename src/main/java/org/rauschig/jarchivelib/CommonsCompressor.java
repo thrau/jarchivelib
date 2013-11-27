@@ -15,6 +15,9 @@
  */
 package org.rauschig.jarchivelib;
 
+import static org.rauschig.jarchivelib.CommonsStreamFactory.createCompressorInputStream;
+import static org.rauschig.jarchivelib.CommonsStreamFactory.createCompressorOutputStream;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,8 +37,6 @@ import org.apache.commons.compress.utils.IOUtils;
  * {@code org.apache.commons.compress} library supports.
  */
 class CommonsCompressor implements Compressor {
-
-    private CompressorStreamFactory streamFactory = new CompressorStreamFactory();
 
     private final String compressorName;
     private final String fileExtension;
@@ -77,7 +78,7 @@ class CommonsCompressor implements Compressor {
                 + ". Destination is a directory.");
         }
 
-        try (CompressorOutputStream compressed = createCompressorOutputStream(destination);
+        try (CompressorOutputStream compressed = createCompressorOutputStream(this, destination);
                 BufferedInputStream input = new BufferedInputStream(new FileInputStream(source))) {
             IOUtils.copy(input, compressed);
         } catch (CompressorException e) {
@@ -106,29 +107,4 @@ class CommonsCompressor implements Compressor {
         }
     }
 
-    /**
-     * Uses the {@link #streamFactory} and the {@link #compressorName} to create a new {@link CompressorOutputStream}
-     * for the given destination {@link File}.
-     * 
-     * @param destination the file to create the {@link CompressorOutputStream} for
-     * @return a new {@link CompressorOutputStream}
-     * @throws IOException if an I/O error occurs
-     * @throws CompressorException if the compressor name is not known
-     */
-    protected CompressorOutputStream createCompressorOutputStream(File destination) throws IOException,
-        CompressorException {
-        return streamFactory.createCompressorOutputStream(compressorName, new FileOutputStream(destination));
-    }
-
-    /**
-     * Uses the {@link #streamFactory} to create a new {@link CompressorInputStream} for the given source {@link File}.
-     * 
-     * @param source the file to create the {@link CompressorInputStream} for
-     * @return a new {@link CompressorInputStream}
-     * @throws IOException if an I/O error occurs
-     * @throws CompressorException if the compressor name is not known
-     */
-    protected CompressorInputStream createCompressorInputStream(File source) throws IOException, CompressorException {
-        return streamFactory.createCompressorInputStream(new BufferedInputStream(new FileInputStream(source)));
-    }
 }

@@ -15,8 +15,14 @@
  */
 package org.rauschig.jarchivelib;
 
+import static org.rauschig.jarchivelib.CommonsStreamFactory.createArchiveInputStream;
+import static org.rauschig.jarchivelib.CommonsStreamFactory.createCompressorInputStream;
+
 import java.io.File;
 import java.io.IOException;
+
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.compressors.CompressorException;
 
 /**
  * Decorates an {@link Archiver} with a {@link Compressor}, s.t. it is able to compress the archives it generates and
@@ -73,8 +79,11 @@ class ArchiverCompressorDecorator implements Archiver {
 
     @Override
     public ArchiveStream stream(File archive) throws IOException {
-        // TODO
-        throw new UnsupportedOperationException("Can't yet stream compressed archives");
+        try {
+            return new CommonsArchiveStream(createArchiveInputStream(archiver, createCompressorInputStream(archive)));
+        } catch (ArchiveException | CompressorException e) {
+            throw new IOException(e);
+        }
     }
 
     /**

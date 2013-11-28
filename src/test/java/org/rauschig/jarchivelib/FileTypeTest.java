@@ -19,13 +19,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class FileTypeMapTest {
+public class FileTypeTest {
 
     @Test
     public void get_archive_returnsCorrectFileType() throws Exception {
         FileType extension;
 
-        extension = FileTypeMap.get("/path/to/file/file.tar");
+        extension = FileType.get("/path/to/file/file.tar");
         assertTrue(extension.isArchive());
         assertFalse(extension.isCompressed());
 
@@ -38,7 +38,7 @@ public class FileTypeMapTest {
     public void get_compressed_returnsCorrectFileType() throws Exception {
         FileType extension;
 
-        extension = FileTypeMap.get("/path/to/file/file.gz");
+        extension = FileType.get("/path/to/file/file.gz");
         assertFalse(extension.isArchive());
         assertTrue(extension.isCompressed());
 
@@ -51,7 +51,7 @@ public class FileTypeMapTest {
     public void get_compressedArchive_returnsCorrectFileType() throws Exception {
         FileType extension;
 
-        extension = FileTypeMap.get("/path/to/file/file.tar.gz");
+        extension = FileType.get("/path/to/file/file.tar.gz");
         assertTrue(extension.isArchive());
         assertTrue(extension.isCompressed());
 
@@ -62,6 +62,6 @@ public class FileTypeMapTest {
 
     @Test
     public void get_unknownExtension_returnsNull() throws Exception {
-        assertNull(FileTypeMap.get("/path/to/file/file.foobar"));
+        assertNull(FileType.get("/path/to/file/file.foobar"));
     }
 }

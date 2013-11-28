@@ -35,7 +35,7 @@ public final class CompressorFactory {
      * @throws IllegalArgumentException if the given file is not a known compressed file type
      */
     public static Compressor createCompressor(File file) throws IllegalArgumentException {
-        FileType extension = FileTypeMap.get(file);
+        FileType extension = FileType.get(file);
 
         if (extension == null) {
             throw new IllegalArgumentException("Unknown file extension " + file.getName());

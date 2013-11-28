@@ -37,7 +37,7 @@ public final class ArchiverFactory {
      * @throws IllegalArgumentException if the given file is not a known archive
      */
     public static Archiver createArchiver(File archive) throws IllegalArgumentException {
-        FileType extension = FileTypeMap.get(archive);
+        FileType extension = FileType.get(archive);
 
         if (extension == null) {
             throw new IllegalArgumentException("Unknown file extension " + archive.getName());

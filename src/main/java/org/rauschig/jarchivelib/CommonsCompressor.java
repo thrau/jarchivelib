@@ -38,31 +38,18 @@ import org.apache.commons.compress.utils.IOUtils;
  */
 class CommonsCompressor implements Compressor {
 
-    private final String compressorName;
-    private final String fileExtension;
+    private final FileType fileType;
 
-    CommonsCompressor(String compressorName) {
-        this.compressorName = compressorName.toLowerCase();
-        this.fileExtension = "." + compressorName.toLowerCase();
+    CommonsCompressor(FileType fileType) {
+        this.fileType = fileType;
     }
 
-    /**
-     * Returns the name of the compressor.
-     * 
-     * @return the compressor name.
-     * @see CompressorFactory
-     */
-    public String getCompressorName() {
-        return compressorName;
+    CommonsCompressor(CompressionType type) {
+        this(FileType.get(type));
     }
 
-    /**
-     * Returns the file extension, which is equal to "." + {@link #getCompressorName()}.
-     * 
-     * @return the filename extension
-     */
-    public String getFileExtension() {
-        return fileExtension;
+    public FileType getFileType() {
+        return fileType;
     }
 
     @Override

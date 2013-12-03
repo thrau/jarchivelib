@@ -61,7 +61,7 @@ public class FileTypeTest {
     }
 
     @Test
-    public void get_unknownExtension_returnsNull() throws Exception {
-        assertNull(FileType.get("/path/to/file/file.foobar"));
+    public void get_unknownExtension_returnsUnknown() throws Exception {
+        assertEquals(FileType.UNKNOWN, FileType.get("/path/to/file/file.foobar"));
     }
 }

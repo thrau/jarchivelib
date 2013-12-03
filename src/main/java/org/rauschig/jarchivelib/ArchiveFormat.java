@@ -25,35 +25,37 @@ public enum ArchiveFormat {
     /**
      * Constant used to identify the AR archive format.
      */
-    AR(ArchiveStreamFactory.AR),
+    AR(ArchiveStreamFactory.AR, ".ar"),
     /**
      * Constant used to identify the CPIO archive format.
      */
-    CPIO(ArchiveStreamFactory.CPIO),
+    CPIO(ArchiveStreamFactory.CPIO, ".cpio"),
     /**
      * Constant used to identify the Unix DUMP archive format.
      */
-    DUMP(ArchiveStreamFactory.DUMP),
+    DUMP(ArchiveStreamFactory.DUMP, ".dump"),
     /**
      * Constant used to identify the JAR archive format.
      */
-    JAR(ArchiveStreamFactory.JAR),
+    JAR(ArchiveStreamFactory.JAR, ".jar"),
     /**
      * Constant used to identify the TAR archive format.
      */
-    TAR(ArchiveStreamFactory.TAR),
+    TAR(ArchiveStreamFactory.TAR, ".tar"),
     /**
      * Constant used to identify the ZIP archive format.
      */
-    ZIP(ArchiveStreamFactory.ZIP);
+    ZIP(ArchiveStreamFactory.ZIP, ".zip");
 
     /**
      * The name by which the compression algorithm is identified.
      */
     private final String name;
+    private final String defaultFileExtension;
 
-    private ArchiveFormat(String name) {
+    private ArchiveFormat(String name, String defaultFileExtension) {
         this.name = name;
+        this.defaultFileExtension = defaultFileExtension;
     }
 
     /**
@@ -66,6 +68,15 @@ public enum ArchiveFormat {
     }
 
     /**
+     * Returns the default file extension for this compression type. E.g. ".gz" for gzip.
+     * 
+     * @return the default file extension preceded by a dot
+     */
+    public String getDefaultFileExtension() {
+        return defaultFileExtension;
+    }
+
+    /**
      * Checks if the given archive format name is valid and known format.
      * 
      * @param archiveFormat the archive format name
@@ -73,11 +84,26 @@ public enum ArchiveFormat {
      */
     public static boolean isValidArchiveFormat(String archiveFormat) {
         for (ArchiveFormat format : values()) {
-            if (archiveFormat.equalsIgnoreCase(format.getName())) {
+            if (archiveFormat.trim().equalsIgnoreCase(format.getName())) {
                 return true;
             }
         }
 
         return false;
     }
+
+    /**
+     * @param archiveFormat
+     * @return
+     */
+    public static ArchiveFormat fromString(String archiveFormat) {
+        for (ArchiveFormat format : values()) {
+            if (archiveFormat.trim().equalsIgnoreCase(format.getName())) {
+                return format;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown archive format " + archiveFormat);
+    }
+
 }

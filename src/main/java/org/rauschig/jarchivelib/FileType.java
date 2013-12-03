@@ -123,21 +123,27 @@ public final class FileType {
         return compression;
     }
 
+    @Override
+    public String toString() {
+        return getSuffix();
+    }
+
     /**
      * Checks the suffix of the given string for an entry in the map. If it exists, the corresponding {@link FileType}
      * entry will be returned.
      * 
      * @param filename the filename to check
-     * @return a {@link FileType} entry for the file extension of the given name, or null if it does not exist
+     * @return a {@link FileType} entry for the file extension of the given name, or the UNKNOWN type if it does not
+     *         exist
      */
     public static FileType get(String filename) {
-        for (String suffix : MAP.keySet()) {
-            if (filename.endsWith(suffix)) {
-                return MAP.get(suffix);
+        for (Map.Entry<String, FileType> entry : MAP.entrySet()) {
+            if (filename.toLowerCase().endsWith(entry.getKey())) {
+                return entry.getValue();
             }
         }
 
-        return null;
+        return UNKNOWN;
     }
 
     /**
@@ -145,10 +151,31 @@ public final class FileType {
      * {@link FileType} entry will be returned.
      * 
      * @param file the file to check
-     * @return a {@link FileType} entry for the file extension of the given file, or null if it does not exist
+     * @return a {@link FileType} entry for the file extension of the given file, or the UNKNOWN type if it does not
+     *         exist
      */
     public static FileType get(File file) {
         return get(file.getName());
+    }
+
+    /**
+     * Returns the default FileType for the given archive format.
+     * 
+     * @param archiveFormat the archive format
+     * @return the FileType entry for the default file extension of the archive format
+     */
+    public static FileType get(ArchiveFormat archiveFormat) {
+        return get(archiveFormat.getDefaultFileExtension());
+    }
+
+    /**
+     * Returns the default FileType for the given compression type.
+     * 
+     * @param compression the compression type
+     * @return the FileType entry for the default file extension of the compression type
+     */
+    public static FileType get(CompressionType compression) {
+        return get(compression.getDefaultFileExtension());
     }
 
     private static void add(String suffix, ArchiveFormat archiveFormat) {

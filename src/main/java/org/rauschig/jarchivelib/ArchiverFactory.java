@@ -37,18 +37,26 @@ public final class ArchiverFactory {
      * @throws IllegalArgumentException if the given file is not a known archive
      */
     public static Archiver createArchiver(File archive) throws IllegalArgumentException {
-        FileType extension = FileType.get(archive);
+        FileType fileType = FileType.get(archive);
 
-        if (extension == null) {
+        if (fileType == FileType.UNKNOWN) {
             throw new IllegalArgumentException("Unknown file extension " + archive.getName());
         }
 
-        if (extension.isArchive() && extension.isCompressed()) {
-            return createArchiver(extension.getArchiveFormat(), extension.getCompression());
-        } else if (extension.isArchive()) {
-            return createArchiver(extension.getArchiveFormat());
+        return createArchiver(fileType);
+    }
+
+    public static Archiver createArchiver(FileType fileType) {
+        if (fileType == FileType.UNKNOWN) {
+            throw new IllegalArgumentException("Unknown file type");
+        }
+
+        if (fileType.isArchive() && fileType.isCompressed()) {
+            return new ArchiverCompressorDecorator(new CommonsArchiver(fileType), new CommonsCompressor(fileType));
+        } else if (fileType.isArchive()) {
+            return new CommonsArchiver(fileType);
         } else {
-            throw new IllegalArgumentException("Unknown archive file extension " + archive.getName());
+            throw new IllegalArgumentException("Unknown archive file extension " + fileType);
         }
     }
 
@@ -69,10 +77,7 @@ public final class ArchiverFactory {
             throw new IllegalArgumentException("Unknown compression type " + compression);
         }
 
-        CommonsArchiver archiver = new CommonsArchiver(archiveFormat);
-        CommonsCompressor compressor = new CommonsCompressor(compression);
-
-        return new ArchiverCompressorDecorator(archiver, compressor);
+        return createArchiver(ArchiveFormat.fromString(archiveFormat), CompressionType.fromString(compression));
     }
 
     /**
@@ -84,7 +89,10 @@ public final class ArchiverFactory {
      * @return a new Archiver instance that also handles compression
      */
     public static Archiver createArchiver(ArchiveFormat archiveFormat, CompressionType compression) {
-        return createArchiver(archiveFormat.getName(), compression.getName());
+        CommonsArchiver archiver = new CommonsArchiver(archiveFormat);
+        CommonsCompressor compressor = new CommonsCompressor(compression);
+
+        return new ArchiverCompressorDecorator(archiver, compressor);
     }
 
     /**
@@ -100,7 +108,7 @@ public final class ArchiverFactory {
             throw new IllegalArgumentException("Unknown archive format " + archiveFormat);
         }
 
-        return new CommonsArchiver(archiveFormat);
+        return createArchiver(ArchiveFormat.fromString(archiveFormat));
     }
 
     /**
@@ -111,7 +119,7 @@ public final class ArchiverFactory {
      * @return a new Archiver instance
      */
     public static Archiver createArchiver(ArchiveFormat archiveFormat) {
-        return new CommonsArchiver(archiveFormat.getName());
+        return new CommonsArchiver(archiveFormat);
     }
 
 }

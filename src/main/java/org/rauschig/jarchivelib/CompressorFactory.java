@@ -35,16 +35,35 @@ public final class CompressorFactory {
      * @throws IllegalArgumentException if the given file is not a known compressed file type
      */
     public static Compressor createCompressor(File file) throws IllegalArgumentException {
-        FileType extension = FileType.get(file);
+        FileType fileType = FileType.get(file);
 
-        if (extension == null) {
+        if (fileType == FileType.UNKNOWN) {
             throw new IllegalArgumentException("Unknown file extension " + file.getName());
         }
 
-        if (extension.isCompressed()) {
-            return createCompressor(extension.getCompression());
+        if (fileType.isCompressed()) {
+            return createCompressor(fileType);
         } else {
             throw new IllegalArgumentException("Unknown compressed file extension " + file.getName());
+        }
+    }
+
+    /**
+     * Creates a new {@link Compressor} for the given {@link FileType}.
+     * 
+     * @param fileType the file type to create the compressor for
+     * @return a new Compressor instance
+     * @throws IllegalArgumentException if the given file type is not a known compression type
+     */
+    public static Compressor createCompressor(FileType fileType) throws IllegalArgumentException {
+        if (fileType == FileType.UNKNOWN) {
+            throw new IllegalArgumentException("Unknown file type");
+        }
+
+        if (fileType.isCompressed()) {
+            return new CommonsCompressor(fileType);
+        } else {
+            throw new IllegalArgumentException("Unknown compressed file type " + fileType);
         }
     }
 
@@ -60,7 +79,7 @@ public final class CompressorFactory {
             throw new IllegalArgumentException("Unkonwn compression type " + compression);
         }
 
-        return new CommonsCompressor(compression);
+        return createCompressor(CompressionType.fromString(compression));
     }
 
     /**
@@ -70,7 +89,7 @@ public final class CompressorFactory {
      * @return a new {@link Compressor} instance that uses the specified compression algorithm.
      */
     public static Compressor createCompressor(CompressionType compression) {
-        return new CommonsCompressor(compression.getName());
+        return new CommonsCompressor(compression);
     }
 
 }

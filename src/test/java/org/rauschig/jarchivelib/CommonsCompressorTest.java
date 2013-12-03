@@ -29,11 +29,11 @@ public class CommonsCompressorTest extends AbstractResourceTest {
 
     private File source = new File(RESOURCES_DIR, "compress.txt");
     private File sourceGz = new File(RESOURCES_DIR, "compress.txt.gz");
-    private File sourceBzip2 = new File(RESOURCES_DIR, "compress.txt.bzip2");
+    private File sourceBzip2 = new File(RESOURCES_DIR, "compress.txt.bz2");
 
     private File destination = new File(ARCHIVE_EXTRACT_DIR, "compress.txt");
     private File destinationGz = new File(ARCHIVE_CREATE_DIR, "compress.txt.gz");
-    private File destinationBzip2 = new File(ARCHIVE_CREATE_DIR, "compress.txt.bzip2");
+    private File destinationBzip2 = new File(ARCHIVE_CREATE_DIR, "compress.txt.bz2");
 
     @After
     public void tearDown() {

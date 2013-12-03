@@ -26,7 +26,7 @@ public class ArchiveTarBzip2Test extends AbstractArchiverTest {
 
     @Override
     protected File getArchive() {
-        return new File(RESOURCES_DIR, "archive.tar.bzip2");
+        return new File(RESOURCES_DIR, "archive.tar.bz2");
     }
 
 }

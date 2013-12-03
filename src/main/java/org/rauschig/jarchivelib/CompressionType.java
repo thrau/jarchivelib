@@ -25,23 +25,25 @@ public enum CompressionType {
     /**
      * Constant used to identify the BZIP2 compression algorithm.
      */
-    BZIP2(CompressorStreamFactory.BZIP2),
+    BZIP2(CompressorStreamFactory.BZIP2, ".bz2"),
     /**
      * Constant used to identify the GZIP compression algorithm.
      */
-    GZIP(CompressorStreamFactory.GZIP),
+    GZIP(CompressorStreamFactory.GZIP, ".gz"),
     /**
      * Constant used to identify the PACK200 compression algorithm.
      */
-    PACK200(CompressorStreamFactory.PACK200);
+    PACK200(CompressorStreamFactory.PACK200, ".pack");
 
     /**
      * The name by which the compression algorithm is identified by
      */
     private final String name;
+    private final String defaultFileExtension;
 
-    private CompressionType(String name) {
+    private CompressionType(String name, String defaultFileExtension) {
         this.name = name;
+        this.defaultFileExtension = defaultFileExtension;
     }
 
     /**
@@ -51,6 +53,15 @@ public enum CompressionType {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns the default file extension for this compression type. E.g. ".gz" for gzip.
+     * 
+     * @return the default file extension preceded by a dot
+     */
+    public String getDefaultFileExtension() {
+        return defaultFileExtension;
     }
 
     /**
@@ -67,5 +78,20 @@ public enum CompressionType {
         }
 
         return false;
+    }
+
+    /**
+     * 
+     * @param compression
+     * @return
+     */
+    public static CompressionType fromString(String compression) {
+        for (CompressionType type : values()) {
+            if (compression.equalsIgnoreCase(type.getName())) {
+                return type;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown compression type " + compression);
     }
 }

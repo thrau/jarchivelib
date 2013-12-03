@@ -48,7 +48,7 @@ class ArchiverCompressorDecorator implements Archiver {
     public File create(String archive, File destination, File... sources) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File temp = File.createTempFile(destination.getName(), archiver.getFileExtension(), destination);
+        File temp = File.createTempFile(destination.getName(), archiver.getFileType().getSuffix(), destination);
         File destinationArchive = null;
 
         try {
@@ -67,7 +67,7 @@ class ArchiverCompressorDecorator implements Archiver {
     public void extract(File archive, File destination) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File temp = File.createTempFile(archive.getName(), archiver.getFileExtension(), destination);
+        File temp = File.createTempFile(archive.getName(), archiver.getFileType().getSuffix(), destination);
 
         try {
             compressor.decompress(archive, temp);
@@ -97,12 +97,12 @@ class ArchiverCompressorDecorator implements Archiver {
      * @return
      */
     private String getArchiveFileName(String archive) {
-        String fileExtension = archiver.getFileExtension() + compressor.getFileExtension();
+        String fileExtension = archiver.getFileType().getSuffix() + compressor.getFileType().getSuffix();
 
         if (archive.endsWith(fileExtension)) {
             return archive;
-        } else if (archive.endsWith(archiver.getFileExtension())) {
-            return archive + compressor.getFileExtension();
+        } else if (archive.endsWith(archiver.getFileType().getSuffix())) {
+            return archive + compressor.getFileType().getSuffix();
         } else {
             return archive + fileExtension;
         }

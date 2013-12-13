@@ -64,15 +64,15 @@ public final class FileType {
     private final ArchiveFormat archiveFormat;
     private final CompressionType compression;
 
-    public FileType(String suffix, ArchiveFormat archiveFormat) {
+    private FileType(String suffix, ArchiveFormat archiveFormat) {
         this(suffix, archiveFormat, null);
     }
 
-    public FileType(String suffix, CompressionType compression) {
+    private FileType(String suffix, CompressionType compression) {
         this(suffix, null, compression);
     }
 
-    public FileType(String suffix, ArchiveFormat archiveFormat, CompressionType compression) {
+    private FileType(String suffix, ArchiveFormat archiveFormat, CompressionType compression) {
         this.suffix = suffix;
         this.compression = compression;
         this.archiveFormat = archiveFormat;

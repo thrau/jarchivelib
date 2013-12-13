@@ -33,7 +33,7 @@ public final class ArchiverFactory {
      * compression.
      *
      * @param archive the archive file to check.
-     * @return a new Archiver instance (that may also handles compression)
+     * @return a new Archiver instance (that may also handle compression)
      * @throws IllegalArgumentException if the given file is not a known archive
      */
     public static Archiver createArchiver(File archive) throws IllegalArgumentException {
@@ -46,6 +46,13 @@ public final class ArchiverFactory {
         return createArchiver(fileType);
     }
 
+    /**
+     * Creates an Archiver that handles the given {@link FileType}. The Archiver may handle compression inherently, if
+     * the {@link FileType} uses a compression type, such as ".tgz" might.
+     *
+     * @param fileType the file type
+     * @return a new Archiver instance (that may also handle compression)
+     */
     public static Archiver createArchiver(FileType fileType) {
         if (fileType == FileType.UNKNOWN) {
             throw new IllegalArgumentException("Unknown file type");

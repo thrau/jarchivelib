@@ -93,8 +93,8 @@ class ArchiverCompressorDecorator implements Archiver {
      * E.g. if the compressor uses the file extension "gz", the archiver "tar", and passed argument is "archive.tar",
      * the returned value will be "archive.tar.gz".
      *
-     * @param archive
-     * @return
+     * @param archive the existing archive file name
+     * @return the normalized archive file name including the correct file name extension
      */
     private String getArchiveFileName(String archive) {
         String fileExtension = archiver.getFileType().getSuffix() + compressor.getFileType().getSuffix();

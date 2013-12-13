@@ -36,9 +36,13 @@ public enum CompressionType {
     PACK200(CompressorStreamFactory.PACK200, ".pack");
 
     /**
-     * The name by which the compression algorithm is identified by
+     * The name by which the compression algorithm is identified
      */
     private final String name;
+
+    /**
+     * The default file extension the compression type is mapped to
+     */
     private final String defaultFileExtension;
 
     private CompressionType(String name, String defaultFileExtension) {
@@ -81,8 +85,11 @@ public enum CompressionType {
     }
 
     /**
-     * @param compression
-     * @return
+     * Attempts to return the {@link CompressionType} instance from a possible given string representation. Ignores case.
+     *
+     * @param compression string representation of the compression type. E.g. "GZIP".
+     * @return the compression type enum
+     * @throws IllegalArgumentException if the given compression type is unknown.
      */
     public static CompressionType fromString(String compression) {
         for (CompressionType type : values()) {

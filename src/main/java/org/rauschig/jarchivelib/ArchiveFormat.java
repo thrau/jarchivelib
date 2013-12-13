@@ -51,6 +51,10 @@ public enum ArchiveFormat {
      * The name by which the compression algorithm is identified.
      */
     private final String name;
+
+    /**
+     * default file extension the archive format is mapped to
+     */
     private final String defaultFileExtension;
 
     private ArchiveFormat(String name, String defaultFileExtension) {
@@ -93,8 +97,11 @@ public enum ArchiveFormat {
     }
 
     /**
-     * @param archiveFormat
-     * @return
+     * Attempts to return the {@link ArchiveFormat} instance from a possible given string representation. Ignores case.
+     *
+     * @param archiveFormat string representation of the archive format. E.g. "tar" or "ZIP".
+     * @return the compression type enum
+     * @throws IllegalArgumentException if the given archive format is unknown.
      */
     public static ArchiveFormat fromString(String archiveFormat) {
         for (ArchiveFormat format : values()) {

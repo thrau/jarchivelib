@@ -60,7 +60,7 @@ public enum ArchiveFormat {
 
     /**
      * Returns the name by which the archive format is identified.
-     * 
+     *
      * @return the archiver format name
      */
     public String getName() {
@@ -69,7 +69,7 @@ public enum ArchiveFormat {
 
     /**
      * Returns the default file extension for this compression type. E.g. ".gz" for gzip.
-     * 
+     *
      * @return the default file extension preceded by a dot
      */
     public String getDefaultFileExtension() {
@@ -78,7 +78,7 @@ public enum ArchiveFormat {
 
     /**
      * Checks if the given archive format name is valid and known format.
-     * 
+     *
      * @param archiveFormat the archive format name
      * @return true if the given archive format is known to the factory, false otherwise
      */

@@ -35,8 +35,8 @@ class ArchiverCompressorDecorator implements Archiver {
 
     /**
      * Decorates the given Archiver with the given Compressor.
-     * 
-     * @param archiver the archiver to decorate
+     *
+     * @param archiver   the archiver to decorate
      * @param compressor the compressor used for compression
      */
     ArchiverCompressorDecorator(CommonsArchiver archiver, CommonsCompressor compressor) {
@@ -89,10 +89,10 @@ class ArchiverCompressorDecorator implements Archiver {
     /**
      * Returns a file name from the given archive name. The file extension suffix will be appended according to what is
      * already present.
-     * <p>
+     * <p/>
      * E.g. if the compressor uses the file extension "gz", the archiver "tar", and passed argument is "archive.tar",
      * the returned value will be "archive.tar.gz".
-     * 
+     *
      * @param archive
      * @return
      */

@@ -39,8 +39,8 @@ public final class IOUtils {
 
     /**
      * Copies the content of an InputStream into a destination File.
-     * 
-     * @param source the InputStream to copy
+     *
+     * @param source      the InputStream to copy
      * @param destination the target File
      * @throws IOException if an error occurs
      */
@@ -52,8 +52,8 @@ public final class IOUtils {
 
     /**
      * Copies the content of a InputStream into an OutputStream. Uses a default buffer size of 8024 bytes.
-     * 
-     * @param input the InputStream to copy
+     *
+     * @param input  the InputStream to copy
      * @param output the target Stream
      * @return the amount of bytes written
      * @throws IOException if an error occurs
@@ -64,9 +64,9 @@ public final class IOUtils {
 
     /**
      * Copies the entire content of the given InputStream into the given OutputStream.
-     * 
-     * @param input the InputStream to copy
-     * @param output the target Stream
+     *
+     * @param input      the InputStream to copy
+     * @param output     the target Stream
      * @param buffersize the buffer size to use
      * @return the amount of bytes written
      * @throws IOException if an error occurs
@@ -84,11 +84,10 @@ public final class IOUtils {
 
     /**
      * Computes the path name of a file node relative to a given root node.
-     * <p>
+     * <p/>
      * If the root is {@code /home/cdlflex/custom-ahy} and the given node is
      * {@code /home/cdlflex/custom-ahy/assembly/pom.xml}, the returned path name will be {@code assembly/pom.xml}.
-     * 
-     * 
+     *
      * @param root the parent node
      * @param node the file node to compute the relative path for
      * @return the path of {@code node} relative to {@code root}
@@ -104,11 +103,11 @@ public final class IOUtils {
     /**
      * Makes sure that the given {@link File} is either a writable directory, or that it does not exist and a directory
      * can be created at its path.
-     * <p>
+     * <p/>
      * Will throw an exception if the given {@link File} is actually an existing file, or the directory is not writable
-     * 
+     *
      * @param destination the directory which to ensure its existence for
-     * @throws IOException if an I/O error occurs e.g. when attempting to create the destination directory
+     * @throws IOException              if an I/O error occurs e.g. when attempting to create the destination directory
      * @throws IllegalArgumentException if the destination is an existing file, or the directory is not writable
      */
     public static void requireDirectory(File destination) throws IOException, IllegalArgumentException {
@@ -125,7 +124,7 @@ public final class IOUtils {
     /**
      * Uses {@code java.nio}'s {@link Paths} and {@link Files#probeContentType(java.nio.file.Path)} to return the files
      * content type.
-     * 
+     *
      * @param file the file to inspect
      * @return a string with the content type
      * @throws IOException if an error occurs while resolving the path or probing the file

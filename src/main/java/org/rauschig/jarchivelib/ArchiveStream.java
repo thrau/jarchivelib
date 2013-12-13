@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 /**
  * An input stream of an archive. Can be used to retrieve each individual {@link ArchiveEntry}.
- * <p>
+ * <p/>
  * The {@link #getNextEntry()} method is used to reset the input stream ready for reading the data from the next entry.
  */
 public abstract class ArchiveStream extends InputStream implements Closeable, AutoCloseable {
@@ -32,7 +32,7 @@ public abstract class ArchiveStream extends InputStream implements Closeable, Au
 
     /**
      * Returns the {@link ArchiveEntry} the stream currently points to.
-     * 
+     *
      * @return the current {@link ArchiveEntry}
      */
     public ArchiveEntry getCurrentEntry() {
@@ -41,9 +41,8 @@ public abstract class ArchiveStream extends InputStream implements Closeable, Au
 
     /**
      * Moves the pointer of the stream to the next {@link ArchiveEntry} and returns it.
-     * 
+     *
      * @return the next archive entry.
-     * 
      * @throws IOException propagated I/O exception
      */
     public ArchiveEntry getNextEntry() throws IOException {
@@ -53,7 +52,7 @@ public abstract class ArchiveStream extends InputStream implements Closeable, Au
 
     /**
      * Abstract method to create the next {@link ArchiveEntry} for the {@link ArchiveStream} implementation.
-     * 
+     *
      * @return the next archive entry
      * @throws IOException propagated I/O exception
      */
@@ -66,7 +65,7 @@ public abstract class ArchiveStream extends InputStream implements Closeable, Au
 
     /**
      * Checks whether the current stream has been closed
-     * 
+     *
      * @return true if the stream has been closed
      */
     public boolean isClosed() {

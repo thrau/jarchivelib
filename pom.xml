@@ -186,6 +186,7 @@
           <excludes>
             <exclude>.gitignore</exclude>
             <exclude>src/test/resources/**</exclude>
+            <exclude>.idea/**</exclude>
           </excludes>
           <properties>
             <name>Thomas Rausch</name>

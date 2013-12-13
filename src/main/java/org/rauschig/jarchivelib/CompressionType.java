@@ -48,7 +48,7 @@ public enum CompressionType {
 
     /**
      * Returns the name by which the compression algorithm is identified.
-     * 
+     *
      * @return the compression algorithm name
      */
     public String getName() {
@@ -57,7 +57,7 @@ public enum CompressionType {
 
     /**
      * Returns the default file extension for this compression type. E.g. ".gz" for gzip.
-     * 
+     *
      * @return the default file extension preceded by a dot
      */
     public String getDefaultFileExtension() {
@@ -66,7 +66,7 @@ public enum CompressionType {
 
     /**
      * Checks if the given compression type name is valid and known format.
-     * 
+     *
      * @param compression the compression algorithm name
      * @return true true if the given compression type is known to the factory, false otherwise
      */
@@ -81,7 +81,6 @@ public enum CompressionType {
     }
 
     /**
-     * 
      * @param compression
      * @return
      */

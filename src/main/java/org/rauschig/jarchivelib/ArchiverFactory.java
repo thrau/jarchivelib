@@ -31,7 +31,7 @@ public final class ArchiverFactory {
      * Probes the given {@link File} for its file type and creates an {@link Archiver} based on this file type. If the
      * File has a composite file extension such as ".tar.gz", the created {@link Archiver} will also handle ".gz"
      * compression.
-     * 
+     *
      * @param archive the archive file to check.
      * @return a new Archiver instance (that may also handles compression)
      * @throws IllegalArgumentException if the given file is not a known archive
@@ -62,10 +62,9 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format that uses compression.
-     * 
+     *
      * @param archiveFormat the archive format e.g. "tar" or "zip"
-     * @param compression the compression algorithm name e.g. "gz"
-     * 
+     * @param compression   the compression algorithm name e.g. "gz"
      * @return a new Archiver instance that also handles compression
      * @throws IllegalArgumentException if the archive format or the compression type is unknown
      */
@@ -82,10 +81,9 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format that uses compression.
-     * 
+     *
      * @param archiveFormat the archive format
-     * @param compression the compression algorithm
-     * 
+     * @param compression   the compression algorithm
      * @return a new Archiver instance that also handles compression
      */
     public static Archiver createArchiver(ArchiveFormat archiveFormat, CompressionType compression) {
@@ -97,9 +95,8 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format.
-     * 
+     *
      * @param archiveFormat the archive format e.g. "tar" or "zip"
-     * 
      * @return a new Archiver instance
      * @throws IllegalArgumentException if the archive format is unknown
      */
@@ -113,9 +110,8 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format.
-     * 
+     *
      * @param archiveFormat the archive format
-     * 
      * @return a new Archiver instance
      */
     public static Archiver createArchiver(ArchiveFormat archiveFormat) {

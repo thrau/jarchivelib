@@ -42,7 +42,7 @@ public abstract class AbstractResourceTest {
      * <li>src/test/resources/archives/archive/folder/subfolder/subfolder_file.txt</li>
      * <li>src/test/resources/archives/archive/file.txt</li>
      * </ul>
-     * 
+     * <p/>
      * Used both as reference to compare whether extraction was successful, and used as source for compression tests.
      */
     public static final File ARCHIVE_DIR = new File(RESOURCES_DIR, "archive");

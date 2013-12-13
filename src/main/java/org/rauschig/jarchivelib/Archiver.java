@@ -21,20 +21,20 @@ import java.io.IOException;
 /**
  * An Archiver facades a specific archiving library, allowing for simple archiving of files and directories, and
  * extraction of archives.
- * <p>
+ * <p/>
  * Some archivers might use an additional {@link Compressor} to compress and decompress their respective archive files.
  */
 public interface Archiver {
 
     /**
      * Creates an archive from the given source files or directories, and saves it into the given destination.
-     * <p>
+     * <p/>
      * If the archive parameter has no file extension (e.g. "archive" instead of "archive.zip"), the concrete archiver
      * implementation should append it according to its file format (.zip, .tar, .tar.gz, ...).
-     * 
-     * @param archive the name of the archive to create
+     *
+     * @param archive     the name of the archive to create
      * @param destination the destination directory where to place the created archive
-     * @param sources the input files or directories to archive
+     * @param sources     the input files or directories to archive
      * @return the newly created archive file
      * @throws IOException propagated I/O errors by {@code java.io}
      */
@@ -42,10 +42,10 @@ public interface Archiver {
 
     /**
      * Extracts the given archive file into the given destination directory.
-     * <p>
+     * <p/>
      * The destination is expected to be a writable directory.
-     * 
-     * @param archive the archive file to extract
+     *
+     * @param archive     the archive file to extract
      * @param destination the directory to which to extract the files
      * @throws IOException propagated I/O errors by {@code java.io}
      */
@@ -53,8 +53,8 @@ public interface Archiver {
 
     /**
      * Reads the given archive file as an {@link ArchiveStream} which is used to access individual
-     * {@link CommonsArchiveEntry} objects within the archive without extracting the archive onto the file system.
-     * 
+     * {@link ArchiveEntry} objects within the archive without extracting the archive onto the file system.
+     *
      * @param archive the archive file to stream
      * @return a new archive stream for the given archive
      * @throws IOException propagated I/O errors by {@code java.io}

@@ -187,6 +187,8 @@
             <exclude>.gitignore</exclude>
             <exclude>src/test/resources/**</exclude>
             <exclude>.idea/**</exclude>
+            <exclude>README.md</exclude>
+            <exclude>.travis.yml</exclude>
           </excludes>
           <properties>
             <name>Thomas Rausch</name>

@@ -1,5 +1,8 @@
 jarchivelib
 ===========
+
+[![Build Status](https://travis-ci.org/thrau/jarchivelib.png?branch=master)](https://travis-ci.org/thrau/jarchivelib)
+
 A simple archiving library for java, facading [org.apache.commons.compress]
 
   [org.apache.commons.compress]: http://commons.apache.org/proper/commons-compress/

@@ -83,7 +83,7 @@ public final class FileType {
 
     /**
      * Returns true if the given file extension denotes an archive.
-     *
+     * 
      * @return true if file extension is an archive, false otherwise
      */
     public boolean isArchive() {
@@ -92,7 +92,7 @@ public final class FileType {
 
     /**
      * Returns true if the given file extension denotes a compressed file.
-     *
+     * 
      * @return true if file extension is a compressed type, false otherwise
      */
     public boolean isCompressed() {
@@ -101,7 +101,7 @@ public final class FileType {
 
     /**
      * Returns the file extension suffix (e.g. ".zip" or ".tar.gz").
-     *
+     * 
      * @return the file extension suffix
      */
     public String getSuffix() {
@@ -110,7 +110,7 @@ public final class FileType {
 
     /**
      * Returns the archive format corresponding to this file extension if any.
-     *
+     * 
      * @return the archive format or null if the file extension does not denote an archive
      */
     public ArchiveFormat getArchiveFormat() {
@@ -119,7 +119,7 @@ public final class FileType {
 
     /**
      * Returns the compression type corresponding to this file extension if any.
-     *
+     * 
      * @return the compression type or null if the file extension does not denote a compressed file
      */
     public CompressionType getCompressionType() {
@@ -134,7 +134,7 @@ public final class FileType {
     /**
      * Checks the suffix of the given string for an entry in the map. If it exists, the corresponding {@link FileType}
      * entry will be returned.
-     *
+     * 
      * @param filename the filename to check
      * @return a {@link FileType} entry for the file extension of the given name, or the UNKNOWN type if it does not
      *         exist
@@ -152,7 +152,7 @@ public final class FileType {
     /**
      * Checks the suffix of the given {@link File} for an entry in the map. If it exists, the corresponding
      * {@link FileType} entry will be returned.
-     *
+     * 
      * @param file the file to check
      * @return a {@link FileType} entry for the file extension of the given file, or the UNKNOWN type if it does not
      *         exist

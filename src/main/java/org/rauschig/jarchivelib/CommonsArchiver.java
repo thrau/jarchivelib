@@ -112,9 +112,9 @@ class CommonsArchiver implements Archiver {
     /**
      * Creates a new File in the given destination. The resulting name will always be "archive"."fileExtension". If the
      * archive name parameter already ends with the given file name extension, it is not additionally appended.
-     *
-     * @param archive     the name of the archive
-     * @param extension   the file extension (e.g. ".tar")
+     * 
+     * @param archive the name of the archive
+     * @param extension the file extension (e.g. ".tar")
      * @param destination the parent path
      * @return the newly created file
      * @throws IOException if an I/O error occurred while creating the file
@@ -134,7 +134,7 @@ class CommonsArchiver implements Archiver {
      * Recursion entry point for {@link #writeToArchive(File, File[], ArchiveOutputStream)}.
      * <p/>
      * Recursively writes all given source {@link File}s into the given {@link ArchiveOutputStream}.
-     *
+     * 
      * @param sources the files to write in to the archive
      * @param archive the archive to write into
      * @throws IOException when an I/O error occurs
@@ -148,7 +148,7 @@ class CommonsArchiver implements Archiver {
             }
 
             if (source.isFile()) {
-                writeToArchive(source.getParentFile(), new File[]{source}, archive);
+                writeToArchive(source.getParentFile(), new File[] { source }, archive);
             } else {
                 writeToArchive(source, source.listFiles(), archive);
             }
@@ -158,8 +158,8 @@ class CommonsArchiver implements Archiver {
     /**
      * Recursively writes all given source {@link File}s into the given {@link ArchiveOutputStream}. The paths of the
      * sources in the archive will be relative to the given parent {@code File}.
-     *
-     * @param parent  the parent file node for computing a relative path (see {@link IOUtils#relativePath(File, File)})
+     * 
+     * @param parent the parent file node for computing a relative path (see {@link IOUtils#relativePath(File, File)})
      * @param sources the files to write in to the archive
      * @param archive the archive to write into
      * @throws IOException when an I/O error occurs
@@ -179,10 +179,10 @@ class CommonsArchiver implements Archiver {
     /**
      * Creates a new {@link ArchiveEntry} in the given {@link ArchiveOutputStream}, and copies the given {@link File}
      * into the new entry.
-     *
-     * @param file      the file to add to the archive
+     * 
+     * @param file the file to add to the archive
      * @param entryName the name of the archive entry
-     * @param archive   the archive to write to
+     * @param archive the archive to write to
      * @throws IOException when an I/O error occurs during FileInputStream creation or during copying
      */
     protected void createArchiveEntry(File file, String entryName, ArchiveOutputStream archive) throws IOException {

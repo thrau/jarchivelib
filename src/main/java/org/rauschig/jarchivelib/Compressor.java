@@ -29,12 +29,12 @@ public interface Compressor {
      * Requires the source the be an existing and readable File, and the destination to be either non-existing but
      * possible to create, or a writable file. If you try to pass directories, an {@link IllegalArgumentException} will
      * be thrown.
-     *
-     * @param source      the source file to compress
+     * 
+     * @param source the source file to compress
      * @param destination the destination file
      * @throws IllegalArgumentException if the source is a directory or not readable, or the destination file exists and
-     *                                  is a directory
-     * @throws IOException              when an I/O error occurs
+     *         is a directory
+     * @throws IOException when an I/O error occurs
      */
     void compress(File source, File destination) throws IllegalArgumentException, IOException;
 
@@ -44,20 +44,19 @@ public interface Compressor {
      * Requires the source the be an existing and readable File, and the destination to be either non-existing but
      * possible to create, or a writable file. If you try to pass directories, an {@link IllegalArgumentException} will
      * be thrown.
-     *
-     * @param source      the compressed source file to decompress
+     * 
+     * @param source the compressed source file to decompress
      * @param destination the destination file
      * @throws IllegalArgumentException if the source is a directory or not readable, or the destination file exists and
-     *                                  is a directory
-     * @throws IOException              when an I/O error occurs
+     *         is a directory
+     * @throws IOException when an I/O error occurs
      */
     void decompress(File source, File destination) throws IllegalArgumentException, IOException;
 
     /**
      * Returns the filename extension that indicates the file format this compressor handles. E.g .gz". or ".bz2".
-     *
+     * 
      * @return a filename extension with a preceding dot
      */
     String getFilenameExtension();
 }
-

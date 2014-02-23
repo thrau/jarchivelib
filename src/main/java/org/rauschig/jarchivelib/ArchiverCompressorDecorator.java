@@ -67,7 +67,7 @@ class ArchiverCompressorDecorator implements Archiver {
     public void extract(File archive, File destination) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File temp = File.createTempFile(archive.getName(), archiver.getArchiveFormat().getDefaultFileExtension(), destination);
+        File temp = File.createTempFile(archive.getName(), archiver.getFilenameExtension(), destination);
 
         try {
             compressor.decompress(archive, temp);
@@ -112,6 +112,5 @@ class ArchiverCompressorDecorator implements Archiver {
             return archive + fileExtension;
         }
     }
-
 
 }

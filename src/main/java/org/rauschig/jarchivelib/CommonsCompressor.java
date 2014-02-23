@@ -41,7 +41,7 @@ class CommonsCompressor implements Compressor {
     private final CompressionType compressionType;
 
     CommonsCompressor(CompressionType type) {
-       this.compressionType = type;
+        this.compressionType = type;
     }
 
     public CompressionType getCompressionType() {
@@ -58,11 +58,11 @@ class CommonsCompressor implements Compressor {
             throw new IllegalArgumentException("Can not compress " + source + ". Can not read from source.");
         } else if (destination.isDirectory()) {
             throw new IllegalArgumentException("Can not compress into " + destination
-                    + ". Destination is a directory.");
+                + ". Destination is a directory.");
         }
 
         try (CompressorOutputStream compressed = createCompressorOutputStream(this, destination);
-             BufferedInputStream input = new BufferedInputStream(new FileInputStream(source))) {
+                BufferedInputStream input = new BufferedInputStream(new FileInputStream(source))) {
             IOUtils.copy(input, compressed);
         } catch (CompressorException e) {
             throw new IOException(e);
@@ -79,11 +79,11 @@ class CommonsCompressor implements Compressor {
             throw new IllegalArgumentException("Can not decompress " + source + ". Can not read from source.");
         } else if (destination.isDirectory()) {
             throw new IllegalArgumentException("Can not decompress into " + destination
-                    + ". Destination is a directory.");
+                + ". Destination is a directory.");
         }
 
         try (CompressorInputStream compressed = createCompressorInputStream(source);
-             FileOutputStream output = new FileOutputStream(destination)) {
+                FileOutputStream output = new FileOutputStream(destination)) {
             IOUtils.copy(compressed, output);
         } catch (CompressorException e) {
             throw new IOException(e);

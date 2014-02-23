@@ -93,7 +93,7 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
     @Test(expected = FileNotFoundException.class)
     public void compress_nonExistingFile_throwsException() throws Exception {
         try {
-            compressor.compress(new File("some/file/that/does/not/exist/../hopefully"), compressDestinationFile);
+            compressor.compress(NON_EXISTING_FILE, compressDestinationFile);
         } finally {
             assertFalse(compressDestinationFile.exists());
         }
@@ -101,7 +101,7 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
 
     @Test(expected = FileNotFoundException.class)
     public void compress_withNonExistingDestination_throwsException() throws Exception {
-        compressor.compress(original, new File("some/file/that/does/not/exist/../hopefully"));
+        compressor.compress(original, NON_EXISTING_FILE);
     }
 
     @Test
@@ -120,12 +120,12 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
 
     @Test(expected = FileNotFoundException.class)
     public void decompress_withNonExistingDestination_throwsException() throws Exception {
-        compressor.decompress(compressedFile, new File("some/file/that/does/not/exist/../hopefully"));
+        compressor.decompress(compressedFile, NON_EXISTING_FILE);
     }
 
     @Test(expected = FileNotFoundException.class)
     public void decompress_nonExistingFile_throwsException() throws Exception {
-        compressor.decompress(new File("some/file/that/does/not/exist/../hopefully"), decompressDestinationFile);
+        compressor.decompress(NON_EXISTING_FILE, decompressDestinationFile);
     }
 
     private void assertCompressionWasSuccessful() throws Exception {

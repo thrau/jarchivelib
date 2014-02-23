@@ -86,7 +86,7 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
 
     @Test(expected = FileNotFoundException.class)
     public void create_withNonExistingSource_fails() throws Exception {
-        archiver.create("archive", ARCHIVE_CREATE_DIR, new File("file/that/does/not/exist/../hopefully"));
+        archiver.create("archive", ARCHIVE_CREATE_DIR, NON_EXISTING_FILE);
     }
 
     @Test(expected = FileNotFoundException.class)
@@ -101,7 +101,7 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
 
     @Test(expected = FileNotFoundException.class)
     public void extract_withNonExistingSource_fails() throws Exception {
-        archiver.extract(new File("file/that/does/not/exist/../hopefully"), ARCHIVE_EXTRACT_DIR);
+        archiver.extract(NON_EXISTING_FILE, ARCHIVE_EXTRACT_DIR);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -171,7 +171,7 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             try {
                 entry = stream.getNextEntry();
             } catch (IllegalStateException e) {
-                fail("Illegal state exception caugth to early");
+                fail("Illegal state exception caugth too early");
             }
         }
 

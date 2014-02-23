@@ -49,6 +49,8 @@ public abstract class AbstractResourceTest {
 
     public static final File NON_READABLE_FILE = new File(RESOURCES_DIR, "non_readable_file.txt");
 
+    public static final File NON_EXISTING_FILE = new File(RESOURCES_DIR, "some/file/that/does/not/exist");
+
     @Before
     public synchronized void createResources() {
         if (!ARCHIVE_EXTRACT_DIR.exists()) {
@@ -56,6 +58,9 @@ public abstract class AbstractResourceTest {
         }
         if (!ARCHIVE_CREATE_DIR.exists()) {
             ARCHIVE_CREATE_DIR.mkdirs();
+        }
+        if (NON_EXISTING_FILE.exists()) {
+            NON_EXISTING_FILE.delete();
         }
 
         NON_READABLE_FILE.setReadable(false);

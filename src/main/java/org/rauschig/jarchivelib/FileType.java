@@ -36,6 +36,9 @@ public final class FileType {
 
     private static final Map<String, FileType> MAP = new LinkedHashMap<>();
 
+    /**
+     * Special case object for an unknown archive/compression file type.
+     */
     public static final FileType UNKNOWN = new FileType("", null, null);
 
     static {
@@ -119,7 +122,7 @@ public final class FileType {
      *
      * @return the compression type or null if the file extension does not denote a compressed file
      */
-    public CompressionType getCompression() {
+    public CompressionType getCompressionType() {
         return compression;
     }
 
@@ -156,26 +159,6 @@ public final class FileType {
      */
     public static FileType get(File file) {
         return get(file.getName());
-    }
-
-    /**
-     * Returns the default FileType for the given archive format.
-     *
-     * @param archiveFormat the archive format
-     * @return the FileType entry for the default file extension of the archive format
-     */
-    public static FileType get(ArchiveFormat archiveFormat) {
-        return get(archiveFormat.getDefaultFileExtension());
-    }
-
-    /**
-     * Returns the default FileType for the given compression type.
-     *
-     * @param compression the compression type
-     * @return the FileType entry for the default file extension of the compression type
-     */
-    public static FileType get(CompressionType compression) {
-        return get(compression.getDefaultFileExtension());
     }
 
     private static void add(String suffix, ArchiveFormat archiveFormat) {

@@ -60,23 +60,17 @@ final class CommonsStreamFactory {
     /**
      * @see {@link ArchiveStreamFactory#createArchiveInputStream(String, InputStream)}
      */
-    static ArchiveInputStream createArchiveInputStream(CommonsArchiver archiver, InputStream in)
+    static ArchiveInputStream createArchiveInputStream(ArchiveFormat archiveFormat, InputStream in)
             throws ArchiveException {
-        return createArchiveInputStream(archiver.getFileType(), in);
+        return createArchiveInputStream(archiveFormat.getName(), in);
     }
 
     /**
-     * @see {@link ArchiveStreamFactory#createArchiveInputStream(String, java.io.InputStream)}
+     * @see {@link ArchiveStreamFactory#createArchiveInputStream(String, InputStream)}
      */
-    static ArchiveInputStream createArchiveInputStream(FileType fileType, InputStream in) throws ArchiveException {
-        if (fileType == FileType.UNKNOWN) {
-            throw new IllegalArgumentException("Unknown FileType");
-        }
-        if (!fileType.isArchive()) {
-            throw new IllegalArgumentException("FileType " + fileType + " is not an archive type");
-        }
-
-        return createArchiveInputStream(fileType.getArchiveFormat().getName(), in);
+    static ArchiveInputStream createArchiveInputStream(CommonsArchiver archiver, InputStream in)
+            throws ArchiveException {
+        return createArchiveInputStream(archiver.getArchiveFormat(), in);
     }
 
     /**
@@ -106,6 +100,11 @@ final class CommonsStreamFactory {
         return archiveStreamFactory.createArchiveOutputStream(archiverName, out);
     }
 
+    static ArchiveOutputStream createArchiveOutputStream(ArchiveFormat format, File archive) throws IOException,
+            ArchiveException {
+        return createArchiveOutputStream(format.getName(), new FileOutputStream(archive));
+    }
+
     /**
      * Uses the {@link ArchiveStreamFactory} and the name of the given archiver to create a new
      * {@link ArchiveOutputStream} for the given archive {@link File}.
@@ -118,18 +117,7 @@ final class CommonsStreamFactory {
      */
     static ArchiveOutputStream createArchiveOutputStream(CommonsArchiver archiver, File archive) throws IOException,
             ArchiveException {
-        return createArchiveOutputStream(archiver.getFileType(), new FileOutputStream(archive));
-    }
-
-    static ArchiveOutputStream createArchiveOutputStream(FileType fileType, OutputStream out) throws ArchiveException {
-        if (fileType == FileType.UNKNOWN) {
-            throw new IllegalArgumentException("Unknown FileType");
-        }
-        if (!fileType.isArchive()) {
-            throw new IllegalArgumentException("FileType " + fileType + " is not an archive type");
-        }
-
-        return createArchiveOutputStream(fileType.getArchiveFormat().getName(), out);
+        return createArchiveOutputStream(archiver.getArchiveFormat(), archive);
     }
 
     /**
@@ -152,24 +140,9 @@ final class CommonsStreamFactory {
         return compressorStreamFactory.createCompressorInputStream(in);
     }
 
-    static CompressorInputStream createCompressorInputStream(FileType fileType, InputStream in)
-            throws CompressorException {
-        if (fileType == FileType.UNKNOWN) {
-            throw new IllegalArgumentException("Unknown FileType");
-        }
-        if (!fileType.isCompressed()) {
-            throw new IllegalArgumentException("FileType " + fileType + " does not support compression");
-        }
-
-        return createCompressorInputStream(fileType.getCompression().getName(), in);
-    }
-
-    /**
-     * @see {@link CompressorStreamFactory#createCompressorInputStream(String, InputStream)};
-     */
-    static CompressorInputStream createCompressorInputStream(String compressorName, InputStream in)
-            throws CompressorException {
-        return compressorStreamFactory.createCompressorInputStream(compressorName, in);
+    static CompressorOutputStream createCompressorOutputStream(CompressionType compressionType, File destination)
+            throws IOException, CompressorException {
+        return createCompressorOutputStream(compressionType.getName(), new FileOutputStream(destination));
     }
 
     /**
@@ -184,22 +157,7 @@ final class CommonsStreamFactory {
      */
     static CompressorOutputStream createCompressorOutputStream(CommonsCompressor compressor, File destination)
             throws IOException, CompressorException {
-        return createCompressorOutputStream(compressor.getFileType(), new FileOutputStream(destination));
-    }
-
-    /**
-     * @see {@link CompressorStreamFactory#createCompressorOutputStream(String, OutputStream)};
-     */
-    static CompressorOutputStream createCompressorOutputStream(FileType fileType, OutputStream out)
-            throws CompressorException {
-        if (fileType == FileType.UNKNOWN) {
-            throw new IllegalArgumentException("Unknown FileType");
-        }
-        if (!fileType.isCompressed()) {
-            throw new IllegalArgumentException("FileType " + fileType + " does not support compression");
-        }
-
-        return createCompressorOutputStream(fileType.getCompression().getName(), out);
+        return createCompressorOutputStream(compressor.getCompressionType(), destination);
     }
 
     /**

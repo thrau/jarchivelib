@@ -36,25 +36,21 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
  */
 class CommonsArchiver implements Archiver {
 
-    private final FileType fileType;
+    private final ArchiveFormat archiveFormat;
 
-    CommonsArchiver(FileType fileType) {
-        this.fileType = fileType;
+    CommonsArchiver(ArchiveFormat archiveFormat) {
+        this.archiveFormat = archiveFormat;
     }
 
-    CommonsArchiver(ArchiveFormat format) {
-        this(FileType.get(format));
-    }
-
-    public FileType getFileType() {
-        return fileType;
+    public ArchiveFormat getArchiveFormat() {
+        return archiveFormat;
     }
 
     @Override
     public File create(String archive, File destination, File... sources) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File archiveFile = createNewArchiveFile(archive, getFileType().getSuffix(), destination);
+        File archiveFile = createNewArchiveFile(archive, getFilenameExtension(), destination);
 
         try (ArchiveOutputStream outputStream = createArchiveOutputStream(this, archiveFile)) {
 
@@ -106,6 +102,11 @@ class CommonsArchiver implements Archiver {
         } catch (ArchiveException e) {
             throw new IOException(e);
         }
+    }
+
+    @Override
+    public String getFilenameExtension() {
+        return getArchiveFormat().getDefaultFileExtension();
     }
 
     /**

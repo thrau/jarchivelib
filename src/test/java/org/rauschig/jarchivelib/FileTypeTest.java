@@ -29,7 +29,7 @@ public class FileTypeTest {
         assertTrue(extension.isArchive());
         assertFalse(extension.isCompressed());
 
-        assertNull(extension.getCompression());
+        assertNull(extension.getCompressionType());
         assertEquals(ArchiveFormat.TAR, extension.getArchiveFormat());
         assertEquals(".tar", extension.getSuffix());
     }
@@ -42,7 +42,7 @@ public class FileTypeTest {
         assertFalse(extension.isArchive());
         assertTrue(extension.isCompressed());
 
-        assertEquals(CompressionType.GZIP, extension.getCompression());
+        assertEquals(CompressionType.GZIP, extension.getCompressionType());
         assertNull(extension.getArchiveFormat());
         assertEquals(".gz", extension.getSuffix());
     }
@@ -55,7 +55,7 @@ public class FileTypeTest {
         assertTrue(extension.isArchive());
         assertTrue(extension.isCompressed());
 
-        assertEquals(CompressionType.GZIP, extension.getCompression());
+        assertEquals(CompressionType.GZIP, extension.getCompressionType());
         assertEquals(ArchiveFormat.TAR, extension.getArchiveFormat());
         assertEquals(".tar.gz", extension.getSuffix());
     }

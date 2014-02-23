@@ -38,18 +38,14 @@ import org.apache.commons.compress.utils.IOUtils;
  */
 class CommonsCompressor implements Compressor {
 
-    private final FileType fileType;
-
-    CommonsCompressor(FileType fileType) {
-        this.fileType = fileType;
-    }
+    private final CompressionType compressionType;
 
     CommonsCompressor(CompressionType type) {
-        this(FileType.get(type));
+       this.compressionType = type;
     }
 
-    public FileType getFileType() {
-        return fileType;
+    public CompressionType getCompressionType() {
+        return compressionType;
     }
 
     @Override
@@ -94,4 +90,8 @@ class CommonsCompressor implements Compressor {
         }
     }
 
+    @Override
+    public String getFilenameExtension() {
+        return getCompressionType().getDefaultFileExtension();
+    }
 }

@@ -15,7 +15,11 @@
  */
 package org.rauschig.jarchivelib;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
+
+import org.junit.Test;
 
 public class ArchiverTarGzTest extends AbstractArchiverTest {
 
@@ -27,6 +31,11 @@ public class ArchiverTarGzTest extends AbstractArchiverTest {
     @Override
     protected File getArchive() {
         return new File(RESOURCES_DIR, "archive.tar.gz");
+    }
+
+    @Test
+    public void getFilenameExtension_targz_returnsCorrectFilenameExtension() throws Exception {
+        assertEquals(".tar.gz", getArchiver().getFilenameExtension());
     }
 
 }

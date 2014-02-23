@@ -15,6 +15,7 @@
  */
 package org.rauschig.jarchivelib;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -148,5 +149,12 @@ public class CommonsCompressorTest extends AbstractResourceTest {
         compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
 
         compressor.decompress(sourceGz, ARCHIVE_DIR);
+    }
+
+    @Test
+    public void getFilenameExtension_gzip_returnsCorrectFilenameExtension() throws Exception {
+        compressor = CompressorFactory.createCompressor(CompressionType.GZIP);
+
+        assertEquals(".gz", compressor.getFilenameExtension());
     }
 }

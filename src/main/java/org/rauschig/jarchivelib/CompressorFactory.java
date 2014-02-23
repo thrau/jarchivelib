@@ -41,11 +41,7 @@ public final class CompressorFactory {
             throw new IllegalArgumentException("Unknown file extension " + file.getName());
         }
 
-        if (fileType.isCompressed()) {
-            return createCompressor(fileType);
-        } else {
-            throw new IllegalArgumentException("Unknown compressed file extension " + file.getName());
-        }
+        return createCompressor(fileType);
     }
 
     /**
@@ -61,7 +57,7 @@ public final class CompressorFactory {
         }
 
         if (fileType.isCompressed()) {
-            return new CommonsCompressor(fileType);
+            return createCompressor(fileType.getCompressionType());
         } else {
             throw new IllegalArgumentException("Unknown compressed file type " + fileType);
         }

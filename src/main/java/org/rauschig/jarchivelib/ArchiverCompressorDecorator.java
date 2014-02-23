@@ -35,8 +35,8 @@ class ArchiverCompressorDecorator implements Archiver {
 
     /**
      * Decorates the given Archiver with the given Compressor.
-     *
-     * @param archiver   the archiver to decorate
+     * 
+     * @param archiver the archiver to decorate
      * @param compressor the compressor used for compression
      */
     ArchiverCompressorDecorator(CommonsArchiver archiver, CommonsCompressor compressor) {
@@ -48,7 +48,7 @@ class ArchiverCompressorDecorator implements Archiver {
     public File create(String archive, File destination, File... sources) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File temp = File.createTempFile(destination.getName(), archiver.getFileType().getSuffix(), destination);
+        File temp = File.createTempFile(destination.getName(), archiver.getFilenameExtension(), destination);
         File destinationArchive = null;
 
         try {
@@ -67,7 +67,7 @@ class ArchiverCompressorDecorator implements Archiver {
     public void extract(File archive, File destination) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File temp = File.createTempFile(archive.getName(), archiver.getFileType().getSuffix(), destination);
+        File temp = File.createTempFile(archive.getName(), archiver.getArchiveFormat().getDefaultFileExtension(), destination);
 
         try {
             compressor.decompress(archive, temp);
@@ -86,26 +86,32 @@ class ArchiverCompressorDecorator implements Archiver {
         }
     }
 
+    @Override
+    public String getFilenameExtension() {
+        return archiver.getFilenameExtension() + compressor.getFilenameExtension();
+    }
+
     /**
      * Returns a file name from the given archive name. The file extension suffix will be appended according to what is
      * already present.
      * <p/>
      * E.g. if the compressor uses the file extension "gz", the archiver "tar", and passed argument is "archive.tar",
      * the returned value will be "archive.tar.gz".
-     *
+     * 
      * @param archive the existing archive file name
      * @return the normalized archive file name including the correct file name extension
      */
     private String getArchiveFileName(String archive) {
-        String fileExtension = archiver.getFileType().getSuffix() + compressor.getFileType().getSuffix();
+        String fileExtension = getFilenameExtension();
 
         if (archive.endsWith(fileExtension)) {
             return archive;
-        } else if (archive.endsWith(archiver.getFileType().getSuffix())) {
-            return archive + compressor.getFileType().getSuffix();
+        } else if (archive.endsWith(archiver.getFilenameExtension())) {
+            return archive + compressor.getFilenameExtension();
         } else {
             return archive + fileExtension;
         }
     }
+
 
 }

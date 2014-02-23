@@ -59,9 +59,9 @@ public final class ArchiverFactory {
         }
 
         if (fileType.isArchive() && fileType.isCompressed()) {
-            return new ArchiverCompressorDecorator(new CommonsArchiver(fileType), new CommonsCompressor(fileType));
+            return createArchiver(fileType.getArchiveFormat(), fileType.getCompressionType());
         } else if (fileType.isArchive()) {
-            return new CommonsArchiver(fileType);
+            return createArchiver(fileType.getArchiveFormat());
         } else {
             throw new IllegalArgumentException("Unknown archive file extension " + fileType);
         }

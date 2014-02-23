@@ -60,4 +60,12 @@ public interface Archiver {
      * @throws IOException propagated I/O errors by {@code java.io}
      */
     ArchiveStream stream(File archive) throws IOException;
+
+    /**
+     * Returns the filename extension that indicates the file format this archiver handles. E.g .tar" or ".zip". In
+     * case of compressed archives, it will return the composite filename extensions, e.g. ".tar.gz"
+     * 
+     * @return a filename extension with a preceding dot
+     */
+    String getFilenameExtension();
 }

@@ -52,4 +52,12 @@ public interface Compressor {
      * @throws IOException              when an I/O error occurs
      */
     void decompress(File source, File destination) throws IllegalArgumentException, IOException;
+
+    /**
+     * Returns the filename extension that indicates the file format this compressor handles. E.g .gz". or ".bz2".
+     *
+     * @return a filename extension with a preceding dot
+     */
+    String getFilenameExtension();
 }
+

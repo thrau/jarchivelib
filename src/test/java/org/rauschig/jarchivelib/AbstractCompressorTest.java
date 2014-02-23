@@ -44,7 +44,7 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
         compressedFile = getCompressedFile();
 
         decompressDestinationFile = new File(decompressDestinationDir, "compress.txt");
-        compressDestinationFile = new File(compressDestinationFile, "compress.txt" + compressor.getFilenameExtension());
+        compressDestinationFile = new File(compressDestinationDir, "compress.txt" + compressor.getFilenameExtension());
     }
 
     @After
@@ -74,7 +74,7 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
         assertCompressionWasSuccessful();
     }
 
-    //@Test
+    @Test
     public void compress_withDirectoryDestination_compressesFileCorrectly() throws Exception {
         compressor.compress(original, compressDestinationDir);
 
@@ -99,6 +99,11 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
         }
     }
 
+    @Test(expected = FileNotFoundException.class)
+    public void compress_withNonExistingDestination_throwsException() throws Exception {
+        compressor.compress(original, new File("some/file/that/does/not/exist/../hopefully"));
+    }
+
     @Test
     public void decompress_withFileDestination_decompressesFileCorrectly() throws Exception {
         compressor.decompress(compressedFile, decompressDestinationFile);
@@ -106,11 +111,16 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
         assertDecompressionWasSuccessful();
     }
 
-    //@Test
+    @Test
     public void decompress_withDirectoryDestination_decompressesFileCorrectly() throws Exception {
         compressor.decompress(compressedFile, decompressDestinationDir);
 
         assertDecompressionWasSuccessful();
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void decompress_withNonExistingDestination_throwsException() throws Exception {
+        compressor.decompress(compressedFile, new File("some/file/that/does/not/exist/../hopefully"));
     }
 
     @Test(expected = FileNotFoundException.class)

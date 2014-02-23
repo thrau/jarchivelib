@@ -29,7 +29,6 @@ import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
-import org.apache.commons.compress.utils.IOUtils;
 
 /**
  * Implementation of a compressor that uses {@link CompressorStreamFactory} to generate compressor streams by a given
@@ -50,15 +49,10 @@ class CommonsCompressor implements Compressor {
 
     @Override
     public void compress(File source, File destination) throws IllegalArgumentException, IOException {
-        if (source.isDirectory()) {
-            throw new IllegalArgumentException("Can not compress " + source + ". Source is a directory.");
-        } else if (!source.exists()) {
-            throw new FileNotFoundException(source.getPath());
-        } else if (!source.canRead()) {
-            throw new IllegalArgumentException("Can not compress " + source + ". Can not read from source.");
-        } else if (destination.isDirectory()) {
-            throw new IllegalArgumentException("Can not compress into " + destination
-                + ". Destination is a directory.");
+        assertSource(source);
+
+        if (destination.isDirectory()) {
+            destination = new File(destination, getCompressedFilename(source));
         }
 
         try (CompressorOutputStream compressed = createCompressorOutputStream(this, destination);
@@ -71,15 +65,10 @@ class CommonsCompressor implements Compressor {
 
     @Override
     public void decompress(File source, File destination) throws IOException {
-        if (source.isDirectory()) {
-            throw new IllegalArgumentException("Can not decompress " + source + ". Source is a directory.");
-        } else if (!source.exists()) {
-            throw new FileNotFoundException(source.getName());
-        } else if (!source.canRead()) {
-            throw new IllegalArgumentException("Can not decompress " + source + ". Can not read from source.");
-        } else if (destination.isDirectory()) {
-            throw new IllegalArgumentException("Can not decompress into " + destination
-                + ". Destination is a directory.");
+        assertSource(source);
+
+        if (destination.isDirectory()) {
+            destination = new File(destination, getDecompressedFilename(source));
         }
 
         try (CompressorInputStream compressed = createCompressorInputStream(source);
@@ -93,5 +82,29 @@ class CommonsCompressor implements Compressor {
     @Override
     public String getFilenameExtension() {
         return getCompressionType().getDefaultFileExtension();
+    }
+
+    private String getCompressedFilename(File source) {
+        return source.getName() + getFilenameExtension();
+    }
+
+    private String getDecompressedFilename(File source) {
+        FileType fileType = FileType.get(source);
+
+        if (compressionType != fileType.getCompressionType()) {
+            throw new IllegalArgumentException(source + " is not of type " + compressionType);
+        }
+
+        return source.getName().substring(0, source.getName().length() - fileType.getSuffix().length());
+    }
+
+    private static void assertSource(File source) throws IllegalArgumentException, FileNotFoundException {
+        if (source.isDirectory()) {
+            throw new IllegalArgumentException("Source " + source + " is a directory.");
+        } else if (!source.exists()) {
+            throw new FileNotFoundException(source.getName());
+        } else if (!source.canRead()) {
+            throw new IllegalArgumentException("Can not read from source " + source);
+        }
     }
 }

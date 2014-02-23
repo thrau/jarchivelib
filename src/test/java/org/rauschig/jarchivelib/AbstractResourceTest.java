@@ -48,34 +48,40 @@ public abstract class AbstractResourceTest {
     public static final File ARCHIVE_DIR = new File(RESOURCES_DIR, "archive");
 
     public static final File NON_READABLE_FILE = new File(RESOURCES_DIR, "non_readable_file.txt");
+    public static final File NON_WRITABLE_FILE = new File(RESOURCES_DIR, "non_writable_file.txt");
+    public static final File NON_READABLE_DIR = new File(RESOURCES_DIR, "non_readable_dir");
+    public static final File NON_WRITABLE_DIR = new File(RESOURCES_DIR, "non_writable_dir");
 
     public static final File NON_EXISTING_FILE = new File(RESOURCES_DIR, "some/file/that/does/not/exist");
 
     @Before
-    public synchronized void createResources() {
-        if (!ARCHIVE_EXTRACT_DIR.exists()) {
-            ARCHIVE_EXTRACT_DIR.mkdirs();
-        }
-        if (!ARCHIVE_CREATE_DIR.exists()) {
-            ARCHIVE_CREATE_DIR.mkdirs();
-        }
-        if (NON_EXISTING_FILE.exists()) {
-            NON_EXISTING_FILE.delete();
-        }
+    public synchronized void createResources() throws IOException {
+        useDirectory(ARCHIVE_EXTRACT_DIR);
+        useDirectory(ARCHIVE_CREATE_DIR);
 
+        free(NON_EXISTING_FILE);
+
+        useFile(NON_READABLE_FILE);
         NON_READABLE_FILE.setReadable(false);
+
+        useFile(NON_WRITABLE_FILE);
+        NON_WRITABLE_FILE.setWritable(false);
+
+        useDirectory(NON_READABLE_DIR);
+        NON_READABLE_DIR.setReadable(false);
+
+        useDirectory(NON_WRITABLE_DIR);
+        NON_WRITABLE_FILE.setWritable(false);
     }
 
     @After
     public synchronized void dropResources() throws IOException {
-        if (ARCHIVE_EXTRACT_DIR.exists()) {
-            FileUtils.deleteDirectory(ARCHIVE_EXTRACT_DIR);
-        }
-        if (ARCHIVE_CREATE_DIR.exists()) {
-            FileUtils.deleteDirectory(ARCHIVE_CREATE_DIR);
-        }
-
-        NON_READABLE_FILE.setReadable(true);
+        free(ARCHIVE_EXTRACT_DIR);
+        free(ARCHIVE_CREATE_DIR);
+        free(NON_READABLE_FILE);
+        free(NON_WRITABLE_FILE);
+        free(NON_READABLE_DIR);
+        free(NON_WRITABLE_DIR);
     }
 
     protected static void assertDirectoryStructureEquals(File expected, File actual) throws IOException {
@@ -158,6 +164,26 @@ public abstract class AbstractResourceTest {
         }
 
         return list;
+    }
+
+    public static void useDirectory(File dir) {
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+    }
+
+    public static void useFile(File file) throws IOException {
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+    }
+
+    public static void free(File file) throws IOException {
+        if (file.exists()) {
+            file.setWritable(true);
+            file.setReadable(true);
+            FileUtils.forceDelete(file);
+        }
     }
 
 }

@@ -104,6 +104,16 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
         compressor.compress(original, NON_EXISTING_FILE);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void compress_withNonWritableDestinationFile_throwsException() throws Exception {
+        compressor.compress(original, NON_WRITABLE_FILE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void compress_withNonWritableDestinationDirectory_throwsException() throws Exception {
+        compressor.compress(original, NON_WRITABLE_DIR);
+    }
+
     @Test
     public void decompress_withFileDestination_decompressesFileCorrectly() throws Exception {
         compressor.decompress(compressedFile, decompressDestinationFile);
@@ -121,6 +131,16 @@ public abstract class AbstractCompressorTest extends AbstractResourceTest {
     @Test(expected = FileNotFoundException.class)
     public void decompress_withNonExistingDestination_throwsException() throws Exception {
         compressor.decompress(compressedFile, NON_EXISTING_FILE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decompress_withNonWritableDestinationFile_throwsException() throws Exception {
+        compressor.decompress(compressedFile, NON_WRITABLE_FILE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decompress_withNonWritableDestinationDirectory_throwsException() throws Exception {
+        compressor.decompress(compressedFile, NON_WRITABLE_DIR);
     }
 
     @Test(expected = FileNotFoundException.class)

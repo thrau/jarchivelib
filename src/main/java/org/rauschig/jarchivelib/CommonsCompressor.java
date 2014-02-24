@@ -50,6 +50,7 @@ class CommonsCompressor implements Compressor {
     @Override
     public void compress(File source, File destination) throws IllegalArgumentException, IOException {
         assertSource(source);
+        assertDestination(destination);
 
         if (destination.isDirectory()) {
             destination = new File(destination, getCompressedFilename(source));
@@ -66,6 +67,7 @@ class CommonsCompressor implements Compressor {
     @Override
     public void decompress(File source, File destination) throws IOException {
         assertSource(source);
+        assertDestination(destination);
 
         if (destination.isDirectory()) {
             destination = new File(destination, getDecompressedFilename(source));
@@ -98,8 +100,10 @@ class CommonsCompressor implements Compressor {
         return source.getName().substring(0, source.getName().length() - fileType.getSuffix().length());
     }
 
-    private static void assertSource(File source) throws IllegalArgumentException, FileNotFoundException {
-        if (source.isDirectory()) {
+    private void assertSource(File source) throws IllegalArgumentException, FileNotFoundException {
+        if (source == null) {
+            throw new IllegalArgumentException("Source is null");
+        } else if (source.isDirectory()) {
             throw new IllegalArgumentException("Source " + source + " is a directory.");
         } else if (!source.exists()) {
             throw new FileNotFoundException(source.getName());
@@ -107,4 +111,17 @@ class CommonsCompressor implements Compressor {
             throw new IllegalArgumentException("Can not read from source " + source);
         }
     }
+
+    private void assertDestination(File destination) {
+        if (destination == null) {
+            throw new IllegalArgumentException("Destination is null");
+        } else if (destination.isDirectory()) {
+            if (!destination.canWrite()) {
+                throw new IllegalArgumentException("Can not write to destination " + destination);
+            }
+        } else if (destination.exists() && !destination.canWrite()) {
+            throw new IllegalArgumentException("Can not write to destination " + destination);
+        }
+    }
+
 }

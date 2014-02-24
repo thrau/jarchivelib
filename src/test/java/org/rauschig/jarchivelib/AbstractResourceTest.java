@@ -71,7 +71,7 @@ public abstract class AbstractResourceTest {
         NON_READABLE_DIR.setReadable(false);
 
         useDirectory(NON_WRITABLE_DIR);
-        NON_WRITABLE_FILE.setWritable(false);
+        NON_WRITABLE_DIR.setWritable(false);
     }
 
     @After

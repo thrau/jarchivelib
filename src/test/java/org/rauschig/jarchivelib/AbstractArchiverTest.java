@@ -99,6 +99,11 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
         archiver.create("archive", NON_READABLE_FILE, ARCHIVE_DIR);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void create_withNonWritableDestination_fails() throws Exception {
+        archiver.create("archive", NON_WRITABLE_DIR, ARCHIVE_DIR);
+    }
+
     @Test(expected = FileNotFoundException.class)
     public void extract_withNonExistingSource_fails() throws Exception {
         archiver.extract(NON_EXISTING_FILE, ARCHIVE_EXTRACT_DIR);
@@ -112,6 +117,11 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
     @Test(expected = IllegalArgumentException.class)
     public void extract_withFileAsDestination_fails() throws Exception {
         archiver.extract(archive, NON_READABLE_FILE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void extract_withNonWritableDestination_fails() throws Exception {
+        archiver.extract(archive, NON_WRITABLE_DIR);
     }
 
     @Test

@@ -124,7 +124,7 @@ public abstract class AbstractResourceTest {
     }
 
     public static List<String> flatList(File root) throws IOException {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
 
         File[] nodes = root.listFiles();
 
@@ -150,7 +150,7 @@ public abstract class AbstractResourceTest {
     }
 
     public static List<String> flatRelativeList(File root, File current) throws IOException {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
 
         String prefix = root.getCanonicalPath();
         File[] nodes = current.getCanonicalFile().listFiles();

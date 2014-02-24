@@ -81,7 +81,9 @@ class ArchiverCompressorDecorator implements Archiver {
     public ArchiveStream stream(File archive) throws IOException {
         try {
             return new CommonsArchiveStream(createArchiveInputStream(archiver, createCompressorInputStream(archive)));
-        } catch (ArchiveException | CompressorException e) {
+        } catch (ArchiveException e) {
+            throw new IOException(e);
+        } catch (CompressorException e) {
             throw new IOException(e);
         }
     }

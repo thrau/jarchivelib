@@ -126,10 +126,11 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
 
     @Test
     public void stream_returnsCorrectEntries() throws IOException {
-        try (ArchiveStream stream = archiver.stream(archive)) {
-
+        ArchiveStream stream = null;
+        try {
+            stream = archiver.stream(archive);
             ArchiveEntry entry;
-            List<String> entries = new ArrayList<>();
+            List<String> entries = new ArrayList<String>();
 
             while ((entry = stream.getNextEntry()) != null) {
                 entries.add(entry.getName());
@@ -141,18 +142,22 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             assertTrue(entries.contains("folder/folder_file.txt"));
             assertTrue(entries.contains("folder/subfolder/subfolder_file.txt"));
             assertTrue(entries.contains("folder/subfolder/"));
-
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
     }
 
     @Test
     public void stream_extractEveryEntryWorks() throws Exception {
-
-        try (ArchiveStream stream = archiver.stream(archive)) {
+        ArchiveStream stream = null;
+        try {
+            stream = archiver.stream(archive);
             ArchiveEntry entry;
             while ((entry = stream.getNextEntry()) != null) {
                 entry.extract(ARCHIVE_EXTRACT_DIR);
             }
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
 
         assertExtractionWasSuccessful();
@@ -160,7 +165,9 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
 
     @Test(expected = IllegalStateException.class)
     public void stream_extractPassedEntry_throwsException() throws Exception {
-        try (ArchiveStream stream = archiver.stream(archive)) {
+        ArchiveStream stream = null;
+        try {
+            stream = archiver.stream(archive);
             ArchiveEntry entry = null;
 
             try {
@@ -171,18 +178,23 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             }
 
             entry.extract(ARCHIVE_EXTRACT_DIR);
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
     }
 
     @Test(expected = IllegalStateException.class)
     public void stream_extractOnClosedStream_throwsException() throws Exception {
         ArchiveEntry entry = null;
-        try (ArchiveStream stream = archiver.stream(archive)) {
-            try {
-                entry = stream.getNextEntry();
-            } catch (IllegalStateException e) {
-                fail("Illegal state exception caugth too early");
-            }
+        ArchiveStream stream = null;
+
+        try {
+            stream = archiver.stream(archive);
+            entry = stream.getNextEntry();
+        } catch (IllegalStateException e) {
+            fail("Illegal state exception caugth too early");
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
 
         entry.extract(ARCHIVE_EXTRACT_DIR);

@@ -52,13 +52,16 @@ class CommonsArchiver implements Archiver {
 
         File archiveFile = createNewArchiveFile(archive, getFilenameExtension(), destination);
 
-        try (ArchiveOutputStream outputStream = createArchiveOutputStream(this, archiveFile)) {
-
+        ArchiveOutputStream outputStream = null;
+        try {
+            outputStream = createArchiveOutputStream(this, archiveFile);
             writeToArchive(sources, outputStream);
 
             outputStream.flush();
         } catch (ArchiveException e) {
             throw new IOException(e);
+        } finally {
+            IOUtils.closeQuietly(outputStream);
         }
 
         return archiveFile;
@@ -76,7 +79,9 @@ class CommonsArchiver implements Archiver {
 
         IOUtils.requireDirectory(destination);
 
-        try (ArchiveInputStream input = createArchiveInputStream(archive)) {
+        ArchiveInputStream input = null;
+        try {
+            input = createArchiveInputStream(archive);
 
             ArchiveEntry entry;
             while ((entry = input.getNextEntry()) != null) {
@@ -92,6 +97,8 @@ class CommonsArchiver implements Archiver {
 
         } catch (ArchiveException e) {
             throw new IOException(e);
+        } finally {
+            IOUtils.closeQuietly(input);
         }
     }
 
@@ -190,8 +197,12 @@ class CommonsArchiver implements Archiver {
         archive.putArchiveEntry(entry);
 
         if (!entry.isDirectory()) {
-            try (FileInputStream input = new FileInputStream(file)) {
+            FileInputStream input = null;
+            try {
+                input = new FileInputStream(file);
                 IOUtils.copy(input, archive);
+            } finally {
+                IOUtils.closeQuietly(input);
             }
         }
 

@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public final class FileType {
 
-    private static final Map<String, FileType> MAP = new LinkedHashMap<>();
+    private static final Map<String, FileType> MAP = new LinkedHashMap<String, FileType>();
 
     /**
      * Special case object for an unknown archive/compression file type.

@@ -15,6 +15,7 @@
  */
 package org.rauschig.jarchivelib;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,8 +46,13 @@ public final class IOUtils {
      * @throws IOException if an error occurs
      */
     public static void copy(InputStream source, File destination) throws IOException {
-        try (OutputStream output = new FileOutputStream(destination)) {
+        OutputStream output = null;
+
+        try {
+            output = new FileOutputStream(destination);
             copy(source, output);
+        } finally {
+            closeQuietly(output);
         }
     }
 
@@ -131,6 +137,20 @@ public final class IOUtils {
      */
     public static String getContentType(File file) throws IOException {
         return Files.probeContentType(file.toPath());
+    }
+
+    /**
+     * Null-safe method that calls {@link java.io.Closeable#close()} and chokes the IOException.
+     * 
+     * @param closeable the object to close
+     */
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
 }

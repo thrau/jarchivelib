@@ -24,7 +24,7 @@ import java.io.InputStream;
  * <p/>
  * The {@link #getNextEntry()} method is used to reset the input stream ready for reading the data from the next entry.
  */
-public abstract class ArchiveStream extends InputStream implements Closeable, AutoCloseable {
+public abstract class ArchiveStream extends InputStream implements Closeable {
 
     private ArchiveEntry currentEntry;
 

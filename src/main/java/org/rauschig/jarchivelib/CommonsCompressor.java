@@ -56,11 +56,18 @@ class CommonsCompressor implements Compressor {
             destination = new File(destination, getCompressedFilename(source));
         }
 
-        try (CompressorOutputStream compressed = createCompressorOutputStream(this, destination);
-                BufferedInputStream input = new BufferedInputStream(new FileInputStream(source))) {
+        CompressorOutputStream compressed = null;
+        BufferedInputStream input = null;
+        try {
+            input = new BufferedInputStream(new FileInputStream(source));
+            compressed = createCompressorOutputStream(this, destination);
+
             IOUtils.copy(input, compressed);
         } catch (CompressorException e) {
             throw new IOException(e);
+        } finally {
+            IOUtils.closeQuietly(compressed);
+            IOUtils.closeQuietly(input);
         }
     }
 
@@ -73,11 +80,17 @@ class CommonsCompressor implements Compressor {
             destination = new File(destination, getDecompressedFilename(source));
         }
 
-        try (CompressorInputStream compressed = createCompressorInputStream(source);
-                FileOutputStream output = new FileOutputStream(destination)) {
+        CompressorInputStream compressed = null;
+        FileOutputStream output = null;
+        try {
+            compressed = createCompressorInputStream(source);
+            output = new FileOutputStream(destination);
             IOUtils.copy(compressed, output);
         } catch (CompressorException e) {
             throw new IOException(e);
+        } finally {
+            IOUtils.closeQuietly(compressed);
+            IOUtils.closeQuietly(output);
         }
     }
 

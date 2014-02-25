@@ -52,7 +52,8 @@ notice that you can omit the filename extension in the archive name, as it will 
 Compatibility
 -------------
 
-Currently only tested for *nix file systems.
+* Java 6 and 7
+* Currently only tested for *nix file systems.
 
 ### OSGi
 

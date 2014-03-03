@@ -50,9 +50,9 @@
   </licenses>
 
   <scm>
-    <url>https://bitbucket.org/thrau/jarchivelib</url>
-    <connection>scm:git:git://git@bitbucket.org:thrau/jarchivelib.git</connection>
-    <developerConnection>scm:git:git@bitbucket.org:thrau/jarchivelib.git</developerConnection>
+    <url>https://github.com/thrau/jarchivelib</url>
+    <connection>scm:git:git://git@github.com:thrau/jarchivelib.git</connection>
+    <developerConnection>scm:git:git@github.com:thrau/jarchivelib.git</developerConnection>
   </scm>
 
   <developers>

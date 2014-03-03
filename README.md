@@ -13,7 +13,7 @@ Usage
 Create a new Archiver to handle zip archives
 
 ```java
-javaArchiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.ZIP);
+Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.ZIP);
 ```
 
 
@@ -48,6 +48,29 @@ File archive = archiver.create(archiveName, destination, source);
 ```
 
 notice that you can omit the filename extension in the archive name, as it will be appended by the archiver automatically if it is missing.
+
+
+#### Stream
+
+To access the contents of an archive as a Stream, rather than extracting them directly onto the filesystem
+
+```java
+ArchiveStream stream = archiver.stream(archive);
+ArchiveEntry entry;
+
+while((entry = stream.getNextEntry()) != null) {
+    // access each archive entry individually using the stream
+    // or extract it using entry.extract(destination)
+    // or fetch meta-data using entry.getName(), entry.isDirectory(), ...
+}
+stream.close();
+```
+
+Dependencies
+------------
+
+* commons-compress(tm) 1.7
+
 
 Compatibility
 -------------

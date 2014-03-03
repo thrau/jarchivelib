@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -182,8 +181,29 @@ public abstract class AbstractResourceTest {
         if (file.exists()) {
             file.setWritable(true);
             file.setReadable(true);
-            FileUtils.forceDelete(file);
+            remove(file);
         }
+    }
+
+    protected static void remove(File file) throws IOException {
+        if (file.isDirectory()) {
+            removeDirectory(file);
+        } else {
+            file.delete();
+        }
+    }
+
+    protected static void removeDirectory(File directory) throws IOException {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            return;
+        }
+
+        for (File file : files) {
+            remove(file);
+        }
+
+        directory.delete();
     }
 
 }

@@ -122,6 +122,9 @@ public final class ArchiverFactory {
      * @return a new Archiver instance
      */
     public static Archiver createArchiver(ArchiveFormat archiveFormat) {
+        if (archiveFormat == ArchiveFormat.SEVEN_Z) {
+            return new SevenZArchiver();
+        }
         return new CommonsArchiver(archiveFormat);
     }
 

@@ -19,6 +19,7 @@ import static org.rauschig.jarchivelib.ArchiveFormat.AR;
 import static org.rauschig.jarchivelib.ArchiveFormat.CPIO;
 import static org.rauschig.jarchivelib.ArchiveFormat.DUMP;
 import static org.rauschig.jarchivelib.ArchiveFormat.JAR;
+import static org.rauschig.jarchivelib.ArchiveFormat.SEVEN_Z;
 import static org.rauschig.jarchivelib.ArchiveFormat.TAR;
 import static org.rauschig.jarchivelib.ArchiveFormat.ZIP;
 import static org.rauschig.jarchivelib.CompressionType.BZIP2;
@@ -48,6 +49,7 @@ public final class FileType {
         add(".tar.bz2", TAR, BZIP2);
         add(".tbz2", TAR, BZIP2);
         // archive formats
+        add(".7z", SEVEN_Z);
         add(".a", AR);
         add(".ar", AR);
         add(".cpio", CPIO);

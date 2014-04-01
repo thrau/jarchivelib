@@ -39,6 +39,10 @@ public enum ArchiveFormat {
      */
     JAR(ArchiveStreamFactory.JAR, ".jar"),
     /**
+     * Constant used to identify the 7z archive format.
+     */
+    SEVEN_Z(ArchiveStreamFactory.SEVEN_Z, ".7z"),
+    /**
      * Constant used to identify the TAR archive format.
      */
     TAR(ArchiveStreamFactory.TAR, ".tar"),

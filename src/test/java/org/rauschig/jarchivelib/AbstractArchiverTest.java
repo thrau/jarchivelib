@@ -133,15 +133,15 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             List<String> entries = new ArrayList<String>();
 
             while ((entry = stream.getNextEntry()) != null) {
-                entries.add(entry.getName());
+                entries.add(entry.getName().replaceAll("/$", "")); // remove trailing slashes for test compatibility
             }
 
             assertEquals(5, entries.size());
             assertTrue(entries.contains("file.txt"));
-            assertTrue(entries.contains("folder/"));
+            assertTrue(entries.contains("folder"));
             assertTrue(entries.contains("folder/folder_file.txt"));
             assertTrue(entries.contains("folder/subfolder/subfolder_file.txt"));
-            assertTrue(entries.contains("folder/subfolder/"));
+            assertTrue(entries.contains("folder/subfolder"));
         } finally {
             IOUtils.closeQuietly(stream);
         }

@@ -15,9 +15,6 @@
  */
 package org.rauschig.jarchivelib;
 
-import static org.rauschig.jarchivelib.CommonsStreamFactory.createArchiveInputStream;
-import static org.rauschig.jarchivelib.CommonsStreamFactory.createArchiveOutputStream;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,12 +51,10 @@ class CommonsArchiver implements Archiver {
 
         ArchiveOutputStream outputStream = null;
         try {
-            outputStream = createArchiveOutputStream(this, archiveFile);
+            outputStream = createArchiveOutputStream(archiveFile);
             writeToArchive(sources, outputStream);
 
             outputStream.flush();
-        } catch (ArchiveException e) {
-            throw new IOException(e);
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
@@ -69,13 +64,7 @@ class CommonsArchiver implements Archiver {
 
     @Override
     public void extract(File archive, File destination) throws IOException {
-        if (archive.isDirectory()) {
-            throw new IllegalArgumentException("Can not extract " + archive + ". Source is a directory.");
-        } else if (!archive.exists()) {
-            throw new FileNotFoundException(archive.getPath());
-        } else if (!archive.canRead()) {
-            throw new IllegalArgumentException("Can not extract " + archive + ". Can not read from source.");
-        }
+        assertExtractSource(archive);
 
         IOUtils.requireDirectory(destination);
 
@@ -95,8 +84,6 @@ class CommonsArchiver implements Archiver {
                 }
             }
 
-        } catch (ArchiveException e) {
-            throw new IOException(e);
         } finally {
             IOUtils.closeQuietly(input);
         }
@@ -104,16 +91,61 @@ class CommonsArchiver implements Archiver {
 
     @Override
     public ArchiveStream stream(File archive) throws IOException {
-        try {
-            return new CommonsArchiveStream(createArchiveInputStream(archive));
-        } catch (ArchiveException e) {
-            throw new IOException(e);
-        }
+        return new CommonsArchiveStream(createArchiveInputStream(archive));
     }
 
     @Override
     public String getFilenameExtension() {
         return getArchiveFormat().getDefaultFileExtension();
+    }
+
+    /**
+     * Returns a new ArchiveInputStream for reading archives. Subclasses can override this to return their own custom
+     * implementation.
+     * 
+     * @param archive the archive file to stream from
+     * @return a new ArchiveInputStream for the given archive file
+     * @throws IOException propagated IO exceptions
+     */
+    protected ArchiveInputStream createArchiveInputStream(File archive) throws IOException {
+        try {
+            return CommonsStreamFactory.createArchiveInputStream(archive);
+        } catch (ArchiveException e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * Returns a new ArchiveOutputStream for creating archives. Subclasses can override this to return their own custom
+     * implementation.
+     * 
+     * @param archiveFile the archive file to stream to
+     * @return a new ArchiveOutputStream for the given archive file.
+     * @throws IOException propagated IO exceptions
+     */
+    protected ArchiveOutputStream createArchiveOutputStream(File archiveFile) throws IOException {
+        try {
+            return CommonsStreamFactory.createArchiveOutputStream(this, archiveFile);
+        } catch (ArchiveException e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * Asserts that the given File object is a readable file that can be used to extract from.
+     * 
+     * @param archive the file to check
+     * @throws FileNotFoundException if the file does not exist
+     * @throws IllegalArgumentException if the file is a directory or not readable
+     */
+    protected void assertExtractSource(File archive) throws FileNotFoundException, IllegalArgumentException {
+        if (archive.isDirectory()) {
+            throw new IllegalArgumentException("Can not extract " + archive + ". Source is a directory.");
+        } else if (!archive.exists()) {
+            throw new FileNotFoundException(archive.getPath());
+        } else if (!archive.canRead()) {
+            throw new IllegalArgumentException("Can not extract " + archive + ". Can not read from source.");
+        }
     }
 
     /**
@@ -155,7 +187,7 @@ class CommonsArchiver implements Archiver {
             }
 
             if (source.isFile()) {
-                writeToArchive(source.getParentFile(), new File[] { source }, archive);
+                writeToArchive(source.getParentFile(), new File[]{ source }, archive);
             } else {
                 writeToArchive(source, source.listFiles(), archive);
             }

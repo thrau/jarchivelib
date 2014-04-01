@@ -23,6 +23,13 @@ Create a new Archiver to handle tar archives with gzip compression
 Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
 ```
 
+
+Alternatively you can use string representations of the archive and compression types.
+
+```java
+Archiver archiver = ArchiverFactory.createArchiver("zip");
+```
+
 ### Using Archivers
 #### Extract
 To extract the zip archive `/home/jack/archive.zip` to `/home/jack/archive`:
@@ -69,7 +76,7 @@ stream.close();
 Dependencies
 ------------
 
-* commons-compress(tm) 1.7
+* commons-compress(tm) 1.8
 
 
 Compatibility

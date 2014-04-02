@@ -3,7 +3,8 @@ jarchivelib
 
 [![Build Status](https://travis-ci.org/thrau/jarchivelib.png?branch=master)](https://travis-ci.org/thrau/jarchivelib)
 
-A simple archiving library for java, facading [org.apache.commons.compress]
+A simple archiving and compression library for Java that provides a thin and easy-to-use API layer on top of the
+powerful and feature-rich [org.apache.commons.compress].
 
   [org.apache.commons.compress]: http://commons.apache.org/proper/commons-compress/
 
@@ -28,6 +29,13 @@ Alternatively you can use string representations of the archive and compression 
 
 ```java
 Archiver archiver = ArchiverFactory.createArchiver("zip");
+```
+
+The ArchiveFactory can also detect archive types based on file extensions and hand you the correct Archiver. This
+example returns an Archiver instance that handles tar.gz files. (It would also recognize the `.tgz` extension)
+
+```java
+Archiver archiver = ArchiveFactory.createArchiver(new File("archive.tar.gz"));
 ```
 
 ### Using Archivers

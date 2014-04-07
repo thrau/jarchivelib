@@ -136,12 +136,18 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
                 entries.add(entry.getName().replaceAll("/$", "")); // remove trailing slashes for test compatibility
             }
 
-            assertEquals(5, entries.size());
+            assertEquals(11, entries.size());
             assertTrue(entries.contains("file.txt"));
             assertTrue(entries.contains("folder"));
             assertTrue(entries.contains("folder/folder_file.txt"));
             assertTrue(entries.contains("folder/subfolder/subfolder_file.txt"));
             assertTrue(entries.contains("folder/subfolder"));
+            assertTrue(entries.contains("permissions"));
+            assertTrue(entries.contains("permissions/executable_file.txt"));
+            assertTrue(entries.contains("permissions/private_executable_file.txt"));
+            assertTrue(entries.contains("permissions/readonly_file.txt"));
+            assertTrue(entries.contains("permissions/private_folder"));
+            assertTrue(entries.contains("permissions/private_folder/private_file.txt"));
         } finally {
             IOUtils.closeQuietly(stream);
         }

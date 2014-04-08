@@ -70,6 +70,8 @@ class CommonsArchiveEntry implements ArchiveEntry {
 
         File file = new File(destination, entry.getName());
 
+        FileModeMapper.map(entry, file);
+
         if (entry.isDirectory()) {
             file.mkdirs();
         } else {

@@ -82,6 +82,8 @@ class CommonsArchiver implements Archiver {
                     file.getParentFile().mkdirs();
                     IOUtils.copy(input, file);
                 }
+
+                FileModeMapper.map(entry, file);
             }
 
         } finally {

@@ -17,30 +17,28 @@ package org.rauschig.jarchivelib;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
-import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 
 /**
  * Reads *nix file mode flags of commons-compress' ArchiveEntry (where possible) and maps them onto Files on the file
  * system.
  */
-abstract class FileModeMapper<T extends ArchiveEntry> {
+abstract class FileModeMapper {
 
-    public static int PERMISSION_MASK = 0777;
+    private static final Logger LOG = Logger.getLogger(FileModeMapper.class.getCanonicalName());
 
-    private T archiveEntry;
+    private ArchiveEntry archiveEntry;
 
-    public FileModeMapper(T archiveEntry) {
+    public FileModeMapper(ArchiveEntry archiveEntry) {
         this.archiveEntry = archiveEntry;
     }
 
     public abstract void map(File file) throws IOException;
 
-    public T getArchiveEntry() {
+    public ArchiveEntry getArchiveEntry() {
         return archiveEntry;
     }
 
@@ -57,116 +55,114 @@ abstract class FileModeMapper<T extends ArchiveEntry> {
 
     /**
      * Factory method for creating a FileModeMapper for the given ArchiveEntry. Unknown types will yield a
-     * DefaultFileModeMapper that discretely does nothing.
+     * FallbackFileModeMapper that discretely does nothing.
      * 
      * @param entry the archive entry for which to create a FileModeMapper for
      * @return a new FileModeMapper instance
      */
-    public static FileModeMapper<?> create(ArchiveEntry entry) {
+    public static FileModeMapper create(ArchiveEntry entry) {
         if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-            // FIXME: this is really horrid, but with java 6 i need a syscall to 'chmod'
-            // TODO: implement basic windows permission mapping (e.g. with File.setX)
-            return new DefaultFileModeMapper(entry);
+            // FIXME: this is really horrid, but with java 6 i need the system call to 'chmod'
+            // TODO: implement basic windows permission mapping (e.g. with File.setX or attrib)
+            return new FallbackFileModeMapper(entry);
         }
 
-        if (entry instanceof TarArchiveEntry) {
-            return new TarModeMapper((TarArchiveEntry) entry);
-        } else if (entry instanceof JarArchiveEntry) {
-            return new JarModeMapper((JarArchiveEntry) entry);
-        } else if (entry instanceof ZipArchiveEntry) {
-            return new ZipModeMapper((ZipArchiveEntry) entry);
-        } else if (entry instanceof CpioArchiveEntry) {
-            return new CpioModeMapper((CpioArchiveEntry) entry);
-        }
-
-        return new DefaultFileModeMapper(entry);
+        // please don't use me on OS/2
+        return new UnixPermissionMapper(entry);
     }
 
-    public static class DefaultFileModeMapper extends FileModeMapper<ArchiveEntry> {
+    /**
+     * Does nothing!
+     */
+    public static class FallbackFileModeMapper extends FileModeMapper {
 
-        public DefaultFileModeMapper(ArchiveEntry archiveEntry) {
-            super(archiveEntry);
-        }
-
-        @Override
-        public void map(File file) {
-            // do nothing
-        }
-    }
-
-    public static abstract class AbstractUnixPermissionMapper<T extends ArchiveEntry> extends FileModeMapper<T> {
-        public AbstractUnixPermissionMapper(T archiveEntry) {
+        public FallbackFileModeMapper(ArchiveEntry archiveEntry) {
             super(archiveEntry);
         }
 
         @Override
         public void map(File file) throws IOException {
-            int perm = getMode() & PERMISSION_MASK;
+            // do nothing
+        }
+    }
+
+    /**
+     * Uses an AttributeAccessor to extract the unix file mode from the ArchiveEntry and then invokes the ChmodCommand
+     * on the given file.
+     */
+    public static class UnixPermissionMapper extends FileModeMapper {
+        public static final int UNIX_PERMISSION_MASK = 0777;
+
+        public UnixPermissionMapper(ArchiveEntry archiveEntry) {
+            super(archiveEntry);
+        }
+
+        @Override
+        public void map(File file) throws IOException {
+            int perm = getMode() & UNIX_PERMISSION_MASK;
 
             if (perm > 0) {
                 chmod(perm, file);
             }
         }
 
-        private void chmod(int mode, File file) throws IOException {
-            String cmd = String.format("chmod %s %s", Integer.toOctalString(mode), file.getAbsolutePath());
+        public int getMode() throws IOException {
+            return AttributeAccessor.create(getArchiveEntry()).getMode();
+        }
 
+        public ChmodCommand getChmodCommand() {
+            return new FileSystemPreferencesReflectionChmodCommand();
+        }
+
+        private void chmod(int mode, File file) throws IOException {
             try {
-                Runtime.getRuntime().exec(cmd);
-            } catch (IOException e) {
-                // fail gracefully
+                getChmodCommand().chmod(mode, file);
+            } catch (Exception e) {
+                LOG.warning("Could not set file permissions of " + file + ". Exception was: " + e.getMessage());
             }
         }
 
-        public abstract int getMode();
     }
 
-    public static class TarModeMapper extends AbstractUnixPermissionMapper<TarArchiveEntry> {
-
-        public TarModeMapper(TarArchiveEntry archiveEntry) {
-            super(archiveEntry);
-        }
-
-        @Override
-        public int getMode() {
-            return getArchiveEntry().getMode();
-        }
-
+    /**
+     * Command interface for unix <code>chmod</code> call. Java 6 made me do it.
+     */
+    public static interface ChmodCommand {
+        void chmod(int mode, File file) throws Exception;
     }
 
-    public static class ZipModeMapper extends AbstractUnixPermissionMapper<ZipArchiveEntry> {
-
-        public ZipModeMapper(ZipArchiveEntry archiveEntry) {
-            super(archiveEntry);
-        }
-
-        @Override
-        public int getMode() {
-            return getArchiveEntry().getUnixMode();
-        }
-    }
-
-    public static class JarModeMapper extends AbstractUnixPermissionMapper<JarArchiveEntry> {
-
-        public JarModeMapper(JarArchiveEntry archiveEntry) {
-            super(archiveEntry);
-        }
+    /**
+     * While still horribly wrong, this actually seems to be the safest way. It will invoke a reflective call on
+     * java.utils.pref.FileSystemPreferences#chmod(String, Integer), which is a JNI call, making it (probably) the
+     * safest bet.
+     */
+    public static class FileSystemPreferencesReflectionChmodCommand implements ChmodCommand {
+        private static Method method;
 
         @Override
-        public int getMode() {
-            return getArchiveEntry().getUnixMode();
+        public void chmod(int mode, File file) throws Exception {
+            getMethod().invoke(null, file.getAbsolutePath(), mode);
+        }
+
+        private Method getMethod() throws Exception {
+            if (method == null) {
+                Class<?> clazz = Class.forName("java.util.prefs.FileSystemPreferences");
+                method = clazz.getDeclaredMethod("chmod", String.class, Integer.TYPE);
+                method.setAccessible(true);
+            }
+
+            return method;
         }
     }
 
-    public static class CpioModeMapper extends AbstractUnixPermissionMapper<CpioArchiveEntry> {
-
-        public CpioModeMapper(CpioArchiveEntry archiveEntry) {
-            super(archiveEntry);
-        }
-
+    /**
+     * This is just here for documentation really. Maybe it could be an alternative in some cases.
+     */
+    public static class RuntimeExecChmodCommand implements ChmodCommand {
         @Override
-        public int getMode() {
-            return (int) getArchiveEntry().getMode();
+        public void chmod(int mode, File file) throws Exception {
+            String cmd = "chmod " + Integer.toOctalString(mode) + " " + file.getAbsolutePath();
+            Runtime.getRuntime().exec(cmd);
         }
     }
 

@@ -228,6 +228,7 @@ class CommonsArchiver implements Archiver {
      */
     protected void createArchiveEntry(File file, String entryName, ArchiveOutputStream archive) throws IOException {
         ArchiveEntry entry = archive.createArchiveEntry(file, entryName);
+        // TODO: read permission from file, write it to the ArchiveEntry
         archive.putArchiveEntry(entry);
 
         if (!entry.isDirectory()) {

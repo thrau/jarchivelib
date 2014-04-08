@@ -124,6 +124,8 @@ public final class ArchiverFactory {
     public static Archiver createArchiver(ArchiveFormat archiveFormat) {
         if (archiveFormat == ArchiveFormat.SEVEN_Z) {
             return new SevenZArchiver();
+        } else if (archiveFormat == ArchiveFormat.ZIP) {
+            return new ZipFileArchiver();
         }
         return new CommonsArchiver(archiveFormat);
     }

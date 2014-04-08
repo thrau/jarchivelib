@@ -67,13 +67,6 @@ class ZipFileArchiver extends CommonsArchiver {
             return currentEntry;
         }
 
-        private void closeCurrentEntryStream() {
-            InputStream stream = getCurrentEntryStream();
-            IOUtils.closeQuietly(stream);
-
-            currentEntryStream = null;
-        }
-
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
             int read = getCurrentEntryStream().read(b, off, len);
@@ -107,13 +100,25 @@ class ZipFileArchiver extends CommonsArchiver {
             return entries;
         }
 
+        private void closeCurrentEntryStream() {
+            InputStream stream = getCurrentEntryStream();
+            IOUtils.closeQuietly(stream);
+
+            currentEntryStream = null;
+        }
+
+        private void closeFile() {
+            try {
+                file.close();
+            } catch (IOException e) {
+                // close quietly
+            }
+        }
+
         @Override
         public void close() throws IOException {
-            InputStream stream = getCurrentEntryStream();
-
-            if (stream != null) {
-                stream.close();
-            }
+            closeCurrentEntryStream();
+            closeFile();
 
             super.close();
         }

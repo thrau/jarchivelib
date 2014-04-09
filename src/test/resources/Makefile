@@ -1,26 +1,40 @@
-COMPRESS_FILE = compress.txt
-ARCHIVE       = archive
+CPF = compress.txt
+AR  = archive
 
 all: archives compress
 
+## archives
+## TODO: separate
 archives:
-	cd $(ARCHIVE);                                                         \
-	tar czf ../$(ARCHIVE).tar.gz *;                                        \
-	tar cjf ../$(ARCHIVE).tar.bz2 *;                                       \
-	tar cf ../$(ARCHIVE).tar *;                                            \
-	zip -q -r ../$(ARCHIVE) .;                                             \
-	jar cMf ../$(ARCHIVE).jar .;                                           \
-	find . -depth ! -path . -print | cpio --quiet -o > ../$(ARCHIVE).cpio; \
-	7z a -t7z ../$(ARCHIVE).7z . > /dev/null;
+	cd $(AR);                                                         \
+	tar czf ../$(AR).tar.gz *;                                        \
+	tar cjf ../$(AR).tar.bz2 *;                                       \
+	tar cf ../$(AR).tar *;                                            \
+	zip -q -r ../$(AR) .;                                             \
+	jar cMf ../$(AR).jar .;                                           \
+	find . -depth ! -path . -print | cpio --quiet -o > ../$(AR).cpio; \
+	7z a -t7z ../$(AR).7z . > /dev/null;
 
-compress:
-	gzip -c $(COMPRESS_FILE) > $(COMPRESS_FILE).gz
-	bzip2 -c $(COMPRESS_FILE) > $(COMPRESS_FILE).bz2
+## compress
+compress: $(CPF).gz $(CPF).lzma $(CPF).bz2 $(CPF).xz
 
+$(CPF).gz:
+	gzip -c $(CPF) > $@
+
+$(CPF).bz2:
+	bzip2 -c $(CPF) > $@
+
+$(CPF).lzma:
+	lzma -z -c $(CPF) > $@
+
+$(CPF).xz:
+	xz -z -c $(CPF) > $@
+
+## clean
 clean: clean-compress clean-archives
 
 clean-compress:
-	rm -f $(COMPRESS_FILE).*
+	rm -f $(CPF).*
 
 clean-archives:
-	rm -f $(ARCHIVE).*
+	rm -f $(AR).*

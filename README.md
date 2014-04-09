@@ -96,3 +96,11 @@ Compatibility
 ### OSGi
 
 jarchivelib compiles to a bundle and is OSGi compatible
+
+
+Known limitations
+-----------------
+
+* Permissions are not stored when creating archives
+* There is no support for Windows permissions
+* JAR files are treated like streamed zip files and can not restore permissions

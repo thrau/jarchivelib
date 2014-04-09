@@ -83,7 +83,7 @@ class CommonsCompressor implements Compressor {
         CompressorInputStream compressed = null;
         FileOutputStream output = null;
         try {
-            compressed = createCompressorInputStream(source);
+            compressed = createCompressorInputStream(getCompressionType(), source);
             output = new FileOutputStream(destination);
             IOUtils.copy(compressed, output);
         } catch (CompressorException e) {

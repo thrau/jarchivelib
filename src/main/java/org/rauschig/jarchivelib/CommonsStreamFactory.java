@@ -134,6 +134,28 @@ final class CommonsStreamFactory {
     }
 
     /**
+     * Uses the {@link CompressorStreamFactory} to create a new {@link CompressorInputStream} for the compression type
+     * and wraps the given source {@link File} with it.
+     * 
+     * @param source the file to create the {@link CompressorInputStream} for
+     * @return a new {@link CompressorInputStream}
+     * @throws IOException if an I/O error occurs
+     * @throws CompressorException if the compressor name is not known
+     */
+    static CompressorInputStream createCompressorInputStream(CompressionType type, File source) throws IOException,
+        CompressorException {
+        return createCompressorInputStream(type.getName(), new BufferedInputStream(new FileInputStream(source)));
+    }
+
+    /**
+     * @see {@link CompressorStreamFactory#createCompressorInputStream(String, java.io.InputStream)}
+     */
+    private static CompressorInputStream createCompressorInputStream(String compressionType, InputStream in)
+        throws CompressorException {
+        return compressorStreamFactory.createCompressorInputStream(compressionType, in);
+    }
+
+    /**
      * @see {@link CompressorStreamFactory#createCompressorInputStream(InputStream)};
      */
     static CompressorInputStream createCompressorInputStream(InputStream in) throws CompressorException {

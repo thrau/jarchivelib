@@ -25,6 +25,7 @@ import static org.rauschig.jarchivelib.ArchiveFormat.ZIP;
 import static org.rauschig.jarchivelib.CompressionType.BZIP2;
 import static org.rauschig.jarchivelib.CompressionType.GZIP;
 import static org.rauschig.jarchivelib.CompressionType.PACK200;
+import static org.rauschig.jarchivelib.CompressionType.XZ;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -60,6 +61,7 @@ public final class FileType {
         add(".zipx", ZIP);
         // compression formats
         add(".bz2", BZIP2);
+        add(".xz", XZ);
         add(".gzip", GZIP);
         add(".gz", GZIP);
         add(".pack", PACK200);

@@ -31,6 +31,10 @@ public enum CompressionType {
      */
     GZIP(CompressorStreamFactory.GZIP, ".gz"),
     /**
+     * Constant used to identify the XZ compression algorithm.
+     */
+    XZ(CompressorStreamFactory.XZ, ".xz"),
+    /**
      * Constant used to identify the PACK200 compression algorithm.
      */
     PACK200(CompressorStreamFactory.PACK200, ".pack");

@@ -30,7 +30,7 @@
 
   <packaging>bundle</packaging>
 
-  <name>java archiving library</name>
+  <name>Java archiving library</name>
 
   <description>
     A simple library that facades org.apache.commons.compress, to provide an easy-to-use API for archiving and
@@ -67,6 +67,7 @@
     <commons.compress.version>1.8</commons.compress.version>
     <junit.version>4.11</junit.version>
 
+    <bundle.name>${project.groupId} :: ${project.artifactId} :: ${project.name}</bundle.name>
     <bundle.symbolicName>${project.groupId}.${project.artifactId}</bundle.symbolicName>
     <bundle.namespace>${project.groupId}.${project.artifactId}</bundle.namespace>
   </properties>
@@ -130,6 +131,7 @@
         <configuration>
           <instructions>
             <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+            <Bundle-Name>${bundle.name}</Bundle-Name>
             <Bundle-Version>${project.version}</Bundle-Version>
             <Embed-Dependency>*;scope=compile|runtime;type=!pom;inline=true</Embed-Dependency>
             <Import-Package>*;resolution:=optional</Import-Package>

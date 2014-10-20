@@ -56,7 +56,7 @@
   </developers>
 
   <properties>
-    <commons.compress.version>1.8</commons.compress.version>
+    <commons.compress.version>1.8.1</commons.compress.version>
     <junit.version>4.11</junit.version>
 
     <bundle.name>${project.groupId} :: ${project.artifactId} :: ${project.name}</bundle.name>

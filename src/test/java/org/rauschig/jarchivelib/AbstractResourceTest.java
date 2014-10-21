@@ -18,6 +18,7 @@ package org.rauschig.jarchivelib;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -87,6 +88,9 @@ public abstract class AbstractResourceTest {
         String[] expecteds = flatRelativeArray(expected);
         String[] actuals = flatRelativeArray(actual);
 
+        Arrays.sort(expecteds);
+        Arrays.sort(actuals);
+
         String msg = String.format("Directory structures of %s and %s do not match.", expected, actual);
         Assert.assertArrayEquals(msg, expecteds, actuals);
     }
@@ -102,6 +106,9 @@ public abstract class AbstractResourceTest {
     protected static void assertFilesEquals(File expectedDir, File actualDir) throws Exception {
         String[] expecteds = flatArray(expectedDir);
         String[] actuals = flatArray(actualDir);
+
+        Arrays.sort(expecteds);
+        Arrays.sort(actuals);
 
         // check whether hashes of files match
         for (int i = 0; i < expecteds.length; i++) {

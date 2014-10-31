@@ -50,7 +50,6 @@ class ArchiverCompressorDecorator implements Archiver {
         
         File temp = File.createTempFile("jAL" + destination.getName(), archiver.getFilenameExtension(), destination);
         File destinationArchive = null;
-
         try {
             temp = archiver.create(temp.getName(), temp.getParentFile(), sources);
             destinationArchive = new File(destination, getArchiveFileName(archive));
@@ -68,7 +67,6 @@ class ArchiverCompressorDecorator implements Archiver {
         IOUtils.requireDirectory(destination);
 
         File temp = File.createTempFile("jAL" + archive.getName(), archiver.getFilenameExtension(), destination);
-
         try {
             compressor.decompress(archive, temp);
             archiver.extract(temp, destination);

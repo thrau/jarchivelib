@@ -132,11 +132,8 @@
           <instructions>
             <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
             <Bundle-Version>${project.version}</Bundle-Version>
-            <Embed-Dependency>*;scope=compile|runtime;type=!pom;inline=true</Embed-Dependency>
             <Import-Package>*;resolution:=optional</Import-Package>
             <Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
-            <Private-Package>!*</Private-Package>
-            <_include>-osgi.bnd</_include>
           </instructions>
         </configuration>
       </plugin>
@@ -225,6 +222,7 @@
       <groupId>org.tukaani</groupId>
       <artifactId>xz</artifactId>
       <version>${xz.version}</version>
+      <optional>true</optional>
     </dependency>
 
     <!-- test dependencies -->

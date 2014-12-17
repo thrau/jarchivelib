@@ -17,6 +17,7 @@ package org.rauschig.jarchivelib;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * An Archiver facades a specific archiving library, allowing for simple archiving of files and directories, and
@@ -50,6 +51,17 @@ public interface Archiver {
      * @throws IOException propagated I/O errors by {@code java.io}
      */
     void extract(File archive, File destination) throws IOException;
+
+    /**
+     * Extracts the given archive supplied as an input stream into the given destination directory.
+     * <p/>
+     * The destination directory is expected to be a writable directory.
+     *
+     * @param archive the archive contents as a stream.
+     * @param destination the destination directory.
+     * @throws IOException
+     */
+    void extract(InputStream archive, File destination) throws IOException;
 
     /**
      * Reads the given archive file as an {@link ArchiveStream} which is used to access individual {@link ArchiveEntry}

@@ -20,6 +20,7 @@ import static org.rauschig.jarchivelib.CommonsStreamFactory.createCompressorInpu
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
@@ -75,6 +76,11 @@ class ArchiverCompressorDecorator implements Archiver {
         } finally {
             temp.delete();
         }
+    }
+
+    @Override
+    public void extract(InputStream archive, File destination) throws IOException {
+       throw new UnsupportedOperationException("If you want to decompress, wrap a suitable stream around your archive.");
     }
 
     @Override

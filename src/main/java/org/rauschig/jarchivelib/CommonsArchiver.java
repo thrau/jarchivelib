@@ -72,7 +72,7 @@ class CommonsArchiver implements Archiver {
         ArchiveInputStream input = null;
         try {
             input = createArchiveInputStream(archive);
-            extractImpl(destination, input);
+            extract(input, destination);
 
         } finally {
             IOUtils.closeQuietly(input);
@@ -84,13 +84,13 @@ class CommonsArchiver implements Archiver {
         ArchiveInputStream input = null;
         try {
             input = createArchiveInputStream(archive);
-            extractImpl(destination, input);
+            extract(input, destination);
         } finally {
             IOUtils.closeQuietly(input);
         }
     }
 
-    private void extractImpl(File destination, ArchiveInputStream input) throws IOException {
+    private void extract(ArchiveInputStream input, File destination) throws IOException {
         ArchiveEntry entry;
         while ((entry = input.getNextEntry()) != null) {
             File file = new File(destination, entry.getName());

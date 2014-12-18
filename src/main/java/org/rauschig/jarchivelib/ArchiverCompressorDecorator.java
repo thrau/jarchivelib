@@ -18,7 +18,9 @@ package org.rauschig.jarchivelib;
 import static org.rauschig.jarchivelib.CommonsStreamFactory.createArchiveInputStream;
 import static org.rauschig.jarchivelib.CommonsStreamFactory.createCompressorInputStream;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -68,19 +70,19 @@ class ArchiverCompressorDecorator implements Archiver {
     public void extract(File archive, File destination) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File temp = File.createTempFile(archive.getName(), archiver.getFilenameExtension(), destination);
-
+        InputStream archiveStream = null;
         try {
-            compressor.decompress(archive, temp);
-            archiver.extract(temp, destination);
+            archiveStream = new BufferedInputStream(new FileInputStream(archive));
+            archiver.extract(compressor.decompressingStream(archiveStream), destination);
         } finally {
-            temp.delete();
+            IOUtils.closeQuietly(archiveStream);
         }
     }
 
     @Override
     public void extract(InputStream archive, File destination) throws IOException {
-       throw new UnsupportedOperationException("If you want to decompress, wrap a suitable stream around your archive.");
+        IOUtils.requireDirectory(destination);
+       archiver.extract(compressor.decompressingStream(archive), destination);
     }
 
     @Override

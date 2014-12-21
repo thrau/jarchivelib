@@ -16,6 +16,9 @@
 package org.rauschig.jarchivelib;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -25,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
@@ -162,6 +166,66 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
             assertTrue(entries.contains("permissions/readonly_file.txt"));
             assertTrue(entries.contains("permissions/private_folder"));
             assertTrue(entries.contains("permissions/private_folder/private_file.txt"));
+        } finally {
+            IOUtils.closeQuietly(stream);
+        }
+    }
+
+    @Test
+    public void entry_isDirectory_behavesCorrectly() throws Exception {
+        ArchiveStream stream = null;
+        try {
+            stream = archiver.stream(archive);
+            ArchiveEntry entry;
+
+            while ((entry = stream.getNextEntry()) != null) {
+                String name = entry.getName().replaceAll("/$", ""); // remove trailing slashes for test compatibility
+
+                if (name.endsWith("folder") || name.endsWith("subfolder") || name.endsWith("permissions")
+                        || name.endsWith("private_folder")) {
+                    assertTrue(entry.getName() + " is a directory", entry.isDirectory());
+                } else {
+                    assertFalse(entry.getName() + " is not a directory", entry.isDirectory());
+                }
+            }
+        } finally {
+            IOUtils.closeQuietly(stream);
+        }
+    }
+
+    @Test
+    public void entry_geSize_behavesCorrectly() throws Exception {
+        ArchiveStream stream = null;
+        try {
+            stream = archiver.stream(archive);
+            ArchiveEntry entry;
+
+            while ((entry = stream.getNextEntry()) != null) {
+                String name = entry.getName().replaceAll("/$", ""); // remove trailing slashes for test compatibility
+
+                if (name.endsWith("folder") || name.endsWith("subfolder") || name.endsWith("permissions")
+                        || name.endsWith("private_folder")) {
+                    assertEquals(0, entry.getSize());
+                } else {
+                    assertNotEquals(0, entry.getSize());
+                }
+            }
+        } finally {
+            IOUtils.closeQuietly(stream);
+        }
+    }
+
+    @Test
+    public void entry_getLastModifiedDate_behavesCorrectly() throws Exception {
+        ArchiveStream stream = null;
+        try {
+            stream = archiver.stream(archive);
+            ArchiveEntry entry;
+
+            while ((entry = stream.getNextEntry()) != null) {
+                assertNotNull(entry.getLastModifiedDate());
+                assertTrue("modification date should be before now", new Date().after(entry.getLastModifiedDate()));
+            }
         } finally {
             IOUtils.closeQuietly(stream);
         }

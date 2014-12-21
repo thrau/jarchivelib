@@ -112,4 +112,9 @@ public class FactoryTest extends AbstractResourceTest {
         CompressorFactory.createCompressor(new File(RESOURCES_DIR, "archive.tar"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void createCompressor_fromUnknownFileType_throwsException() throws Exception {
+        CompressorFactory.createCompressor(FileType.UNKNOWN);
+    }
+
 }

@@ -18,8 +18,12 @@ package org.rauschig.jarchivelib;
 import static org.rauschig.jarchivelib.CommonsStreamFactory.createArchiveInputStream;
 import static org.rauschig.jarchivelib.CommonsStreamFactory.createCompressorInputStream;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
@@ -67,14 +71,31 @@ class ArchiverCompressorDecorator implements Archiver {
     public void extract(File archive, File destination) throws IOException {
         IOUtils.requireDirectory(destination);
 
-        File temp = File.createTempFile(archive.getName(), archiver.getFilenameExtension(), destination);
-
-        try {
-            compressor.decompress(archive, temp);
-            archiver.extract(temp, destination);
-        } finally {
-            temp.delete();
+        /*
+         * The decompressor has to map F-N-F to I-A-E in some cases to preserve compatibility,
+         * and we don't want that here.
+         */
+        if (!archive.exists()) {
+            throw new FileNotFoundException(String.format("Archive %s does not exist.", archive.getAbsolutePath()));
         }
+
+        InputStream archiveStream = null;
+        try {
+
+            archiveStream = new BufferedInputStream(new FileInputStream(archive));
+            archiver.extract(compressor.decompressingStream(archiveStream), destination);
+        } catch (FileNotFoundException e) {
+            // Java throws F-N-F for no access, and callers expect I-A-E for that.
+            throw new IllegalArgumentException(String.format("Access control or other error opening %s", archive.getAbsolutePath()), e);
+        } finally {
+            IOUtils.closeQuietly(archiveStream);
+        }
+    }
+
+    @Override
+    public void extract(InputStream archive, File destination) throws IOException {
+        IOUtils.requireDirectory(destination);
+        archiver.extract(compressor.decompressingStream(archive), destination);
     }
 
     @Override

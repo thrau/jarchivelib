@@ -77,7 +77,7 @@ final class CommonsStreamFactory {
      * @see {@link ArchiveStreamFactory#createArchiveInputStream(InputStream)};
      */
     static ArchiveInputStream createArchiveInputStream(InputStream in) throws ArchiveException {
-        return archiveStreamFactory.createArchiveInputStream(in);
+        return archiveStreamFactory.createArchiveInputStream(new BufferedInputStream(in));
     }
 
     /**
@@ -144,15 +144,15 @@ final class CommonsStreamFactory {
      */
     static CompressorInputStream createCompressorInputStream(CompressionType type, File source) throws IOException,
         CompressorException {
-        return createCompressorInputStream(type.getName(), new BufferedInputStream(new FileInputStream(source)));
+        return createCompressorInputStream(type, new BufferedInputStream(new FileInputStream(source)));
     }
 
     /**
      * @see {@link CompressorStreamFactory#createCompressorInputStream(String, java.io.InputStream)}
      */
-    private static CompressorInputStream createCompressorInputStream(String compressionType, InputStream in)
+    static CompressorInputStream createCompressorInputStream(CompressionType compressionType, InputStream in)
         throws CompressorException {
-        return compressorStreamFactory.createCompressorInputStream(compressionType, in);
+        return compressorStreamFactory.createCompressorInputStream(compressionType.getName(), in);
     }
 
     /**

@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
@@ -91,6 +92,15 @@ class CommonsCompressor implements Compressor {
         } finally {
             IOUtils.closeQuietly(compressed);
             IOUtils.closeQuietly(output);
+        }
+    }
+
+    @Override
+    public InputStream decompressingStream(InputStream compressedStream) throws IOException {
+        try {
+            return CommonsStreamFactory.createCompressorInputStream(getCompressionType(), compressedStream);
+        } catch (CompressorException e) {
+            throw new IOException(e);
         }
     }
 

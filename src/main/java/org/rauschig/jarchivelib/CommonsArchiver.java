@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
@@ -71,23 +72,37 @@ class CommonsArchiver implements Archiver {
         ArchiveInputStream input = null;
         try {
             input = createArchiveInputStream(archive);
-
-            ArchiveEntry entry;
-            while ((entry = input.getNextEntry()) != null) {
-                File file = new File(destination, entry.getName());
-
-                if (entry.isDirectory()) {
-                    file.mkdirs();
-                } else {
-                    file.getParentFile().mkdirs();
-                    IOUtils.copy(input, file);
-                }
-
-                FileModeMapper.map(entry, file);
-            }
+            extract(input, destination);
 
         } finally {
             IOUtils.closeQuietly(input);
+        }
+    }
+
+    @Override
+    public void extract(InputStream archive, File destination) throws IOException {
+        ArchiveInputStream input = null;
+        try {
+            input = createArchiveInputStream(archive);
+            extract(input, destination);
+        } finally {
+            IOUtils.closeQuietly(input);
+        }
+    }
+
+    private void extract(ArchiveInputStream input, File destination) throws IOException {
+        ArchiveEntry entry;
+        while ((entry = input.getNextEntry()) != null) {
+            File file = new File(destination, entry.getName());
+
+            if (entry.isDirectory()) {
+                file.mkdirs();
+            } else {
+                file.getParentFile().mkdirs();
+                IOUtils.copy(input, file);
+            }
+
+            FileModeMapper.map(entry, file);
         }
     }
 
@@ -110,6 +125,22 @@ class CommonsArchiver implements Archiver {
      * @throws IOException propagated IO exceptions
      */
     protected ArchiveInputStream createArchiveInputStream(File archive) throws IOException {
+        try {
+            return CommonsStreamFactory.createArchiveInputStream(archive);
+        } catch (ArchiveException e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * Returns a new ArchiveInputStream for reading archives. Subclasses can override this to return their own custom
+     * implementation.
+     *
+     * @param archive the archive contents to stream from
+     * @return a new ArchiveInputStream for the given archive file
+     * @throws IOException propagated IO exceptions
+     */
+    protected ArchiveInputStream createArchiveInputStream(InputStream archive) throws IOException {
         try {
             return CommonsStreamFactory.createArchiveInputStream(archive);
         } catch (ArchiveException e) {

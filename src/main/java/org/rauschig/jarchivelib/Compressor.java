@@ -17,6 +17,7 @@ package org.rauschig.jarchivelib;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A compressor facades a specific compression library, allowing for simple compression and decompression of files.
@@ -50,6 +51,13 @@ public interface Compressor {
      * @throws IOException when an I/O error occurs
      */
     void decompress(File source, File destination) throws IllegalArgumentException, IOException;
+
+    /**
+     * Accept a stream and wrap it in a decompressing stream suitable for the current compressor.
+     * @param compressedStream the stream of compressed data.
+     * @throws IOException an I/O error.
+     */
+    InputStream decompressingStream(InputStream compressedStream) throws IOException;
 
     /**
      * Returns the filename extension that indicates the file format this compressor handles. E.g .gz". or ".bz2".

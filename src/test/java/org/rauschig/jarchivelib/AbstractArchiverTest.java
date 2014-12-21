@@ -20,8 +20,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,18 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
         archiver.extract(archive, ARCHIVE_EXTRACT_DIR);
 
         assertExtractionWasSuccessful();
+    }
+
+    @Test
+    public void extract_properlyExtractsArchiveStream() throws Exception {
+        InputStream archiveAsStream = null;
+        try {
+            archiveAsStream = new FileInputStream(archive);
+            archiver.extract(archiveAsStream, ARCHIVE_EXTRACT_DIR);
+            assertExtractionWasSuccessful();
+        } finally {
+            IOUtils.closeQuietly(archiveAsStream);
+        }
     }
 
     @Test

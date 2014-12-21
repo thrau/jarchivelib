@@ -76,7 +76,7 @@ class ArchiverCompressorDecorator implements Archiver {
          * and we don't want that here.
          */
         if (!archive.exists()) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException(String.format("Archive %s does not exist.", archive.getAbsolutePath()));
         }
 
         InputStream archiveStream = null;
@@ -86,7 +86,7 @@ class ArchiverCompressorDecorator implements Archiver {
             archiver.extract(compressor.decompressingStream(archiveStream), destination);
         } catch (FileNotFoundException e) {
             // Java throws F-N-F for no access, and callers expect I-A-E for that.
-            throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException(String.format("Access control or other error opening %s", archive.getAbsolutePath()), e);
         } finally {
             IOUtils.closeQuietly(archiveStream);
         }
@@ -95,7 +95,7 @@ class ArchiverCompressorDecorator implements Archiver {
     @Override
     public void extract(InputStream archive, File destination) throws IOException {
         IOUtils.requireDirectory(destination);
-       archiver.extract(compressor.decompressingStream(archive), destination);
+        archiver.extract(compressor.decompressingStream(archive), destination);
     }
 
     @Override

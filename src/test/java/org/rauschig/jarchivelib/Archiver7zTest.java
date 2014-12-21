@@ -17,10 +17,19 @@ package org.rauschig.jarchivelib;
 
 import java.io.File;
 
+import org.apache.commons.compress.archivers.StreamingNotSupportedException;
+import org.hamcrest.CoreMatchers;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 /**
  * Archiver7zTest
  */
 public class Archiver7zTest extends AbstractArchiverTest {
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Override
     protected Archiver getArchiver() {
         return ArchiverFactory.createArchiver(ArchiveFormat.SEVEN_Z);
@@ -31,4 +40,10 @@ public class Archiver7zTest extends AbstractArchiverTest {
         return new File(RESOURCES_DIR, "archive.7z");
     }
 
+    @Test
+    public void extract_properlyExtractsArchiveStream() throws Exception {
+        // 7z does not allow streaming
+        expectedException.expectCause(CoreMatchers.<Throwable>instanceOf(StreamingNotSupportedException.class));
+        super.extract_properlyExtractsArchiveStream();
+    }
 }

@@ -3,3 +3,6 @@ language: java
 jdk:
   - openjdk6
   - openjdk7
+
+after_success:
+  - mvn clean cobertura:cobertura coveralls:report

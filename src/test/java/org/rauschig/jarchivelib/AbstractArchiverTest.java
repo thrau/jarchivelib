@@ -65,7 +65,7 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
         InputStream archiveAsStream = null;
         try {
             archiveAsStream = new FileInputStream(archive);
-            archiver.extract(archive, ARCHIVE_EXTRACT_DIR);
+            archiver.extract(archiveAsStream, ARCHIVE_EXTRACT_DIR);
             assertExtractionWasSuccessful();
         } finally {
             IOUtils.closeQuietly(archiveAsStream);

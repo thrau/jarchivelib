@@ -77,7 +77,6 @@
             <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
             <Bundle-Name>${bundle.name}</Bundle-Name>
             <Bundle-Version>${project.version}</Bundle-Version>
-            <Import-Package>*;resolution:=optional</Import-Package>
             <Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
           </instructions>
         </configuration>

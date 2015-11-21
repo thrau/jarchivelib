@@ -90,6 +90,19 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
     }
 
     @Test
+    public void create_multipleSourceFiles_properlyCreatesArchive() throws Exception {
+        String archiveName = archive.getName();
+
+        File createdArchive = archiver.create(archiveName, ARCHIVE_CREATE_DIR, ARCHIVE_DIR.listFiles());
+
+        assertTrue(createdArchive.exists());
+        assertEquals(archiveName, createdArchive.getName());
+
+        archiver.extract(createdArchive, ARCHIVE_EXTRACT_DIR);
+        assertDirectoryStructureEquals(ARCHIVE_DIR, ARCHIVE_EXTRACT_DIR);
+    }
+
+    @Test
     public void create_recursiveDirectory_withoutFileExtension_properlyCreatesArchive() throws Exception {
         String archiveName = archive.getName();
 

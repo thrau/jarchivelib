@@ -49,6 +49,11 @@ class ArchiverCompressorDecorator implements Archiver {
     }
 
     @Override
+    public File create(String archive, File destination, File source) throws IOException {
+        return create(archive, destination, IOUtils.filesContainedIn(source));
+    }
+
+    @Override
     public File create(String archive, File destination, File... sources) throws IOException {
         IOUtils.requireDirectory(destination);
 

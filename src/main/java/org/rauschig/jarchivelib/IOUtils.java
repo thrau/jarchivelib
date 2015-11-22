@@ -139,4 +139,18 @@ public final class IOUtils {
         }
     }
 
+    /**
+     * Given a source File, return its direct descendants if the File is a directory. Otherwise return the File itself.
+     *
+     * @param source File or folder to be examined
+     * @return a File[] array containing the files inside this folder, or a size-1 array containing the file itself.
+     */
+    public static File[] filesContainedIn(File source) {
+        if (source.isDirectory()) {
+            return source.listFiles();
+        } else {
+            return new File[] { source };
+        }
+    }
+
 }

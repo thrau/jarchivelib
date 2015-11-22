@@ -45,7 +45,13 @@ class CommonsArchiver implements Archiver {
     }
 
     @Override
+    public File create(String archive, File destination, File source) throws IOException {
+        return create(archive, destination, IOUtils.filesContainedIn(source));
+    }
+
+    @Override
     public File create(String archive, File destination, File... sources) throws IOException {
+
         IOUtils.requireDirectory(destination);
 
         File archiveFile = createNewArchiveFile(archive, getFilenameExtension(), destination);
@@ -219,11 +225,7 @@ class CommonsArchiver implements Archiver {
                 throw new FileNotFoundException(source.getPath() + " (Permission denied)");
             }
 
-            if (source.isFile()) {
-                writeToArchive(source.getParentFile(), new File[]{ source }, archive);
-            } else {
-                writeToArchive(source, source.listFiles(), archive);
-            }
+            writeToArchive(source.getParentFile(), new File[]{ source }, archive);
         }
     }
 

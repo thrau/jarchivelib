@@ -28,11 +28,31 @@ import java.io.InputStream;
 public interface Archiver {
 
     /**
-     * Creates an archive from the given source files or directories, and saves it into the given destination.
+     * Creates an archive from the given source file or directory, and saves it into the given destination.
+     * <p/>
+     * If the source is a directory, the archive will contain all the files in that directory, but not the directory
+     * itself.
      * <p/>
      * If the archive parameter has no file extension (e.g. "archive" instead of "archive.zip"), the concrete archiver
      * implementation should append it according to its file format (.zip, .tar, .tar.gz, ...).
      * 
+     * @param archive the name of the archive to create
+     * @param destination the destination directory where to place the created archive
+     * @param source the input file or directory to archive
+     * @return the newly created archive file
+     * @throws IOException propagated I/O errors by {@code java.io}
+     */
+    File create(String archive, File destination, File source) throws IOException;
+
+    /**
+     * Creates an archive from the given source files or directories, and saves it into the given destination.
+     * <p/>
+     * If the source is a directory, the archive will contain all the files in that directory, but not the directory
+     * itself.
+     * <p/>
+     * If the archive parameter has no file extension (e.g. "archive" instead of "archive.zip"), the concrete archiver
+     * implementation should append it according to its file format (.zip, .tar, .tar.gz, ...).
+     *
      * @param archive the name of the archive to create
      * @param destination the destination directory where to place the created archive
      * @param sources the input files or directories to archive

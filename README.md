@@ -3,7 +3,7 @@ jarchivelib
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.rauschig/jarchivelib/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.rauschig/jarchivelib/)
 [![Build Status](https://travis-ci.org/thrau/jarchivelib.png?branch=master)](https://travis-ci.org/thrau/jarchivelib)
-[![Coverage Status](https://coveralls.io/repos/thrau/jarchivelib/badge.png)](https://coveralls.io/r/thrau/jarchivelib)
+[![Coverage Status](https://coveralls.io/repos/thrau/jarchivelib/badge.svg)](https://coveralls.io/r/thrau/jarchivelib)
 
 A simple archiving and compression library for Java that provides a thin and easy-to-use API layer on top of the
 powerful and feature-rich [org.apache.commons.compress].

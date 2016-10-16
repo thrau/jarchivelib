@@ -6,3 +6,9 @@ jdk:
 
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
+  - mvn clean deploy -DskipTests --settings .travis-settings.xml
+
+env:
+  global:
+    - SONATYPE_USERNAME=thrau
+    - secure: RC4WPxCVQMI1Y+F0Qh1SVozaHB6035yn4VjMgvTrXuR2Vf3dsvKaxOtaIn7zwzX4suBDJQE55Lo4l7AjI8En6LtEMKrZmgGMgQGWLO2I51rCgWGyFsW9MOYxf3SoDApl2YmhwbGsVEhAYogYhoXyO0CWsHAJTfnnI3Tc+Onf0+M=

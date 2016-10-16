@@ -87,13 +87,8 @@ class CommonsArchiver implements Archiver {
 
     @Override
     public void extract(InputStream archive, File destination) throws IOException {
-        ArchiveInputStream input = null;
-        try {
-            input = createArchiveInputStream(archive);
-            extract(input, destination);
-        } finally {
-            IOUtils.closeQuietly(input);
-        }
+        ArchiveInputStream input = createArchiveInputStream(archive);
+        extract(input, destination);
     }
 
     private void extract(ArchiveInputStream input, File destination) throws IOException {

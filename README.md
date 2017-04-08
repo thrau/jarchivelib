@@ -37,7 +37,7 @@ The ArchiveFactory can also detect archive types based on file extensions and ha
 example returns an Archiver instance that handles tar.gz files. (It would also recognize the `.tgz` extension)
 
 ```java
-Archiver archiver = ArchiveFactory.createArchiver(new File("archive.tar.gz"));
+Archiver archiver = ArchiverFactory.createArchiver(new File("archive.tar.gz"));
 ```
 
 ### Using Archivers

@@ -1,5 +1,5 @@
 /**
- *    Copyright 2013 Thomas Rausch
+ *    Copyright 2013-2017 Thomas Rausch, Kirill Romanov
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.rauschig.jarchivelib;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 
 /**
@@ -80,6 +81,17 @@ class CommonsArchiveEntry implements ArchiveEntry {
         FileModeMapper.map(entry, file);
 
         return file;
+    }
+
+    @Override
+    public void extract(OutputStream destination) throws IOException, IllegalStateException, UnsupportedOperationException {
+        assertState();
+
+        if (entry.isDirectory()) {
+            throw new UnsupportedOperationException("Can't extract directory to stream");
+        } else {
+            IOUtils.copy(stream, destination);
+        }
     }
 
     private void assertState() {

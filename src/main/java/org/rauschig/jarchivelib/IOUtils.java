@@ -88,7 +88,7 @@ public final class IOUtils {
 
     /**
      * Computes the path name of a file node relative to a given root node.
-     * <p/>
+     * <br>
      * If the root is {@code /home/cdlflex/custom-ahy} and the given node is
      * {@code /home/cdlflex/custom-ahy/assembly/pom.xml}, the returned path name will be {@code assembly/pom.xml}.
      * 
@@ -107,7 +107,7 @@ public final class IOUtils {
     /**
      * Makes sure that the given {@link File} is either a writable directory, or that it does not exist and a directory
      * can be created at its path.
-     * <p/>
+     * <br>
      * Will throw an exception if the given {@link File} is actually an existing file, or the directory is not writable
      * 
      * @param destination the directory which to ensure its existence for

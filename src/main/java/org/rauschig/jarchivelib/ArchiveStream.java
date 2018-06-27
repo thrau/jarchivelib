@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 /**
  * An input stream of an archive. Can be used to retrieve each individual {@link ArchiveEntry}.
- * <p/>
+ * <br>
  * The {@link #getNextEntry()} method is used to reset the input stream ready for reading the data from the next entry.
  */
 public abstract class ArchiveStream extends InputStream implements Closeable {

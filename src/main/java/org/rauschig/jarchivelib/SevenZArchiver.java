@@ -26,7 +26,7 @@ import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 /**
  * Archiver to handle 7z archives. commons-compress does not handle 7z over ArchiveStreams, so we need this custom
  * implementation.
- * <p/>
+ * <br>
  * Basically this could disperse by adapting the CommonsStreamFactory, but this seemed more convenient as we also have
  * both Input and Output stream wrappers capsuled here.
  */

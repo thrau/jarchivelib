@@ -22,17 +22,17 @@ import java.io.InputStream;
 /**
  * An Archiver facades a specific archiving library, allowing for simple archiving of files and directories, and
  * extraction of archives.
- * <p/>
+ * <br>
  * Some archivers might use an additional {@link Compressor} to compress and decompress their respective archive files.
  */
 public interface Archiver {
 
     /**
      * Creates an archive from the given source file or directory, and saves it into the given destination.
-     * <p/>
+     * <br>
      * If the source is a directory, the archive will contain all the files in that directory, but not the directory
      * itself.
-     * <p/>
+     * <br>
      * If the archive parameter has no file extension (e.g. "archive" instead of "archive.zip"), the concrete archiver
      * implementation should append it according to its file format (.zip, .tar, .tar.gz, ...).
      * 
@@ -46,10 +46,10 @@ public interface Archiver {
 
     /**
      * Creates an archive from the given source files or directories, and saves it into the given destination.
-     * <p/>
+     * <br>
      * If the source is a directory, the archive will contain all the files in that directory, but not the directory
      * itself.
-     * <p/>
+     * <br>
      * If the archive parameter has no file extension (e.g. "archive" instead of "archive.zip"), the concrete archiver
      * implementation should append it according to its file format (.zip, .tar, .tar.gz, ...).
      *
@@ -63,7 +63,7 @@ public interface Archiver {
 
     /**
      * Extracts the given archive file into the given destination directory.
-     * <p/>
+     * <br>
      * The destination is expected to be a writable directory.
      * 
      * @param archive the archive file to extract
@@ -74,7 +74,7 @@ public interface Archiver {
 
     /**
      * Extracts the given archive supplied as an input stream into the given destination directory.
-     * <p/>
+     * <br>
      * The destination directory is expected to be a writable directory.
      *
      * @param archive the archive contents as a stream.

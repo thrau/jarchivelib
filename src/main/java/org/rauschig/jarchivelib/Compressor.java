@@ -26,7 +26,7 @@ public interface Compressor {
 
     /**
      * Compresses the given input file to the given destination directory or file.
-     * <p/>
+     * <br>
      * Requires the source the be an existing and readable File, and the destination to be either a file or a directory.
      * If you pass a directory, the name of the source file is used, with the appended filename extension suffix of the
      * compression type.
@@ -40,7 +40,7 @@ public interface Compressor {
 
     /**
      * Decompresses the given source file to the given destination directory or file.
-     * <p/>
+     * <br>
      * Requires the source the be an existing and readable File, and the destination to be either a file or a directory.
      * If you pass a directory, the name of the source file is used, with the removed filename extension suffix of the
      * compression type.

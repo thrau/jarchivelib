@@ -21,7 +21,7 @@ import java.util.Date;
 
 /**
  * The entry of an archive.
- * <p/>
+ * 
  * The life of an {@link ArchiveEntry} is dependent on the status of the {@link ArchiveStream} it came from. Once
  * retrieved via {@link ArchiveStream#getNextEntry()}, the entry can be used as long as the {@code ArchiveStream}
  * remains on this entry, i.e. {@code getNextEntry()} was not called, and the stream was not since closed.
@@ -63,7 +63,7 @@ public interface ArchiveEntry {
 
     /**
      * Extracts the entry to the given destination directory.
-     * <p/>
+     * 
      * The destination is expected to be a writable directory.
      * 
      * @param destination the directory to extract the value to

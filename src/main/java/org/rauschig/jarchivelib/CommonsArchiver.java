@@ -205,7 +205,7 @@ class CommonsArchiver implements Archiver {
 
     /**
      * Recursion entry point for {@link #writeToArchive(File, File[], ArchiveOutputStream)}.
-     * <p/>
+     * <br>
      * Recursively writes all given source {@link File}s into the given {@link ArchiveOutputStream}.
      * 
      * @param sources the files to write in to the archive

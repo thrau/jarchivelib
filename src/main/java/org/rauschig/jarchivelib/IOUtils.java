@@ -165,8 +165,8 @@ public final class IOUtils {
      * @param entryName the name of the resource to create in the destination
      * @return the created resource after it is placed in the destination directory
      */
-    public static File createResourceInDestination(File destination, String entryName) {
-        return createResourceInDestination(destination, entryName, destination.toPath().toAbsolutePath().normalize());
+    public static File createResourceInDestination(File destination, String entryName) throws IOException {
+        return createResourceInDestination(destination, entryName, destination.getCanonicalPath());
     }
 
     /**
@@ -174,16 +174,15 @@ public final class IOUtils {
      *
      * @param destination the destination directory to place the resource in
      * @param entryName the name of the resource to create in the destination
-     * @param destinationNormalizedAbsolutePath the normalized absolute path of the destination
+     * @param destinationCanonicalPath the canonical path of the destination
      * @return the created resource after it is placed in the destination directory
      */
     public static File createResourceInDestination(File destination,
                                                    String entryName,
-                                                   Path destinationNormalizedAbsolutePath)
+                                                   String destinationCanonicalPath) throws IOException
     {
         File file = new File(destination, entryName);
-        Path normalizedFile = file.toPath().toAbsolutePath().normalize();
-        if (!normalizedFile.startsWith(destinationNormalizedAbsolutePath)) {
+        if (!file.getCanonicalPath().startsWith(destinationCanonicalPath)) {
             file = new File(destination, cleanEntryName(entryName));
         }
         return file;

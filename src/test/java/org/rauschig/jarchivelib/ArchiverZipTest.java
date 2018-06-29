@@ -29,18 +29,39 @@ import static org.junit.Assert.assertTrue;
 public class ArchiverZipTest extends AbstractArchiverTest {
 
     /**
-     * Contains 2 files. safe.txt that is a safe file located at the root of the target directory and unsafe.txt that
-     * attempts to traverse the tree all the way to / and down to tmp. This should be placed at target/tmp/unsafe.txt
-     * when extracted
+     * Contains 2 files:
+     *   1- safe.txt
+     *   2- ../../../../../../../../../../../../../../../../../../../../../../../../../../
+     *      ../../../../../../../../../../../../../../../tmp/unsafe.txt
+     *
+     * safe.txt is a safe file located at the root of the target directory and unsafe.txt that attempts to traverse the
+     * tree all the way to / and down to tmp. This should be placed at target/tmp/unsafe.txt when extracted
      */
     private static final String ZIP_TRAVERSAL_FILE_1 = "zip_traversal.zip";
 
     /**
-     * Contains 2 files. safe.txt that is a safe file located at the root of the target directory and unsafe.txt that
+     * Contains 2 files:
+     *   1- safe.txt
+     *   2- ../../../unsafe.txt
+     *
+     * safe.txt is a safe file located at the root of the target directory and unsafe.txt that
      * attempts to traverse the tree outside the target directory but not high enough to make it to /.
      * This should be placed at target/unsafe.txt when extracted
      */
     private static final String ZIP_TRAVERSAL_FILE_2 = "zip_traversal_2.zip";
+
+    /**
+     * Contains 2 files:
+     *   1- safe.txt
+     *   2- subDirectory/../../../../../../../../../../../../../../../../../../../../../
+     *      ../../../../../../../../../../../../../../../../../../../../../tmp/unsafe.txt
+     *
+     * safe.txt is a safe file located at the root of the target directory and unsafe.txt that
+     * attempts to traverse the tree all the way to / and down to tmp. This should be placed at target/tmp/unsafe.txt
+     * when extracted. The difference between this file and ZIP_TRAVERSAL_FILE_1 is that the unsafe file relative path
+     * is not normalized.
+     */
+    private static final String ZIP_TRAVERSAL_FILE_3 = "zip_traversal_3.zip";
 
     @Override
     protected Archiver getArchiver() {
@@ -76,6 +97,19 @@ public class ArchiverZipTest extends AbstractArchiverTest {
         File archive = new File(RESOURCES_DIR, ZIP_TRAVERSAL_FILE_2);
         getArchiver().extract(archive, ARCHIVE_EXTRACT_DIR);
         assertTargetDirectoryAsRoot();
+    }
+
+    @Test
+    public void zip_traversal_test_entry_extraction_for_non_normalized_path() throws Exception {
+        archiveExtractorHelper(ZIP_TRAVERSAL_FILE_3);
+        assertZipTraversal();
+    }
+
+    @Test
+    public void zip_traversal_test_archiver_extraction_for_non_normalized_path() throws Exception {
+        File archive = new File(RESOURCES_DIR, ZIP_TRAVERSAL_FILE_3);
+        getArchiver().extract(archive, ARCHIVE_EXTRACT_DIR);
+        assertZipTraversal();
     }
 
     private void archiveExtractorHelper(final String fileName) throws IOException {

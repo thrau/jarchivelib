@@ -93,8 +93,11 @@ class CommonsArchiver implements Archiver {
 
     private void extract(ArchiveInputStream input, File destination) throws IOException {
         ArchiveEntry entry;
+        String destinationCanonicalPath = destination.getCanonicalPath();
+
         while ((entry = input.getNextEntry()) != null) {
-            File file = new File(destination, entry.getName());
+            File file =
+                IOUtils.createResourceInDestination(destination, entry.getName(), destinationCanonicalPath);
 
             if (entry.isDirectory()) {
                 file.mkdirs();

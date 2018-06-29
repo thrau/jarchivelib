@@ -68,7 +68,7 @@ class CommonsArchiveEntry implements ArchiveEntry {
         assertState();
         IOUtils.requireDirectory(destination);
 
-        File file = new File(destination, entry.getName());
+        File file = IOUtils.createResourceInDestination(destination, entry.getName());
 
         if (entry.isDirectory()) {
             file.mkdirs();

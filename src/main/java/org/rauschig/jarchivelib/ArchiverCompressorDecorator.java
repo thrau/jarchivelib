@@ -34,16 +34,16 @@ import org.apache.commons.compress.compressors.CompressorException;
  */
 class ArchiverCompressorDecorator implements Archiver {
 
-    private CommonsArchiver archiver;
+    private Archiver archiver;
     private CommonsCompressor compressor;
 
     /**
      * Decorates the given Archiver with the given Compressor.
-     * 
+     *
      * @param archiver the archiver to decorate
      * @param compressor the compressor used for compression
      */
-    ArchiverCompressorDecorator(CommonsArchiver archiver, CommonsCompressor compressor) {
+    ArchiverCompressorDecorator(Archiver archiver, CommonsCompressor compressor) {
         this.archiver = archiver;
         this.compressor = compressor;
     }
@@ -119,13 +119,18 @@ class ArchiverCompressorDecorator implements Archiver {
         return archiver.getFilenameExtension() + compressor.getFilenameExtension();
     }
 
+    @Override
+    public ArchiveFormat getArchiveFormat() {
+        return archiver.getArchiveFormat();
+    }
+
     /**
      * Returns a file name from the given archive name. The file extension suffix will be appended according to what is
      * already present.
      * <br>
      * E.g. if the compressor uses the file extension "gz", the archiver "tar", and passed argument is "archive.tar",
      * the returned value will be "archive.tar.gz".
-     * 
+     *
      * @param archive the existing archive file name
      * @return the normalized archive file name including the correct file name extension
      */

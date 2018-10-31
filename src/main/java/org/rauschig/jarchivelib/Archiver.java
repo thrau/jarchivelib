@@ -35,7 +35,7 @@ public interface Archiver {
      * <br>
      * If the archive parameter has no file extension (e.g. "archive" instead of "archive.zip"), the concrete archiver
      * implementation should append it according to its file format (.zip, .tar, .tar.gz, ...).
-     * 
+     *
      * @param archive the name of the archive to create
      * @param destination the destination directory where to place the created archive
      * @param source the input file or directory to archive
@@ -65,7 +65,7 @@ public interface Archiver {
      * Extracts the given archive file into the given destination directory.
      * <br>
      * The destination is expected to be a writable directory.
-     * 
+     *
      * @param archive the archive file to extract
      * @param destination the directory to which to extract the files
      * @throws IOException propagated I/O errors by {@code java.io}
@@ -86,7 +86,7 @@ public interface Archiver {
     /**
      * Reads the given archive file as an {@link ArchiveStream} which is used to access individual {@link ArchiveEntry}
      * objects within the archive without extracting the archive onto the file system.
-     * 
+     *
      * @param archive the archive file to stream
      * @return a new archive stream for the given archive
      * @throws IOException propagated I/O errors by {@code java.io}
@@ -96,8 +96,15 @@ public interface Archiver {
     /**
      * Returns the filename extension that indicates the file format this archiver handles. E.g .tar" or ".zip". In case
      * of compressed archives, it will return the composite filename extensions, e.g. ".tar.gz"
-     * 
+     *
      * @return a filename extension with a preceding dot
      */
     String getFilenameExtension();
+
+    /**
+     * Returns the archiver's format
+     *
+     * @return archiver format
+     */
+    ArchiveFormat getArchiveFormat();
 }

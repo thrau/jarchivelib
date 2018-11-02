@@ -17,7 +17,13 @@ package org.rauschig.jarchivelib;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -29,6 +35,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 abstract class FileModeMapper {
 
     private static final Logger LOG = Logger.getLogger(FileModeMapper.class.getCanonicalName());
+    private static boolean IS_POSIX = FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
 
     private ArchiveEntry archiveEntry;
 
@@ -61,14 +68,12 @@ abstract class FileModeMapper {
      * @return a new FileModeMapper instance
      */
     public static FileModeMapper create(ArchiveEntry entry) {
-        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-            // FIXME: this is really horrid, but with java 6 i need the system call to 'chmod'
-            // TODO: implement basic windows permission mapping (e.g. with File.setX or attrib)
-            return new FallbackFileModeMapper(entry);
+        if (IS_POSIX) {
+            return new PosixPermissionMapper(entry);
         }
 
-        // please don't use me on OS/2
-        return new UnixPermissionMapper(entry);
+        // TODO: implement basic windows permission mapping (e.g. with File.setX or attrib)
+        return new FallbackFileModeMapper(entry);
     }
 
     /**
@@ -87,22 +92,22 @@ abstract class FileModeMapper {
     }
 
     /**
-     * Uses an AttributeAccessor to extract the unix file mode from the ArchiveEntry and then invokes the ChmodCommand
+     * Uses an AttributeAccessor to extract the posix file permissions from the ArchiveEntry and sets them
      * on the given file.
      */
-    public static class UnixPermissionMapper extends FileModeMapper {
+    public static class PosixPermissionMapper extends FileModeMapper {
         public static final int UNIX_PERMISSION_MASK = 0777;
 
-        public UnixPermissionMapper(ArchiveEntry archiveEntry) {
+        public PosixPermissionMapper(ArchiveEntry archiveEntry) {
             super(archiveEntry);
         }
 
         @Override
         public void map(File file) throws IOException {
-            int perm = getMode() & UNIX_PERMISSION_MASK;
+            int mode = getMode() & UNIX_PERMISSION_MASK;
 
-            if (perm > 0) {
-                chmod(perm, file);
+            if (mode > 0) {
+                setPermissions(mode, file);
             }
         }
 
@@ -110,59 +115,42 @@ abstract class FileModeMapper {
             return AttributeAccessor.create(getArchiveEntry()).getMode();
         }
 
-        public ChmodCommand getChmodCommand() {
-            return new FileSystemPreferencesReflectionChmodCommand();
-        }
-
-        private void chmod(int mode, File file) throws IOException {
+        private void setPermissions(int mode, File file) {
             try {
-                getChmodCommand().chmod(mode, file);
+                Set<PosixFilePermission> posixFilePermissions = new PosixFilePermissionsMapper().map(mode);
+                Files.setPosixFilePermissions(file.toPath(), posixFilePermissions);
             } catch (Exception e) {
                 LOG.warning("Could not set file permissions of " + file + ". Exception was: " + e.getMessage());
             }
         }
-
     }
 
-    /**
-     * Command interface for unix <code>chmod</code> call. Java 6 made me do it.
-     */
-    public static interface ChmodCommand {
-        void chmod(int mode, File file) throws Exception;
-    }
+    public static class PosixFilePermissionsMapper {
 
-    /**
-     * While still horribly wrong, this actually seems to be the safest way. It will invoke a reflective call on
-     * java.utils.pref.FileSystemPreferences#chmod(String, Integer), which is a JNI call, making it (probably) the
-     * safest bet.
-     */
-    public static class FileSystemPreferencesReflectionChmodCommand implements ChmodCommand {
-        private static Method method;
+        public static Map<Integer, PosixFilePermission> intToPosixFilePermission = new HashMap<>();
 
-        @Override
-        public void chmod(int mode, File file) throws Exception {
-            getMethod().invoke(null, file.getAbsolutePath(), mode);
+        static {
+            intToPosixFilePermission.put(0400, PosixFilePermission.OWNER_READ);
+            intToPosixFilePermission.put(0200, PosixFilePermission.OWNER_WRITE);
+            intToPosixFilePermission.put(0100, PosixFilePermission.OWNER_EXECUTE);
+
+            intToPosixFilePermission.put(0040, PosixFilePermission.GROUP_READ);
+            intToPosixFilePermission.put(0020, PosixFilePermission.GROUP_WRITE);
+            intToPosixFilePermission.put(0010, PosixFilePermission.GROUP_EXECUTE);
+
+            intToPosixFilePermission.put(0004, PosixFilePermission.OTHERS_READ);
+            intToPosixFilePermission.put(0002, PosixFilePermission.OTHERS_WRITE);
+            intToPosixFilePermission.put(0001, PosixFilePermission.OTHERS_EXECUTE);
         }
 
-        private Method getMethod() throws Exception {
-            if (method == null) {
-                Class<?> clazz = Class.forName("java.util.prefs.FileSystemPreferences");
-                method = clazz.getDeclaredMethod("chmod", String.class, Integer.TYPE);
-                method.setAccessible(true);
+        public Set<PosixFilePermission> map(int mode) {
+            Set<PosixFilePermission> permissionSet = new HashSet<>();
+            for (Map.Entry<Integer, PosixFilePermission> entry : intToPosixFilePermission.entrySet()) {
+                if ((mode & entry.getKey()) > 0) {
+                     permissionSet.add(entry.getValue());
+                }
             }
-
-            return method;
-        }
-    }
-
-    /**
-     * This is just here for documentation really. Maybe it could be an alternative in some cases.
-     */
-    public static class RuntimeExecChmodCommand implements ChmodCommand {
-        @Override
-        public void chmod(int mode, File file) throws Exception {
-            String cmd = "chmod " + Integer.toOctalString(mode) + " " + file.getAbsolutePath();
-            Runtime.getRuntime().exec(cmd);
+            return permissionSet;
         }
     }
 

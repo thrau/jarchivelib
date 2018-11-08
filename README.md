@@ -86,18 +86,22 @@ stream.close();
 Dependencies
 ------------
 
-* commons-compress(tm) 1.9
+* commons-compress(tm) 1.18
 
 
 Compatibility
 -------------
 
-* Java 6 and 7
+* Java 7, 8, 9, 10
 * Currently only tested for *nix file systems.
 
 ### OSGi
 
 jarchivelib compiles to a bundle and is OSGi compatible
+
+### jarchivelib 0.8.x and below
+
+* Java 6 and 7
 
 
 Known limitations

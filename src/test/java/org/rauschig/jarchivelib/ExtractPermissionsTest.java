@@ -19,9 +19,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,13 +70,13 @@ public class ExtractPermissionsTest extends AbstractResourceTest {
     @Test
     public void extract_restoresUnixPermissions() throws Exception {
         archiver.extract(archive, ARCHIVE_EXTRACT_DIR);
-        assertUnixPermissions();
+        assertPosixPermissions();
     }
 
     @Test
     public void extract_stream_restoresUnixPermissions() throws Exception {
         extractWithStream();
-        assertUnixPermissions();
+        assertPosixPermissions();
     }
 
     @Test
@@ -105,12 +106,12 @@ public class ExtractPermissionsTest extends AbstractResourceTest {
         assertPermissions(true, true, false, getExtractedFile("permissions/private_folder/private_file.txt"));
     }
 
-    private void assertUnixPermissions() throws IOException {
-        assertEquals("755", getUnixModeOctal(getExtractedFile("permissions/executable_file.txt")));
-        assertEquals("700", getUnixModeOctal(getExtractedFile("permissions/private_executable_file.txt")));
-        assertEquals("444", getUnixModeOctal(getExtractedFile("permissions/readonly_file.txt")));
-        assertEquals("700", getUnixModeOctal(getExtractedFile("permissions/private_folder")));
-        assertEquals("600", getUnixModeOctal(getExtractedFile("permissions/private_folder/private_file.txt")));
+    private void assertPosixPermissions() throws IOException {
+        assertEquals("rwxr-xr-x", getPosixPermissionsString(getExtractedFile("permissions/executable_file.txt")));
+        assertEquals("rwx------", getPosixPermissionsString(getExtractedFile("permissions/private_executable_file.txt")));
+        assertEquals("r--r--r--", getPosixPermissionsString(getExtractedFile("permissions/readonly_file.txt")));
+        assertEquals("rwx------", getPosixPermissionsString(getExtractedFile("permissions/private_folder")));
+        assertEquals("rw-------", getPosixPermissionsString(getExtractedFile("permissions/private_folder/private_file.txt")));
     }
 
     private void assertPermissions(boolean r, boolean w, boolean x, File file) {
@@ -119,17 +120,8 @@ public class ExtractPermissionsTest extends AbstractResourceTest {
         assertEquals(x, file.canExecute());
     }
 
-    private String getUnixModeOctal(File file) throws IOException {
-        String[] cmd = { "stat", "-c", "%a", file.getAbsolutePath() };
-        Process exec = Runtime.getRuntime().exec(cmd);
-
-        try {
-            exec.waitFor();
-        } catch (InterruptedException e) {
-            return null;
-        }
-
-        return new Scanner(exec.getInputStream()).nextLine().trim();
+    private String getPosixPermissionsString(File file) throws IOException {
+        return PosixFilePermissions.toString(Files.getPosixFilePermissions(file.toPath()));
     }
 
     private File getExtractedFile(String name) {

@@ -57,7 +57,7 @@
   </developers>
 
   <properties>
-    <commons.compress.version>1.18</commons.compress.version>
+    <commons.compress.version>1.19</commons.compress.version>
     <xz.version>1.8</xz.version>
     <junit.version>4.11</junit.version>
 

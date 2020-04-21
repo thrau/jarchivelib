@@ -1,5 +1,4 @@
-jarchivelib
-===========
+# jarchivelib
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.rauschig/jarchivelib/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.rauschig/jarchivelib/)
 [![Build Status](https://travis-ci.org/thrau/jarchivelib.svg?branch=master)](https://travis-ci.org/thrau/jarchivelib)
@@ -8,24 +7,23 @@ jarchivelib
 A simple archiving and compression library for Java that provides a thin and easy-to-use API layer on top of the
 powerful and feature-rich [org.apache.commons.compress].
 
-  [org.apache.commons.compress]: http://commons.apache.org/proper/commons-compress/
+[org.apache.commons.compress]: http://commons.apache.org/proper/commons-compress/
 
-Usage
------
+## Usage
+
 ### Using the ArchiverFactory
+
 Create a new Archiver to handle zip archives
 
 ```java
 Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.ZIP);
 ```
 
-
 Create a new Archiver to handle tar archives with gzip compression
 
 ```java
 Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
 ```
-
 
 Alternatively you can use string representations of the archive and compression types.
 
@@ -41,7 +39,9 @@ Archiver archiver = ArchiverFactory.createArchiver(new File("archive.tar.gz"));
 ```
 
 ### Using Archivers
+
 #### Extract
+
 To extract the zip archive `/home/jack/archive.zip` to `/home/jack/archive`:
 
 ```java
@@ -53,6 +53,7 @@ archiver.extract(archive, destination);
 ```
 
 #### Create
+
 To create a new tar archive with gzip compression `archive.tar.gz` in `/home/jack/` containing the entire directory `/home/jack/archive`
 
 ```java
@@ -65,7 +66,6 @@ File archive = archiver.create(archiveName, destination, source);
 ```
 
 notice that you can omit the filename extension in the archive name, as it will be appended by the archiver automatically if it is missing.
-
 
 #### Stream
 
@@ -83,17 +83,14 @@ while((entry = stream.getNextEntry()) != null) {
 stream.close();
 ```
 
-Dependencies
-------------
+## Dependencies
 
-* commons-compress(tm) 1.18
+- commons-compress(tm) 1.18
 
+## Compatibility
 
-Compatibility
--------------
-
-* Java 7, 8, 9, 10
-* Currently only tested for *nix file systems.
+- Java 7, 8, 9, 10
+- Currently only tested for \*nix file systems.
 
 ### OSGi
 
@@ -101,12 +98,10 @@ jarchivelib compiles to a bundle and is OSGi compatible
 
 ### jarchivelib 0.8.x and below
 
-* Java 6 and 7
+- Java 6 and 7
 
+## Known limitations
 
-Known limitations
------------------
-
-* Permissions are not stored when creating archives
-* There is no support for Windows permissions
-* JAR files are treated like streamed zip files and can not restore permissions
+- Permissions are not stored when creating archives
+- There is no support for Windows permissions
+- JAR files are treated like streamed zip files and can not restore permissions

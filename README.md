@@ -92,7 +92,7 @@ Dependencies
 Compatibility
 -------------
 
-* Java 7, 8, 9, 10
+* Java 7, 8, 9, 10, 14
 * Currently only tested for *nix file systems.
 
 ### OSGi

@@ -1,15 +1,35 @@
 language: java
 
-jdk:
-  - openjdk7
-  - oraclejdk8
-  - oraclejdk9
-  - openjdk10
-  - openjdk11
-
-after_success:
-  - mvn clean cobertura:cobertura coveralls:report
-  - mvn clean deploy -DskipTests --settings .travis-settings.xml
+jobs:
+  include:
+    - stage: test
+    # test jobs
+      os: linux
+      dist: trusty
+      jdk: openjdk7
+    - os: linux
+      dist: trusty
+      jdk: openjdk8
+    - os: linux
+      dist: trusty
+      jdk: oraclejdk9
+    - os: linux
+      dist: xenial
+      jdk: openjdk10
+    - os: linux
+      dist: xenial
+      jdk: openjdk11
+    - os: linux
+      dist: bionic
+      jdk: openjdk14
+    # deploy job (re-run jdk7 build)
+    - stage: deploy
+      os: linux
+      dist: trusty
+      jdk: openjdk7
+      after_success:
+        - mvn clean cobertura:cobertura coveralls:report
+        - mvn clean deploy -DskipTests --settings .travis-settings.xml
 
 env:
   global:

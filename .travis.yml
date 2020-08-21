@@ -2,7 +2,9 @@ language: java
 
 jobs:
   include:
-    - os: linux
+    - stage: test
+    # test jobs
+      os: linux
       dist: trusty
       jdk: openjdk7
     - os: linux
@@ -17,10 +19,14 @@ jobs:
     - os: linux
       dist: xenial
       jdk: openjdk11
-
-after_success:
-  - mvn clean cobertura:cobertura coveralls:report
-  - mvn clean deploy -DskipTests --settings .travis-settings.xml
+    # deploy job (re-run jdk7 build)
+    - stage: deploy
+      os: linux
+      dist: trusty
+      jdk: openjdk7
+      after_success:
+        - mvn clean cobertura:cobertura coveralls:report
+        - mvn clean deploy -DskipTests --settings .travis-settings.xml
 
 env:
   global:

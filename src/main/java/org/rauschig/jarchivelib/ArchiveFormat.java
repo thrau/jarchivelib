@@ -49,11 +49,7 @@ public enum ArchiveFormat {
     /**
      * Constant used to identify the ZIP archive format.
      */
-    ZIP(ArchiveStreamFactory.ZIP, ".zip"),
-
-    DEB(ArchiveStreamFactory.AR, ".deb"),
-
-    RPM(ArchiveStreamFactory.CPIO, ".rpm");
+    ZIP(ArchiveStreamFactory.ZIP, ".zip");
 
     /**
      * The name by which the compression algorithm is identified.

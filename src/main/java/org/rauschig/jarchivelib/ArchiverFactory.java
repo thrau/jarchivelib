@@ -31,7 +31,7 @@ public final class ArchiverFactory {
      * Probes the given {@link File} for its file type and creates an {@link Archiver} based on this file type. If the
      * File has a composite file extension such as ".tar.gz", the created {@link Archiver} will also handle ".gz"
      * compression.
-     * 
+     *
      * @param archive the archive file to check.
      * @return a new Archiver instance (that may also handle compression)
      * @throws IllegalArgumentException if the given file is not a known archive
@@ -49,7 +49,7 @@ public final class ArchiverFactory {
     /**
      * Creates an Archiver that handles the given {@link FileType}. The Archiver may handle compression inherently, if
      * the {@link FileType} uses a compression type, such as ".tgz" might.
-     * 
+     *
      * @param fileType the file type
      * @return a new Archiver instance (that may also handle compression)
      */
@@ -69,7 +69,7 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format that uses compression.
-     * 
+     *
      * @param archiveFormat the archive format e.g. "tar" or "zip"
      * @param compression the compression algorithm name e.g. "gz"
      * @return a new Archiver instance that also handles compression
@@ -88,13 +88,13 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format that uses compression.
-     * 
+     *
      * @param archiveFormat the archive format
      * @param compression the compression algorithm
      * @return a new Archiver instance that also handles compression
      */
     public static Archiver createArchiver(ArchiveFormat archiveFormat, CompressionType compression) {
-        CommonsArchiver archiver = new CommonsArchiver(archiveFormat);
+        Archiver archiver = createArchiver(archiveFormat);
         CommonsCompressor compressor = new CommonsCompressor(compression);
 
         return new ArchiverCompressorDecorator(archiver, compressor);
@@ -102,7 +102,7 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format.
-     * 
+     *
      * @param archiveFormat the archive format e.g. "tar" or "zip"
      * @return a new Archiver instance
      * @throws IllegalArgumentException if the archive format is unknown
@@ -117,7 +117,7 @@ public final class ArchiverFactory {
 
     /**
      * Creates an Archiver for the given archive format.
-     * 
+     *
      * @param archiveFormat the archive format
      * @return a new Archiver instance
      */
@@ -126,6 +126,8 @@ public final class ArchiverFactory {
             return new SevenZArchiver();
         } else if (archiveFormat == ArchiveFormat.ZIP) {
             return new ZipFileArchiver();
+        } else if (archiveFormat == ArchiveFormat.TAR) {
+            return new TarArchiver();
         }
         return new CommonsArchiver(archiveFormat);
     }

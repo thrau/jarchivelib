@@ -169,7 +169,7 @@ public abstract class AbstractArchiverTest extends AbstractResourceTest {
 
             assertEquals(12, entries.size());
             assertTrue(entries.contains("file.txt"));
-            assertTrue(entries.contains("looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_filenae.txt"));
+            assertTrue(entries.contains("looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_filename.txt"));
             assertTrue(entries.contains("folder"));
             assertTrue(entries.contains("folder/folder_file.txt"));
             assertTrue(entries.contains("folder/subfolder/subfolder_file.txt"));

@@ -160,12 +160,10 @@ class CommonsArchiver implements Archiver {
      */
     protected ArchiveOutputStream createArchiveOutputStream(File archiveFile) throws IOException {
         try {
-            ArchiveOutputStream archiveOutputStream
-                = CommonsStreamFactory.createArchiveOutputStream(this, archiveFile);
+            ArchiveOutputStream archiveOutputStream = CommonsStreamFactory.createArchiveOutputStream(this, archiveFile);
 
             if (archiveOutputStream instanceof TarArchiveOutputStream) {
-              ((TarArchiveOutputStream) archiveOutputStream).setLongFileMode(
-                  TarArchiveOutputStream.LONGFILE_POSIX);;
+                ((TarArchiveOutputStream) archiveOutputStream).setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
             }
 
             return archiveOutputStream;

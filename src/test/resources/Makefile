@@ -1,7 +1,17 @@
+.PHONY = permissions archives compress clean
+
 CPF = compress.txt
 AR  = archive
 
-all: archives compress
+all: permissions archives compress
+
+permissions:
+	cd $(AR); \
+	chmod 755 permissions/executable_file.txt; \
+	chmod 700 permissions/private_executable_file.txt; \
+	chmod 444 permissions/readonly_file.txt; \
+	chmod 700 permissions/private_folder; \
+	chmod 600 permissions/private_folder/private_file.txt;
 
 ## archives
 ## TODO: separate

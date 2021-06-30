@@ -49,6 +49,8 @@ public final class FileType {
         add(".tgz", TAR, GZIP);
         add(".tar.bz2", TAR, BZIP2);
         add(".tbz2", TAR, BZIP2);
+        add(".tar.xz", TAR, XZ);
+        add(".txz", TAR, XZ);
         // archive formats
         add(".7z", SEVEN_Z);
         add(".a", AR);

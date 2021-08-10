@@ -86,7 +86,7 @@ stream.close();
 Dependencies
 ------------
 
-* commons-compress(tm) 1.20
+* commons-compress(tm) 1.21
 
 
 Compatibility

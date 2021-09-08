@@ -26,6 +26,7 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 
 /**
  * Implementation of an {@link Archiver} that uses {@link ArchiveStreamFactory} to generate archive streams by a given
@@ -159,7 +160,13 @@ class CommonsArchiver implements Archiver {
      */
     protected ArchiveOutputStream createArchiveOutputStream(File archiveFile) throws IOException {
         try {
-            return CommonsStreamFactory.createArchiveOutputStream(this, archiveFile);
+            ArchiveOutputStream archiveOutputStream = CommonsStreamFactory.createArchiveOutputStream(this, archiveFile);
+
+            if (archiveOutputStream instanceof TarArchiveOutputStream) {
+                ((TarArchiveOutputStream) archiveOutputStream).setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+            }
+
+            return archiveOutputStream;
         } catch (ArchiveException e) {
             throw new IOException(e);
         }

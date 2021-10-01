@@ -1,22 +1,19 @@
 /**
- *    Copyright 2013 Thomas Rausch
+ * Copyright 2013 Thomas Rausch
  *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.rauschig.jarchivelib;
 
 import java.io.IOException;
-
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 
 /**
@@ -24,38 +21,37 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
  */
 class CommonsArchiveStream extends ArchiveStream {
 
-    private ArchiveInputStream stream;
+  private final ArchiveInputStream stream;
 
-    CommonsArchiveStream(ArchiveInputStream stream) {
-        this.stream = stream;
-    }
+  CommonsArchiveStream(final ArchiveInputStream stream) {
+    this.stream = stream;
+  }
 
-    @Override
-    protected ArchiveEntry createNextEntry() throws IOException {
-        org.apache.commons.compress.archivers.ArchiveEntry next = stream.getNextEntry();
+  @Override
+  protected ArchiveEntry createNextEntry() throws IOException {
+    final org.apache.commons.compress.archivers.ArchiveEntry next = this.stream.getNextEntry();
 
-        return (next == null) ? null : new CommonsArchiveEntry(this, next);
-    }
+    return (next == null) ? null : new CommonsArchiveEntry(this, next);
+  }
 
-    @Override
-    public int read() throws IOException {
-        return stream.read();
-    }
+  @Override
+  public int read() throws IOException {
+    return this.stream.read();
+  }
 
-    @Override
-    public int read(byte[] b) throws IOException {
-        return stream.read(b);
-    }
+  @Override
+  public int read(final byte[] b) throws IOException {
+    return this.stream.read(b);
+  }
 
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        return stream.read(b, off, len);
-    }
+  @Override
+  public int read(final byte[] b, final int off, final int len) throws IOException {
+    return this.stream.read(b, off, len);
+  }
 
-    @Override
-    public void close() throws IOException {
-        super.close();
-        stream.close();
-    }
-
+  @Override
+  public void close() throws IOException {
+    super.close();
+    this.stream.close();
+  }
 }

@@ -1,17 +1,15 @@
 /**
- *    Copyright 2013 Thomas Rausch
+ * Copyright 2013 Thomas Rausch
  *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
+ * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * <p>http://www.apache.org/licenses/LICENSE-2.0
  *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * <p>Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.rauschig.jarchivelib;
 
@@ -20,75 +18,73 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Implementation of an {@link ArchiveEntry} that wraps the commons compress version of the same type.
+ * Implementation of an {@link ArchiveEntry} that wraps the commons compress version of the same
+ * type.
  */
 class CommonsArchiveEntry implements ArchiveEntry {
 
-    /**
-     * The wrapped {@code ArchiveEntry} entry.
-     */
-    private org.apache.commons.compress.archivers.ArchiveEntry entry;
+  /** The wrapped {@code ArchiveEntry} entry. */
+  private final org.apache.commons.compress.archivers.ArchiveEntry entry;
 
-    /**
-     * The {@link ArchiveStream} this entry belongs to.
-     */
-    private ArchiveStream stream;
+  /** The {@link ArchiveStream} this entry belongs to. */
+  private final ArchiveStream stream;
 
-    CommonsArchiveEntry(ArchiveStream stream, org.apache.commons.compress.archivers.ArchiveEntry entry) {
-        this.stream = stream;
-        this.entry = entry;
+  CommonsArchiveEntry(
+      final ArchiveStream stream, final org.apache.commons.compress.archivers.ArchiveEntry entry) {
+    this.stream = stream;
+    this.entry = entry;
+  }
+
+  @Override
+  public String getName() {
+    this.assertState();
+    return this.entry.getName();
+  }
+
+  @Override
+  public long getSize() {
+    this.assertState();
+    return this.entry.getSize();
+  }
+
+  @Override
+  public Date getLastModifiedDate() {
+    this.assertState();
+    return this.entry.getLastModifiedDate();
+  }
+
+  @Override
+  public boolean isDirectory() {
+    this.assertState();
+    return this.entry.isDirectory();
+  }
+
+  @Override
+  public File extract(final File destination)
+      throws IOException, IllegalStateException, IllegalArgumentException {
+    this.assertState();
+    IOUtils.requireDirectory(destination);
+
+    final File file = new File(destination, this.entry.getName());
+
+    if (this.entry.isDirectory()) {
+      file.mkdirs();
+    } else {
+      file.getParentFile().mkdirs();
+      IOUtils.copy(this.stream, file);
     }
 
-    @Override
-    public String getName() {
-        assertState();
-        return entry.getName();
+    FileModeMapper.map(this.entry, file);
+
+    return file;
+  }
+
+  private void assertState() {
+    if (this.stream.isClosed()) {
+      throw new IllegalStateException("Stream has already been closed");
     }
-
-    @Override
-    public long getSize() {
-        assertState();
-        return entry.getSize();
+    if (this != this.stream.getCurrentEntry()) {
+      throw new IllegalStateException("Illegal stream pointer");
     }
-
-    @Override
-    public Date getLastModifiedDate() {
-        assertState();
-        return entry.getLastModifiedDate();
-    }
-
-    @Override
-    public boolean isDirectory() {
-        assertState();
-        return entry.isDirectory();
-    }
-
-    @Override
-    public File extract(File destination) throws IOException, IllegalStateException, IllegalArgumentException {
-        assertState();
-        IOUtils.requireDirectory(destination);
-
-        File file = new File(destination, entry.getName());
-
-        if (entry.isDirectory()) {
-            file.mkdirs();
-        } else {
-            file.getParentFile().mkdirs();
-            IOUtils.copy(stream, file);
-        }
-
-        FileModeMapper.map(entry, file);
-
-        return file;
-    }
-
-    private void assertState() {
-        if (stream.isClosed()) {
-            throw new IllegalStateException("Stream has already been closed");
-        }
-        if (this != stream.getCurrentEntry()) {
-            throw new IllegalStateException("Illegal stream pointer");
-        }
-    }
-
+  }
 }

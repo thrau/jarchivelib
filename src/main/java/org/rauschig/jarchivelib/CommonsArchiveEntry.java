@@ -45,11 +45,13 @@ class CommonsArchiveEntry implements ArchiveEntry {
         return entry.getName();
     }
 
-    @Override
-    public long getSize() {
-        assertState();
-        return entry.getSize();
-    }
+   @Override
+	public long getSize() {
+		assert entry != null : "Entry cannot be null";
+		assert entry.getSize() >= 0 : "Entry size cannot be negative";
+		assertState();
+		return entry.getSize();
+	}
 
     @Override
     public Date getLastModifiedDate() {
